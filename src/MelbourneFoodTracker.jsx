@@ -60,7 +60,7 @@ const S = {
   gold: "#f0b429",
 };
 
-export default function FoodTracker() {
+export default function FoodTracker({ onSwitch = () => {} }) {
   const [entries, setEntries] = useState([]);
   const [filter, setFilter] = useState("all");
   const [showForm, setShowForm] = useState(false);
@@ -72,9 +72,9 @@ export default function FoodTracker() {
   useEffect(() => {
     (async () => {
       try {
-        const res = await window.storage.get("melb-food-v2");
+        const res = localStorage.getItem("melb-food-v2");
         if (res) {
-          const parsed = JSON.parse(res.value);
+          const parsed = JSON.parse(res);
           setEntries(parsed.length ? parsed : SAMPLE);
         } else {
           setEntries(SAMPLE);
@@ -88,7 +88,7 @@ export default function FoodTracker() {
 
   async function persist(next) {
     setEntries(next);
-    try { await window.storage.set("melb-food-v2", JSON.stringify(next)); } catch {}
+    try { localStorage.setItem("melb-food-v2", JSON.stringify(next)); } catch {}
   }
 
   function handleSubmit() {
@@ -157,6 +157,8 @@ export default function FoodTracker() {
     .toggle-btn { transition: all 0.15s; cursor: pointer; }
     .toggle-btn:hover { opacity: 0.85; }
     ::-webkit-scrollbar { width: 6px; } ::-webkit-scrollbar-track { background: transparent; } ::-webkit-scrollbar-thumb { background: #ccc; border-radius: 3px; }
+    .city-btn { cursor: pointer; border: none; font-family: 'Inter', sans-serif; transition: all 0.15s; }
+    .city-btn:hover { opacity: 0.85; }
   `;
 
   if (loading) return (
@@ -168,6 +170,22 @@ export default function FoodTracker() {
   return (
     <div style={{ minHeight: "100vh", background: S.cream, fontFamily: "'Inter', sans-serif" }}>
       <style>{css}</style>
+
+      {/* ── City Nav ── */}
+      <div style={{ background: "#111d2b", padding: "0 24px" }}>
+        <div style={{ maxWidth: 820, margin: "0 auto", display: "flex", alignItems: "center", gap: 8, height: 38 }}>
+          <span style={{ fontSize: 10, color: "rgba(255,255,255,0.35)", textTransform: "uppercase", letterSpacing: 2, fontWeight: 600, marginRight: 4 }}>
+            My Journals
+          </span>
+          <button className="city-btn" style={{ background: "rgba(255,255,255,0.12)", border: "none", borderRadius: 20, padding: "4px 12px", fontSize: 12, fontWeight: 700, color: "white" }}>
+            🇦🇺 Melbourne
+          </button>
+          <button className="city-btn" onClick={onSwitch}
+            style={{ background: "transparent", border: "1px solid rgba(255,255,255,0.2)", borderRadius: 20, padding: "4px 12px", fontSize: 12, fontWeight: 500, color: "rgba(255,255,255,0.5)" }}>
+            🇻🇳 HCMC
+          </button>
+        </div>
+      </div>
 
       {/* ── Header ── */}
       <div style={{ background: S.navy, color: "white", padding: "28px 24px 22px" }}>

@@ -221,7 +221,7 @@ const C = {
   cardBg: "#ffffff",
 };
 
-export default function HCMCFoodPassport() {
+export default function HCMCFoodPassport({ onSwitch = () => {} }) {
   const [entries, setEntries] = useState([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState("all");
@@ -235,9 +235,9 @@ export default function HCMCFoodPassport() {
   useEffect(() => {
     (async () => {
       try {
-        const res = await window.storage.get("hcmc-passport-v1");
+        const res = localStorage.getItem("hcmc-passport-v1");
         if (res) {
-          const parsed = JSON.parse(res.value);
+          const parsed = JSON.parse(res);
           setEntries(parsed.length ? parsed : INITIAL_DATA);
         } else {
           setEntries(INITIAL_DATA);
@@ -249,7 +249,7 @@ export default function HCMCFoodPassport() {
 
   async function persist(next) {
     setEntries(next);
-    try { await window.storage.set("hcmc-passport-v1", JSON.stringify(next)); } catch {}
+    try { localStorage.setItem("hcmc-passport-v1", JSON.stringify(next)); } catch {}
   }
 
   function cycleStatus(id) {
@@ -311,6 +311,8 @@ export default function HCMCFoodPassport() {
     .maps-btn:hover { background:${C.header} !important; color:white !important; }
     ::-webkit-scrollbar { width:5px; } ::-webkit-scrollbar-thumb { background:#ccc; border-radius:3px; }
     .submit-btn:hover { background:${C.headerDark} !important; }
+    .city-btn { cursor:pointer; border:none; font-family:Inter,sans-serif; transition:all 0.15s; }
+    .city-btn:hover { opacity:0.85; }
   `;
 
   if (loading) return (
@@ -328,6 +330,22 @@ export default function HCMCFoodPassport() {
   return (
     <div style={{ minHeight:"100vh", background:C.bg, fontFamily:"Inter,sans-serif" }}>
       <style>{css}</style>
+
+      {/* ── City Nav ── */}
+      <div style={{ background:"#0e1f16", padding:"0 24px" }}>
+        <div style={{ maxWidth:860, margin:"0 auto", display:"flex", alignItems:"center", gap:8, height:38 }}>
+          <span style={{ fontSize:10, color:"rgba(255,255,255,0.35)", textTransform:"uppercase", letterSpacing:2, fontWeight:600, marginRight:4 }}>
+            My Journals
+          </span>
+          <button className="city-btn" onClick={onSwitch}
+            style={{ background:"transparent", border:"1px solid rgba(255,255,255,0.2)", borderRadius:20, padding:"4px 12px", fontSize:12, fontWeight:500, color:"rgba(255,255,255,0.5)" }}>
+            🇦🇺 Melbourne
+          </button>
+          <button className="city-btn" style={{ background:"rgba(255,255,255,0.12)", border:"none", borderRadius:20, padding:"4px 12px", fontSize:12, fontWeight:700, color:"white" }}>
+            🇻🇳 HCMC
+          </button>
+        </div>
+      </div>
 
       {/* ── HEADER ── */}
       <div style={{ background:C.header, color:"white", padding:"26px 24px 22px" }}>
