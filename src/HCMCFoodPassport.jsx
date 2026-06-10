@@ -533,7 +533,7 @@ export default function HCMCFoodPassport({ onSwitch = () => {} }) {
               {label:"Budget/person (VND)", key:"budget", placeholder:"e.g. 200k–500k"},
             ].map(({label,key,placeholder}) => (
               <div key={key} style={{ marginBottom:13 }}>
-                <label style={{ fontSize:11, fontWeight:600, color:"#555", display:"block", marginBottom:4, textTransform:"uppercase", letterSpacing:0.5 }}>{label}</label>
+                <label style={{ fontSize:11, fontWeight:600, color:"#ffffff", display:"block", marginBottom:4, textTransform:"uppercase", letterSpacing:0.5 }}>{label}</label>
                 <input placeholder={placeholder} value={form[key]}
                   onChange={e => setForm(f => ({...f, [key]:e.target.value}))}
                   style={{ width:"100%", border:`1.5px solid ${C.border}`, borderRadius:9, padding:"10px 12px", fontSize:14 }} />
