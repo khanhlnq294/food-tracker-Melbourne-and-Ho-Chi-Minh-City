@@ -5,7 +5,8 @@ const CUISINE_BG = {
   "Japanese 🇯🇵": "#e8f0f8",
   "Korean 🇰🇷": "#fff0e0",
   "Thai 🇹🇭": "#f5e8f8",
-  "Chinese / HK 🇨🇳🇭🇰": "#fff5e8",
+  "Chinese / HongKong 🇨🇳🇭🇰": "#fff5e8",
+  "Taiwanese / Hotpot 🇹🇼": "#fce8f4",
   "Italian 🇮🇹": "#fce8e8",
   "Spanish 🇪🇸": "#fff8e0",
   "Mexican 🇲🇽": "#f0fce8",
@@ -16,176 +17,194 @@ const CUISINE_BG = {
   "Indonesia 🇮🇩": "#f8f0e8",
   "Middle Eastern 🇱🇧🇹🇷": "#fdf8e8",
   "Vietnamese 🇻🇳": "#eaf8f0",
+  "Vietnamese Street/Local 🇻🇳": "#d4f5e4",
   "Cafe / Brunch ☕": "#f8f3e0",
+  "Bakery 🥐": "#fff0d0",
 };
 const CUISINES = Object.keys(CUISINE_BG);
 
-// ── ALL 138 RESTAURANTS ──────────────────────────────────────────────────
+// ── ALL 168 RESTAURANTS ──────────────────────────────────────────────────
 const INITIAL_DATA = [
-  // Japanese
-  {id:1,cuisine:"Japanese 🇯🇵",place:"Nori - Modern Izakaya",area:"Q1 / Bến Thành",type:"Izakaya / Japanese dining",budget:"300k–700k",status:"want",rating:0,notes:"Dinner, drinks, late-night",mapsUrl:"https://maps.google.com/?q=Nori+Modern+Izakaya+114+L%C3%BD+T%E1%BB%B1+Tr%E1%BB%8Dng+Ho+Chi+Minh"},
-  {id:2,cuisine:"Japanese 🇯🇵",place:"Sushi Hokkaido Sachi",area:"Q1 / Takashimaya",type:"Sushi / sashimi",budget:"400k–900k",status:"want",rating:0,notes:"Safe premium sushi pick",mapsUrl:"https://maps.google.com/?q=Sushi+Hokkaido+Sachi+Takashimaya+Ho+Chi+Minh"},
-  {id:3,cuisine:"Japanese 🇯🇵",place:"Ippudo Ramen",area:"Q1 / Lê Thánh Tôn",type:"Ramen",budget:"250k–500k",status:"want",rating:0,notes:"Ramen chain; reliable",mapsUrl:"https://maps.google.com/?q=Ippudo+Ramen+17%2F5+L%C3%AA+Th%C3%A1nh+T%C3%B4n+Ho+Chi+Minh"},
-  {id:4,cuisine:"Japanese 🇯🇵",place:"Futaba Ramen",area:"Q1 / Thái Văn Lung",type:"Ramen",budget:"200k–400k",status:"want",rating:0,notes:"Japanese Town option",mapsUrl:"https://maps.google.com/?q=Futaba+Ramen+Th%C3%A1i+V%C4%83n+Lung+Ho+Chi+Minh"},
-  {id:5,cuisine:"Japanese 🇯🇵",place:"Danbo Ramen",area:"Q1",type:"Ramen",budget:"200k–450k",status:"want",rating:0,notes:"Casual ramen",mapsUrl:"https://maps.google.com/?q=Danbo+Ramen+Ho+Chi+Minh+City"},
-  {id:6,cuisine:"Japanese 🇯🇵",place:"Mutahiro Ramen",area:"Q1",type:"Ramen",budget:"200k–450k",status:"want",rating:0,notes:"Rich ramen broth",mapsUrl:"https://maps.google.com/?q=Mutahiro+Ramen+Ho+Chi+Minh+City"},
-  {id:7,cuisine:"Japanese 🇯🇵",place:"Fujiro Tonkatsu",area:"Q1",type:"Tonkatsu",budget:"250k–550k",status:"want",rating:0,notes:"Good pork cutlet set",mapsUrl:"https://maps.google.com/?q=Fujiro+Tonkatsu+Ho+Chi+Minh+City"},
-  {id:8,cuisine:"Japanese 🇯🇵",place:"Izakaya Matsuki",area:"Q1 / Thái Văn Lung",type:"Izakaya",budget:"300k–700k",status:"want",rating:0,notes:"Good group dinner",mapsUrl:"https://maps.google.com/?q=Izakaya+Matsuki+8A%2FA20+Th%C3%A1i+V%C4%83n+Lung+Ho+Chi+Minh"},
-  {id:9,cuisine:"Japanese 🇯🇵",place:"Metetsu Izakaya",area:"Q1 / Thái Văn Lung",type:"Izakaya",budget:"300k–700k",status:"want",rating:0,notes:"Japanese drinking food",mapsUrl:"https://maps.google.com/?q=Metetsu+Izakaya+Th%C3%A1i+V%C4%83n+Lung+Ho+Chi+Minh"},
-  {id:10,cuisine:"Japanese 🇯🇵",place:"Izakaya Ten",area:"Q1 / Phan Xích Long",type:"Izakaya",budget:"300k–700k",status:"want",rating:0,notes:"Multiple locations",mapsUrl:"https://maps.google.com/?q=Izakaya+Ten+Ho+Chi+Minh"},
-  {id:11,cuisine:"Japanese 🇯🇵",place:"Ebisu Shoten",area:"Q1",type:"Izakaya",budget:"250k–600k",status:"want",rating:0,notes:"Casual Japanese pub food",mapsUrl:"https://maps.google.com/?q=Ebisu+Shoten+Ho+Chi+Minh"},
-  {id:12,cuisine:"Japanese 🇯🇵",place:"Sushi Tiger",area:"Q1",type:"Sushi",budget:"300k–800k",status:"want",rating:0,notes:"Sushi casual-premium",mapsUrl:"https://maps.google.com/?q=Sushi+Tiger+Ho+Chi+Minh"},
-  {id:13,cuisine:"Japanese 🇯🇵",place:"Chikara Gyoza",area:"Q1",type:"Gyoza / izakaya",budget:"200k–500k",status:"want",rating:0,notes:"Good for snacks and drinks",mapsUrl:"https://maps.google.com/?q=Chikara+Gyoza+Ho+Chi+Minh"},
-  {id:14,cuisine:"Japanese 🇯🇵",place:"Sukiya",area:"Multiple",type:"Japanese rice bowls",budget:"100k–250k",status:"want",rating:0,notes:"Cheap comfort food",mapsUrl:"https://maps.google.com/?q=Sukiya+Ho+Chi+Minh+City"},
-  {id:15,cuisine:"Japanese 🇯🇵",place:"Maguro Studio",area:"Q1",type:"Sushi / tuna-focused",budget:"400k–900k",status:"want",rating:0,notes:"Premium but still under budget",mapsUrl:"https://maps.google.com/?q=Maguro+Studio+Ho+Chi+Minh+City"},
-  {id:16,cuisine:"Japanese 🇯🇵",place:"Matsuri Japanese Restaurant",area:"Q1 / Nguyễn Huệ",type:"Japanese casual dining",budget:"250k–600k",status:"want",rating:0,notes:"Central location",mapsUrl:"https://maps.google.com/?q=Matsuri+Japanese+Restaurant+Nguy%E1%BB%85n+Hu%E1%BB%87+Ho+Chi+Minh"},
-  {id:17,cuisine:"Japanese 🇯🇵",place:"Naked Sushi",area:"Q3 / Nam Kỳ Khởi Nghĩa",type:"Sushi",budget:"300k–800k",status:"want",rating:0,notes:"Modern sushi choice",mapsUrl:"https://maps.google.com/?q=Naked+Sushi+Nam+K%E1%BB%B3+Kh%E1%BB%9Fi+Ngh%C4%A9a+Ho+Chi+Minh"},
-  {id:18,cuisine:"Japanese 🇯🇵",place:"Kimochi Sushi",area:"Bình Thạnh",type:"Sushi",budget:"200k–500k",status:"want",rating:0,notes:"Local sushi option",mapsUrl:"https://maps.google.com/?q=Kimochi+Sushi+Ng%C3%B4+T%E1%BA%A5t+T%E1%BB%91+B%C3%ACnh+Th%E1%BA%A1nh"},
-  {id:19,cuisine:"Japanese 🇯🇵",place:"Tròn Kitchen",area:"Lê Văn Sỹ",type:"Japanese-inspired",budget:"200k–500k",status:"want",rating:0,notes:"Casual meal",mapsUrl:"https://maps.google.com/?q=Tr%C3%B2n+Kitchen+L%C3%AA+V%C4%83n+S%E1%BB%B9+Ho+Chi+Minh"},
-  // Korean
-  {id:20,cuisine:"Korean 🇰🇷",place:"BROS KOREA 1980s",area:"Q3 / Nguyễn Thị Diệu",type:"Korean BBQ",budget:"300k–700k",status:"want",rating:0,notes:"Very popular BBQ",mapsUrl:"https://maps.google.com/?q=BROS+KOREA+1980s+Nguy%E1%BB%85n+Th%E1%BB%8B+Di%E1%BB%87u+Ho+Chi+Minh"},
-  {id:21,cuisine:"Korean 🇰🇷",place:"Midam Korean Premium BBQ",area:"Q1 / Thi Sách",type:"Korean BBQ",budget:"400k–900k",status:"want",rating:0,notes:"Premium BBQ but under 1m",mapsUrl:"https://maps.google.com/?q=Midam+Korean+Premium+BBQ+02+Thi+S%C3%A1ch+Ho+Chi+Minh"},
-  {id:22,cuisine:"Korean 🇰🇷",place:"Palsaik BBQ",area:"Q1 / Đông Du",type:"Korean BBQ",budget:"400k–900k",status:"want",rating:0,notes:"Famous pork belly set",mapsUrl:"https://maps.google.com/?q=Palsaik+BBQ+%C4%90%C3%B4ng+Du+Ho+Chi+Minh"},
-  {id:23,cuisine:"Korean 🇰🇷",place:"Doran Doran",area:"Q1 / Cô Bắc",type:"Korean home-style",budget:"250k–600k",status:"want",rating:0,notes:"Good non-BBQ option",mapsUrl:"https://maps.google.com/?q=Doran+Doran+Korean+Restaurant+C%C3%B4+B%E1%BA%AFc+Ho+Chi+Minh"},
-  {id:24,cuisine:"Korean 🇰🇷",place:"Matchandeul BBQ",area:"Q7 / Phú Mỹ Hưng",type:"Korean BBQ",budget:"350k–800k",status:"want",rating:0,notes:"K-town style",mapsUrl:"https://maps.google.com/?q=Matchandeul+BBQ+Ho+Chi+Minh"},
-  {id:25,cuisine:"Korean 🇰🇷",place:"Busan Korean Food",area:"Multiple",type:"Korean casual",budget:"150k–350k",status:"want",rating:0,notes:"Budget-friendly",mapsUrl:"https://maps.google.com/?q=Busan+Korean+Food+Ho+Chi+Minh"},
-  {id:26,cuisine:"Korean 🇰🇷",place:"Hanuri",area:"Multiple",type:"Korean casual",budget:"120k–300k",status:"want",rating:0,notes:"Student-friendly",mapsUrl:"https://maps.google.com/?q=Hanuri+Korean+Food+Ho+Chi+Minh"},
-  {id:27,cuisine:"Korean 🇰🇷",place:"GoGi House",area:"Multiple",type:"Korean BBQ chain",budget:"300k–700k",status:"want",rating:0,notes:"Easy group BBQ",mapsUrl:"https://maps.google.com/?q=GoGi+House+Ho+Chi+Minh"},
-  {id:28,cuisine:"Korean 🇰🇷",place:"Yukssam BBQ",area:"Multiple",type:"Korean BBQ",budget:"300k–700k",status:"want",rating:0,notes:"BBQ + cold noodles",mapsUrl:"https://maps.google.com/?q=Yukssam+BBQ+Ho+Chi+Minh"},
-  {id:29,cuisine:"Korean 🇰🇷",place:"Bornga",area:"Q1 / Q7",type:"Korean BBQ",budget:"400k–900k",status:"want",rating:0,notes:"Good meat quality",mapsUrl:"https://maps.google.com/?q=Bornga+Ho+Chi+Minh"},
-  {id:30,cuisine:"Korean 🇰🇷",place:"Don Chicken",area:"Multiple",type:"Korean fried chicken",budget:"200k–450k",status:"want",rating:0,notes:"Chicken and beer vibe",mapsUrl:"https://maps.google.com/?q=Don+Chicken+Ho+Chi+Minh"},
-  {id:31,cuisine:"Korean 🇰🇷",place:"Gaxeo Chicken",area:"Q1 / Q7",type:"Korean fried chicken",budget:"200k–500k",status:"want",rating:0,notes:"Good sharing plates",mapsUrl:"https://maps.google.com/?q=Gaxeo+Chicken+Ho+Chi+Minh"},
-  {id:32,cuisine:"Korean 🇰🇷",place:"Kimbap FC",area:"Multiple",type:"Korean casual",budget:"100k–250k",status:"want",rating:0,notes:"Cheap quick meal",mapsUrl:"https://maps.google.com/?q=Kimbap+FC+Ho+Chi+Minh"},
-  {id:33,cuisine:"Korean 🇰🇷",place:"Pacho Pocha",area:"Thảo Điền / Q2",type:"Korean pocha",budget:"250k–600k",status:"want",rating:0,notes:"Night-out style",mapsUrl:"https://maps.google.com/?q=Pacho+Pocha+Th%E1%BA%A3o+%C4%90i%E1%BB%81n+Ho+Chi+Minh"},
-  {id:34,cuisine:"Korean 🇰🇷",place:"Mabu-KKO Chi",area:"Q7 / Sky Garden",type:"Korean dining",budget:"250k–600k",status:"want",rating:0,notes:"Q7 Korean area",mapsUrl:"https://maps.google.com/?q=Mabu-KKO+Chi+Sky+Garden+Ho+Chi+Minh"},
-  {id:35,cuisine:"Korean 🇰🇷",place:"G2 Chicken",area:"Thảo Điền / Q2",type:"Korean fried chicken",budget:"200k–500k",status:"want",rating:0,notes:"Chicken option in Thảo Điền",mapsUrl:"https://maps.google.com/?q=G2+Chicken+Th%E1%BA%A3o+%C4%90i%E1%BB%81n+Ho+Chi+Minh"},
-  // Thai
-  {id:36,cuisine:"Thai 🇹🇭",place:"Lac Thai Restaurant",area:"Q1 / Mạc Thị Bưởi",type:"Thai restaurant",budget:"250k–600k",status:"want",rating:0,notes:"Classic Thai restaurant",mapsUrl:"https://maps.google.com/?q=Lac+Thai+Restaurant+M%E1%BA%A1c+Th%E1%BB%8B+B%C6%B0%E1%BB%9Fi+Ho+Chi+Minh"},
-  {id:37,cuisine:"Thai 🇹🇭",place:"Somtam ZAAP",area:"Q1 / Pasteur",type:"Thai / som tam",budget:"200k–500k",status:"want",rating:0,notes:"Good Thai casual",mapsUrl:"https://maps.google.com/?q=Somtam+ZAAP+136+Pasteur+Ho+Chi+Minh"},
-  {id:38,cuisine:"Thai 🇹🇭",place:"Koh Yam",area:"Q1 / Hồ Tùng Mậu",type:"Thai restaurant",budget:"200k–500k",status:"want",rating:0,notes:"Modern Thai chain",mapsUrl:"https://maps.google.com/?q=Koh+Yam+111+H%E1%BB%93+T%C3%B9ng+M%E1%BA%ADu+Ho+Chi+Minh"},
-  {id:39,cuisine:"Thai 🇹🇭",place:"Golden Elephant",area:"Q1 / Hai Bà Trưng",type:"Thai restaurant",budget:"300k–700k",status:"want",rating:0,notes:"Traditional Thai",mapsUrl:"https://maps.google.com/?q=Golden+Elephant+Thai+Restaurant+Hai+B%C3%A0+Tr%C6%B0ng+Ho+Chi+Minh"},
-  {id:40,cuisine:"Thai 🇹🇭",place:"Som Tum Thai",area:"Q1 / Takashimaya",type:"Thai restaurant",budget:"250k–600k",status:"want",rating:0,notes:"Convenient mall option",mapsUrl:"https://maps.google.com/?q=Som+Tum+Thai+Takashimaya+Ho+Chi+Minh"},
-  {id:41,cuisine:"Thai 🇹🇭",place:"Mama Thai",area:"Q1 / Nguyễn Trãi",type:"Thai restaurant",budget:"200k–500k",status:"want",rating:0,notes:"Casual Thai",mapsUrl:"https://maps.google.com/?q=Mama+Thai+Nguy%E1%BB%85n+Tr%C3%A3i+Ho+Chi+Minh"},
-  {id:42,cuisine:"Thai 🇹🇭",place:"TukTuk Thai Bistro",area:"Q1 / Q2",type:"Thai bistro",budget:"250k–650k",status:"want",rating:0,notes:"Good for group sharing",mapsUrl:"https://maps.google.com/?q=TukTuk+Thai+Bistro+Ho+Chi+Minh"},
-  {id:43,cuisine:"Thai 🇹🇭",place:"Thai Market",area:"Multiple",type:"Thai casual",budget:"180k–400k",status:"want",rating:0,notes:"Good value Thai",mapsUrl:"https://maps.google.com/?q=Thai+Market+Ho+Chi+Minh"},
-  {id:44,cuisine:"Thai 🇹🇭",place:"MK Restaurant",area:"Multiple",type:"Thai hotpot",budget:"250k–600k",status:"want",rating:0,notes:"Thai-style suki hotpot",mapsUrl:"https://maps.google.com/?q=MK+Restaurant+Ho+Chi+Minh"},
-  {id:45,cuisine:"Thai 🇹🇭",place:"HiHi Thai Noodle",area:"Q3 / Nguyễn Đình Chiểu",type:"Thai noodles",budget:"100k–250k",status:"want",rating:0,notes:"Casual noodle option",mapsUrl:"https://maps.google.com/?q=H%E1%BB%A7+Ti%E1%BA%BFu+Th%C3%A1i+Lan+HiHi+Nguy%E1%BB%85n+%C4%90%C3%ACnh+Chi%E1%BB%83u+Ho+Chi+Minh"},
-  // Chinese / HK
-  {id:46,cuisine:"Chinese / HK 🇨🇳🇭🇰",place:"Dim Tu Tac",area:"Q1 / Takashimaya",type:"Dim sum / Cantonese",budget:"350k–900k",status:"want",rating:0,notes:"Premium dimsum",mapsUrl:"https://maps.google.com/?q=Dim+Tu+Tac+Takashimaya+Ho+Chi+Minh"},
-  {id:47,cuisine:"Chinese / HK 🇨🇳🇭🇰",place:"Cửu Long Quán / Kowloon",area:"Q6 / Bùi Hữu Nghĩa",type:"Hong Kong food",budget:"200k–500k",status:"want",rating:0,notes:"Chợ Lớn vibe",mapsUrl:"https://maps.google.com/?q=C%E1%BB%ADu+Long+Qu%C3%A1n+76+B%C3%B9i+H%E1%BB%AFu+Ngh%C4%A9a+Ho+Chi+Minh"},
-  {id:48,cuisine:"Chinese / HK 🇨🇳🇭🇰",place:"Baoz Dimsum",area:"Multiple",type:"Dim sum",budget:"250k–600k",status:"want",rating:0,notes:"Accessible dimsum chain",mapsUrl:"https://maps.google.com/?q=Baoz+Dimsum+Ho+Chi+Minh"},
-  {id:49,cuisine:"Chinese / HK 🇨🇳🇭🇰",place:"Crystal Jade",area:"Q1 / Q7",type:"Cantonese",budget:"350k–900k",status:"want",rating:0,notes:"Mall Cantonese option",mapsUrl:"https://maps.google.com/?q=Crystal+Jade+Ho+Chi+Minh"},
-  {id:50,cuisine:"Chinese / HK 🇨🇳🇭🇰",place:"San Fu Lou",area:"Q1 / Q7",type:"Cantonese / dimsum",budget:"300k–700k",status:"want",rating:0,notes:"Reliable Chinese food",mapsUrl:"https://maps.google.com/?q=San+Fu+Lou+Ho+Chi+Minh"},
-  {id:51,cuisine:"Chinese / HK 🇨🇳🇭🇰",place:"Tân Hải Vân",area:"Q1 / Q5",type:"Chinese-Vietnamese",budget:"200k–500k",status:"want",rating:0,notes:"Late meal option",mapsUrl:"https://maps.google.com/?q=T%C3%A2n+H%E1%BA%A3i+V%C3%A2n+Ho+Chi+Minh"},
-  {id:52,cuisine:"Chinese / HK 🇨🇳🇭🇰",place:"Hải Ký Mì Gia",area:"Q5",type:"Noodles / wonton",budget:"100k–250k",status:"want",rating:0,notes:"Chợ Lớn classic",mapsUrl:"https://maps.google.com/?q=H%E1%BA%A3i+K%C3%BD+M%C3%AC+Gia+Ho+Chi+Minh"},
-  {id:53,cuisine:"Chinese / HK 🇨🇳🇭🇰",place:"Tim Ho Wan",area:"Q1",type:"Hong Kong dimsum",budget:"300k–700k",status:"want",rating:0,notes:"Famous dimsum brand",mapsUrl:"https://maps.google.com/?q=Tim+Ho+Wan+Ho+Chi+Minh"},
-  {id:54,cuisine:"Chinese / HK 🇨🇳🇭🇰",place:"Long Triều",area:"Q1",type:"Cantonese",budget:"500k–1000k",status:"want",rating:0,notes:"Higher-end; order carefully under budget",mapsUrl:"https://maps.google.com/?q=Long+Tri%E1%BB%81u+Ho+Chi+Minh"},
-  {id:55,cuisine:"Chinese / HK 🇨🇳🇭🇰",place:"Bao Bei",area:"Q1",type:"Chinese modern",budget:"300k–700k",status:"want",rating:0,notes:"Modern Chinese",mapsUrl:"https://maps.google.com/?q=Bao+Bei+Ho+Chi+Minh"},
-  {id:56,cuisine:"Chinese / HK 🇨🇳🇭🇰",place:"Dimsum Ông Sủi",area:"Q5 / Châu Văn Liêm",type:"Dim sum",budget:"150k–400k",status:"want",rating:0,notes:"Chợ Lớn casual dimsum",mapsUrl:"https://maps.google.com/?q=Dimsum+%C3%94ng+S%E1%BB%A7i+26+Ch%C3%A2u+V%C4%83n+Li%C3%AAm+Ho+Chi+Minh"},
-  {id:57,cuisine:"Chinese / HK 🇨🇳🇭🇰",place:"Sủi Cảo Ngọc Ý",area:"Q11 / Hà Tôn Quyền",type:"Dumplings",budget:"100k–250k",status:"want",rating:0,notes:"Classic dumpling street",mapsUrl:"https://maps.google.com/?q=S%E1%BB%A7i+C%E1%BA%A3o+Ng%E1%BB%8Dc+%C3%9D+H%C3%A0+T%C3%B4n+Quy%E1%BB%81n+Ho+Chi+Minh"},
-  {id:58,cuisine:"Chinese / HK 🇨🇳🇭🇰",place:"Tân Tòng Lợi",area:"Q3 / Võ Văn Tần",type:"Dumplings / noodles",budget:"100k–250k",status:"want",rating:0,notes:"Casual sủi cảo",mapsUrl:"https://maps.google.com/?q=S%E1%BB%A7i+C%E1%BA%A3o+T%C3%A2n+T%C3%B2ng+L%E1%BB%A3i+V%C3%B5+V%C4%83n+T%E1%BA%A7n+Ho+Chi+Minh"},
-  // Italian
-  {id:59,cuisine:"Italian 🇮🇹",place:"Pizza 4P's",area:"Multiple",type:"Pizza / pasta",budget:"300k–700k",status:"want",rating:0,notes:"Must-try in Saigon",mapsUrl:"https://maps.google.com/?q=Pizza+4P%27s+Ho+Chi+Minh"},
-  {id:60,cuisine:"Italian 🇮🇹",place:"Truffle & Co.",area:"Q1 / Mạc Thị Bưởi",type:"Italian / pasta",budget:"350k–800k",status:"want",rating:0,notes:"Truffle pasta option",mapsUrl:"https://maps.google.com/?q=Truffle+%26+Co+M%E1%BA%A1c+Th%E1%BB%8B+B%C6%B0%E1%BB%9Fi+Ho+Chi+Minh"},
-  {id:61,cuisine:"Italian 🇮🇹",place:"PASTA CLUB Not so Italian",area:"Q1 / Hai Bà Trưng",type:"Pasta",budget:"250k–600k",status:"want",rating:0,notes:"Fun casual pasta",mapsUrl:"https://maps.google.com/?q=PASTA+CLUB+Not+so+Italian+Hai+B%C3%A0+Tr%C6%B0ng+Ho+Chi+Minh"},
-  {id:62,cuisine:"Italian 🇮🇹",place:"Pendolasco",area:"Q1 / Thảo Điền",type:"Italian",budget:"400k–900k",status:"want",rating:0,notes:"Classic Italian pick",mapsUrl:"https://maps.google.com/?q=Pendolasco+Ho+Chi+Minh"},
-  {id:63,cuisine:"Italian 🇮🇹",place:"Basta Hiro",area:"Q1",type:"Italian / pizza",budget:"350k–800k",status:"want",rating:0,notes:"Central Italian option",mapsUrl:"https://maps.google.com/?q=Basta+Hiro+Ho+Chi+Minh"},
-  {id:64,cuisine:"Italian 🇮🇹",place:"Opera Italian Restaurant",area:"Q1",type:"Italian fine casual",budget:"500k–1000k",status:"want",rating:0,notes:"Good for date night",mapsUrl:"https://maps.google.com/?q=Opera+Italian+Restaurant+Ho+Chi+Minh"},
-  {id:65,cuisine:"Italian 🇮🇹",place:"Ciao Bella",area:"Q1",type:"Italian",budget:"350k–800k",status:"want",rating:0,notes:"Comfort Italian",mapsUrl:"https://maps.google.com/?q=Ciao+Bella+Ho+Chi+Minh"},
-  {id:66,cuisine:"Italian 🇮🇹",place:"Aperitivo",area:"Thảo Điền / Q2",type:"Italian / wine bar",budget:"400k–900k",status:"want",rating:0,notes:"Thảo Điền option",mapsUrl:"https://maps.google.com/?q=Aperitivo+Th%E1%BA%A3o+%C4%90i%E1%BB%81n+Ho+Chi+Minh"},
-  {id:67,cuisine:"Italian 🇮🇹",place:"Brix Restaurant",area:"Thảo Điền / Q2",type:"Western / Italian-ish",budget:"500k–1000k",status:"want",rating:0,notes:"Brunch/dinner vibe",mapsUrl:"https://maps.google.com/?q=Brix+Restaurant+Th%E1%BA%A3o+%C4%90i%E1%BB%81n+Ho+Chi+Minh"},
-  // Spanish
-  {id:68,cuisine:"Spanish 🇪🇸",place:"Tomatito",area:"Q1",type:"Spanish tapas",budget:"400k–900k",status:"want",rating:0,notes:"Tapas and drinks",mapsUrl:"https://maps.google.com/?q=Tomatito+Saigon+Ho+Chi+Minh"},
-  {id:69,cuisine:"Spanish 🇪🇸",place:"Iberico",area:"Q1 / Q2",type:"Spanish / Mediterranean",budget:"400k–900k",status:"want",rating:0,notes:"Tapas sharing",mapsUrl:"https://maps.google.com/?q=Iberico+Ho+Chi+Minh"},
-  {id:70,cuisine:"Spanish 🇪🇸",place:"La Fiesta",area:"Q1",type:"Mexican / Tex-Mex",budget:"250k–600k",status:"want",rating:0,notes:"Casual Latin food",mapsUrl:"https://maps.google.com/?q=La+Fiesta+Ho+Chi+Minh"},
-  {id:71,cuisine:"Spanish 🇪🇸",place:"Octo Tapas",area:"Q1",type:"Spanish tapas",budget:"400k–900k",status:"want",rating:0,notes:"Stylish tapas",mapsUrl:"https://maps.google.com/?q=Octo+Tapas+Ho+Chi+Minh"},
-  // Mexican
-  {id:72,cuisine:"Mexican 🇲🇽",place:"District Federal",area:"Thảo Điền / Q2",type:"Mexican",budget:"250k–600k",status:"want",rating:0,notes:"Good tacos",mapsUrl:"https://maps.google.com/?q=District+Federal+Th%E1%BA%A3o+%C4%90i%E1%BB%81n+Ho+Chi+Minh"},
-  {id:73,cuisine:"Mexican 🇲🇽",place:"Tippy's",area:"Thảo Điền / Q2",type:"Mexican",budget:"250k–600k",status:"want",rating:0,notes:"Casual Mexican",mapsUrl:"https://maps.google.com/?q=Tippy%27s+Mexican+Food+Th%E1%BA%A3o+%C4%90i%E1%BB%81n+Ho+Chi+Minh"},
-  {id:74,cuisine:"Mexican 🇲🇽",place:"Rico Taco",area:"Q1",type:"Mexican",budget:"200k–500k",status:"want",rating:0,notes:"Taco option",mapsUrl:"https://maps.google.com/?q=Rico+Taco+Ho+Chi+Minh"},
-  {id:75,cuisine:"Mexican 🇲🇽",place:"Gringo Tacos",area:"Q1 / Q2",type:"Tacos",budget:"200k–500k",status:"want",rating:0,notes:"Casual tacos",mapsUrl:"https://maps.google.com/?q=Gringo+Tacos+Ho+Chi+Minh"},
-  {id:76,cuisine:"Mexican 🇲🇽",place:"TacoLeo",area:"Q1",type:"Tacos",budget:"150k–400k",status:"want",rating:0,notes:"Quick taco meal",mapsUrl:"https://maps.google.com/?q=TacoLeo+Ho+Chi+Minh"},
-  {id:77,cuisine:"Mexican 🇲🇽",place:"Mexcla",area:"Q1",type:"Mexican",budget:"200k–500k",status:"want",rating:0,notes:"Mexican casual",mapsUrl:"https://maps.google.com/?q=Mexcla+Ho+Chi+Minh"},
-  // French
-  {id:78,cuisine:"French 🇫🇷",place:"Le Corto",area:"Q1",type:"French dining",budget:"600k–1000k",status:"want",rating:0,notes:"Higher-end French",mapsUrl:"https://maps.google.com/?q=Le+Corto+Ho+Chi+Minh"},
-  {id:79,cuisine:"French 🇫🇷",place:"Cocotte",area:"Q1 / Q2",type:"French bistro",budget:"250k–700k",status:"want",rating:0,notes:"Comfort French food",mapsUrl:"https://maps.google.com/?q=Cocotte+Ho+Chi+Minh"},
-  {id:80,cuisine:"French 🇫🇷",place:"L'Usine",area:"Q1 / Q2",type:"Bistro / cafe",budget:"250k–600k",status:"want",rating:0,notes:"Cafe and brunch",mapsUrl:"https://maps.google.com/?q=L%27Usine+Ho+Chi+Minh"},
-  {id:81,cuisine:"French 🇫🇷",place:"Paul Bakery",area:"Q1",type:"Bakery / cafe",budget:"150k–400k",status:"want",rating:0,notes:"Dessert/cafe stop",mapsUrl:"https://maps.google.com/?q=Paul+Bakery+Ho+Chi+Minh"},
-  // American
-  {id:82,cuisine:"American 🇺🇸",place:"Eddie's Diner",area:"Q1 / Pasteur",type:"American diner",budget:"250k–600k",status:"want",rating:0,notes:"Burgers, shakes, breakfast",mapsUrl:"https://maps.google.com/?q=Eddie%27s+Diner+73+Pasteur+Ho+Chi+Minh"},
-  {id:83,cuisine:"American 🇺🇸",place:"Gummy Chicken Steak",area:"Q3 / Võ Văn Tần",type:"Chicken steak",budget:"150k–350k",status:"want",rating:0,notes:"Budget western meal",mapsUrl:"https://maps.google.com/?q=Gummy+Chicken+Steak+V%C3%B5+V%C4%83n+T%E1%BA%A7n+Ho+Chi+Minh"},
-  {id:84,cuisine:"American 🇺🇸",place:"Quan Ut Ut",area:"Q1 / Q2",type:"BBQ / smokehouse",budget:"300k–700k",status:"want",rating:0,notes:"Meat sharing plates",mapsUrl:"https://maps.google.com/?q=Quan+Ut+Ut+Ho+Chi+Minh"},
-  {id:85,cuisine:"American 🇺🇸",place:"Chicago Steakhouse",area:"Q1",type:"Steak",budget:"500k–1000k",status:"want",rating:0,notes:"Choose carefully under 1m",mapsUrl:"https://maps.google.com/?q=Chicago+Steakhouse+Ho+Chi+Minh"},
-  {id:86,cuisine:"American 🇺🇸",place:"The Wagon Wheel",area:"Q1",type:"American comfort food",budget:"300k–700k",status:"want",rating:0,notes:"Southern-style food",mapsUrl:"https://maps.google.com/?q=The+Wagon+Wheel+Ho+Chi+Minh"},
-  {id:87,cuisine:"American 🇺🇸",place:"Hard Rock Cafe",area:"Q1",type:"American dining",budget:"350k–800k",status:"want",rating:0,notes:"Touristy but fun",mapsUrl:"https://maps.google.com/?q=Hard+Rock+Cafe+Ho+Chi+Minh"},
-  {id:88,cuisine:"American 🇺🇸",place:"Marcel Gourmet Burger",area:"Q1 / Q2",type:"Burger",budget:"250k–600k",status:"want",rating:0,notes:"Good burger pick",mapsUrl:"https://maps.google.com/?q=Marcel+Gourmet+Burger+Ho+Chi+Minh"},
-  {id:89,cuisine:"American 🇺🇸",place:"Chucks Burger",area:"Thảo Điền / Q2",type:"Burger",budget:"200k–500k",status:"want",rating:0,notes:"Casual burger",mapsUrl:"https://maps.google.com/?q=Chucks+Burger+Th%E1%BA%A3o+%C4%90i%E1%BB%81n+Ho+Chi+Minh"},
-  // Indian
-  {id:90,cuisine:"Indian 🇮🇳",place:"Baba's Kitchen",area:"Q1",type:"Indian",budget:"250k–600k",status:"want",rating:0,notes:"Long-time Indian spot",mapsUrl:"https://maps.google.com/?q=Baba%27s+Kitchen+Ho+Chi+Minh"},
-  {id:91,cuisine:"Indian 🇮🇳",place:"Tandoor",area:"Q1",type:"Indian",budget:"300k–700k",status:"want",rating:0,notes:"Classic Indian dining",mapsUrl:"https://maps.google.com/?q=Tandoor+Indian+Restaurant+Ho+Chi+Minh"},
-  {id:92,cuisine:"Indian 🇮🇳",place:"Benaras",area:"Q1",type:"Indian",budget:"400k–900k",status:"want",rating:0,notes:"Premium Indian",mapsUrl:"https://maps.google.com/?q=Benaras+Indian+Restaurant+Ho+Chi+Minh"},
-  {id:93,cuisine:"Indian 🇮🇳",place:"Ganesh",area:"Q1 / Q2",type:"Indian",budget:"250k–600k",status:"want",rating:0,notes:"Reliable Indian",mapsUrl:"https://maps.google.com/?q=Ganesh+Indian+Restaurant+Ho+Chi+Minh"},
-  {id:94,cuisine:"Indian 🇮🇳",place:"Mustard",area:"Thảo Điền / Q2",type:"Indian",budget:"250k–600k",status:"want",rating:0,notes:"Thảo Điền Indian option",mapsUrl:"https://maps.google.com/?q=Mustard+Indian+Restaurant+Th%E1%BA%A3o+%C4%90i%E1%BB%81n+Ho+Chi+Minh"},
-  {id:95,cuisine:"Indian 🇮🇳",place:"Saffron",area:"Q1",type:"Indian / Mediterranean",budget:"350k–800k",status:"want",rating:0,notes:"Nice dinner vibe",mapsUrl:"https://maps.google.com/?q=Saffron+Ho+Chi+Minh"},
-  // Malaysia / Singapore
-  {id:96,cuisine:"Malaysia / Singapore 🇲🇾🇸🇬",place:"Mamak Malaysian",area:"Q1",type:"Malaysian",budget:"200k–500k",status:"want",rating:0,notes:"Malaysian comfort food",mapsUrl:"https://maps.google.com/?q=Mamak+Malaysian+Ho+Chi+Minh"},
-  {id:97,cuisine:"Malaysia / Singapore 🇲🇾🇸🇬",place:"Penang Food Village",area:"Q1 / Q7",type:"Malaysian / Singaporean",budget:"200k–500k",status:"want",rating:0,notes:"Casual hawker-style",mapsUrl:"https://maps.google.com/?q=Penang+Food+Village+Ho+Chi+Minh"},
-  {id:98,cuisine:"Malaysia / Singapore 🇲🇾🇸🇬",place:"Old Street Bak Kut Teh",area:"Q1",type:"Singaporean bak kut teh",budget:"250k–600k",status:"want",rating:0,notes:"Soup/rice meal",mapsUrl:"https://maps.google.com/?q=Old+Street+Bak+Kut+Teh+Ho+Chi+Minh"},
-  {id:99,cuisine:"Malaysia / Singapore 🇲🇾🇸🇬",place:"Song Fa Bak Kut Teh",area:"Q1",type:"Singaporean bak kut teh",budget:"250k–600k",status:"want",rating:0,notes:"Popular Singapore brand",mapsUrl:"https://maps.google.com/?q=Song+Fa+Bak+Kut+Teh+Ho+Chi+Minh"},
-  // Indonesia
-  {id:100,cuisine:"Indonesia 🇮🇩",place:"Warung Indo",area:"Q1",type:"Indonesian",budget:"150k–400k",status:"want",rating:0,notes:"Indonesian casual",mapsUrl:"https://maps.google.com/?q=Warung+Indo+Ho+Chi+Minh"},
-  {id:101,cuisine:"Indonesia 🇮🇩",place:"Bali in Saigon",area:"Thảo Điền / Q2",type:"Indonesian / Balinese",budget:"200k–500k",status:"want",rating:0,notes:"Balinese-style dishes",mapsUrl:"https://maps.google.com/?q=Bali+in+Saigon+Ho+Chi+Minh"},
-  {id:102,cuisine:"Indonesia 🇮🇩",place:"Dapur Indo",area:"Q1",type:"Indonesian",budget:"150k–400k",status:"want",rating:0,notes:"Casual Indo pick",mapsUrl:"https://maps.google.com/?q=Dapur+Indo+Ho+Chi+Minh"},
-  // Middle Eastern
-  {id:103,cuisine:"Middle Eastern 🇱🇧🇹🇷",place:"Kebaby",area:"Thảo Điền / Q2",type:"Kebab / Middle Eastern",budget:"120k–300k",status:"want",rating:0,notes:"Budget-friendly",mapsUrl:"https://maps.google.com/?q=Kebaby+Ho+Chi+Minh"},
-  {id:104,cuisine:"Middle Eastern 🇱🇧🇹🇷",place:"Al Sham",area:"Q1",type:"Syrian / Middle Eastern",budget:"250k–600k",status:"want",rating:0,notes:"Good for sharing",mapsUrl:"https://maps.google.com/?q=Al+Sham+Restaurant+Ho+Chi+Minh"},
-  {id:105,cuisine:"Middle Eastern 🇱🇧🇹🇷",place:"Pasha Turkish",area:"Thảo Điền / Q2",type:"Turkish",budget:"300k–700k",status:"want",rating:0,notes:"Turkish dining",mapsUrl:"https://maps.google.com/?q=Pasha+Turkish+Restaurant+Ho+Chi+Minh"},
-  {id:106,cuisine:"Middle Eastern 🇱🇧🇹🇷",place:"Beirut Restaurant",area:"Q1",type:"Lebanese",budget:"300k–700k",status:"want",rating:0,notes:"Lebanese sharing plates",mapsUrl:"https://maps.google.com/?q=Beirut+Restaurant+Ho+Chi+Minh"},
-  {id:107,cuisine:"Middle Eastern 🇱🇧🇹🇷",place:"Hummus & Grill",area:"Thảo Điền / Q2",type:"Middle Eastern",budget:"200k–500k",status:"want",rating:0,notes:"Healthy casual",mapsUrl:"https://maps.google.com/?q=Hummus+%26+Grill+Ho+Chi+Minh"},
-  {id:108,cuisine:"Middle Eastern 🇱🇧🇹🇷",place:"Sultan Kebab",area:"Multiple",type:"Turkish kebab",budget:"100k–250k",status:"want",rating:0,notes:"Quick kebab meal",mapsUrl:"https://maps.google.com/?q=Sultan+Kebab+Ho+Chi+Minh"},
-  // Vietnamese
-  {id:109,cuisine:"Vietnamese 🇻🇳",place:"Anan Saigon",area:"Q1",type:"Modern Vietnamese",budget:"800k–1000k",status:"want",rating:0,notes:"Book ahead; careful with budget",mapsUrl:"https://maps.google.com/?q=Anan+Saigon+Ho+Chi+Minh"},
-  {id:110,cuisine:"Vietnamese 🇻🇳",place:"Bếp Mẹ Ỉn",area:"Q1",type:"Vietnamese home-style",budget:"200k–500k",status:"want",rating:0,notes:"Good for visitors",mapsUrl:"https://maps.google.com/?q=B%E1%BA%BFp+M%E1%BA%B9+%E1%BB%88n+Ho+Chi+Minh"},
-  {id:111,cuisine:"Vietnamese 🇻🇳",place:"Quán Bụi",area:"Q1 / Q2",type:"Vietnamese restaurant",budget:"250k–600k",status:"want",rating:0,notes:"Good family-style Vietnamese",mapsUrl:"https://maps.google.com/?q=Qu%C3%A1n+B%E1%BB%A5i+Ho+Chi+Minh"},
-  {id:112,cuisine:"Vietnamese 🇻🇳",place:"Secret Garden",area:"Q1",type:"Vietnamese restaurant",budget:"250k–600k",status:"want",rating:0,notes:"Rooftop-style Vietnamese",mapsUrl:"https://maps.google.com/?q=Secret+Garden+Ho+Chi+Minh"},
-  {id:113,cuisine:"Vietnamese 🇻🇳",place:"Cục Gạch Quán",area:"Q1",type:"Vietnamese home-style",budget:"350k–800k",status:"want",rating:0,notes:"Classic Vietnamese dining",mapsUrl:"https://maps.google.com/?q=C%E1%BB%A5c+G%E1%BA%A1ch+Qu%C3%A1n+Ho+Chi+Minh"},
-  {id:114,cuisine:"Vietnamese 🇻🇳",place:"Hoa Túc",area:"Q1",type:"Vietnamese modern",budget:"350k–800k",status:"want",rating:0,notes:"Nice setting",mapsUrl:"https://maps.google.com/?q=Hoa+T%C3%BAc+Ho+Chi+Minh"},
-  {id:115,cuisine:"Vietnamese 🇻🇳",place:"Hum Vegetarian",area:"Q2 / Q3",type:"Vegetarian Vietnamese",budget:"250k–600k",status:"want",rating:0,notes:"Good vegetarian option",mapsUrl:"https://maps.google.com/?q=Hum+Vegetarian+Ho+Chi+Minh"},
-  {id:116,cuisine:"Vietnamese 🇻🇳",place:"Chay Garden",area:"Q3",type:"Vegetarian Vietnamese",budget:"250k–600k",status:"want",rating:0,notes:"Vegetarian dinner",mapsUrl:"https://maps.google.com/?q=Chay+Garden+Ho+Chi+Minh"},
-  {id:117,cuisine:"Vietnamese 🇻🇳",place:"Mặn Mòi",area:"Q1 / Q3",type:"Vietnamese dining",budget:"250k–600k",status:"want",rating:0,notes:"Good family meal",mapsUrl:"https://maps.google.com/?q=M%E1%BA%B7n+M%C3%B2i+Ho+Chi+Minh"},
-  {id:118,cuisine:"Vietnamese 🇻🇳",place:"Nén Light",area:"Q1",type:"Modern Vietnamese",budget:"700k–1000k",status:"want",rating:0,notes:"Tasting-style; check menu",mapsUrl:"https://maps.google.com/?q=N%C3%A9n+Light+Ho+Chi+Minh"},
-  {id:119,cuisine:"Vietnamese 🇻🇳",place:"Phở Gia Hân",area:"Bình Thạnh / Chu Văn An",type:"Phở",budget:"60k–120k",status:"want",rating:0,notes:"Local phở pick",mapsUrl:"https://maps.google.com/?q=Ph%E1%BB%9F+Gia+H%C3%A2n+Chu+V%C4%83n+An+B%C3%ACnh+Th%E1%BA%A1nh"},
-  {id:120,cuisine:"Vietnamese 🇻🇳",place:"Phở Chú Hải",area:"Q1 / Trần Khánh Dư",type:"Phở / late night",budget:"70k–150k",status:"want",rating:0,notes:"Late-night phở",mapsUrl:"https://maps.google.com/?q=Ph%E1%BB%9F+Ch%C3%BA+H%E1%BA%A3i+53%2F64+Tr%E1%BA%A7n+Kh%C3%A1nh+D%C6%B0+Qu%E1%BA%ADn+1"},
-  {id:121,cuisine:"Vietnamese 🇻🇳",place:"Phở Miến Gà Kỳ Đồng",area:"Q3 / Kỳ Đồng",type:"Chicken phở / miến",budget:"70k–150k",status:"want",rating:0,notes:"Classic chicken noodle",mapsUrl:"https://maps.google.com/?q=Ph%E1%BB%9F+Mi%E1%BA%BFn+G%C3%A0+K%E1%BB%B3+%C4%90%E1%BB%93ng+14%2F5+K%E1%BB%B3+%C4%90%E1%BB%93ng+Qu%E1%BA%ADn+3"},
-  {id:122,cuisine:"Vietnamese 🇻🇳",place:"Hủ Tiếu Thành Đạt",area:"Q1 / Cô Bắc",type:"Hủ tiếu",budget:"60k–120k",status:"want",rating:0,notes:"Casual breakfast/lunch",mapsUrl:"https://maps.google.com/?q=H%E1%BB%A7+Ti%E1%BA%BFu+Th%C3%A0nh+%C4%90%E1%BA%A1t+C%C3%B4+B%E1%BA%AFc+Qu%E1%BA%ADn+1"},
-  {id:123,cuisine:"Vietnamese 🇻🇳",place:"Bún Chả Vân Anh",area:"Tân Bình / Hồng Hà",type:"Bún chả",budget:"70k–150k",status:"want",rating:0,notes:"Near airport area",mapsUrl:"https://maps.google.com/?q=B%C3%BAn+Ch%E1%BA%A3+V%C3%A2n+Anh+36+H%E1%BB%93ng+H%C3%A0+T%C3%A2n+B%C3%ACnh"},
-  {id:124,cuisine:"Vietnamese 🇻🇳",place:"Bún Thịt Nướng Kiều Bảo",area:"Q1 / Đề Thám",type:"Bún thịt nướng",budget:"60k–120k",status:"want",rating:0,notes:"Quick Vietnamese meal",mapsUrl:"https://maps.google.com/?q=B%C3%BAn+Th%E1%BB%8Bt+N%C6%B0%E1%BB%9Bng+Ki%E1%BB%81u+B%E1%BA%A3o+%C4%90%E1%BB%81+Th%C3%A1m+Qu%E1%BA%ADn+1"},
-  {id:125,cuisine:"Vietnamese 🇻🇳",place:"Bún Đậu Ngọc Hà",area:"Bình Thạnh / Lê Quang Định",type:"Bún đậu",budget:"80k–180k",status:"want",rating:0,notes:"Northern-style snack meal",mapsUrl:"https://maps.google.com/?q=B%C3%BAn+%C4%90%E1%BA%ADu+Ng%E1%BB%8Dc+H%C3%A0+L%C3%AA+Quang+%C4%90%E1%BB%8Bnh+B%C3%ACnh+Th%E1%BA%A1nh"},
-  {id:126,cuisine:"Vietnamese 🇻🇳",place:"Cơm Tấm Huyền",area:"Bình Thạnh / Lê Văn Duyệt",type:"Cơm tấm / late night",budget:"70k–150k",status:"want",rating:0,notes:"Late-night cơm tấm",mapsUrl:"https://maps.google.com/?q=C%C6%A1m+T%E1%BA%A5m+Huy%E1%BB%81n+L%C3%AA+V%C4%83n+Duy%E1%BB%87t+B%C3%ACnh+Th%E1%BA%A1nh"},
-  {id:127,cuisine:"Vietnamese 🇻🇳",place:"Cơm Tấm Nạc Giòn",area:"Phú Nhuận / Nguyễn Đình Chính",type:"Cơm tấm",budget:"70k–150k",status:"want",rating:0,notes:"Crispy pork option",mapsUrl:"https://maps.google.com/?q=C%C6%A1m+T%E1%BA%A5m+N%E1%BA%A1c+Gi%C3%B2n+33%2F16+Nguy%E1%BB%85n+%C4%90%C3%ACnh+Ch%C3%ADnh+Ph%C3%BA+Nhu%E1%BA%ADn"},
-  {id:128,cuisine:"Vietnamese 🇻🇳",place:"Cơm Gà Thanh",area:"Q5 / Nguyễn Trãi",type:"Chicken rice",budget:"70k–150k",status:"want",rating:0,notes:"Chợ Lớn comfort food",mapsUrl:"https://maps.google.com/?q=C%C6%A1m+G%C3%A0+Thanh+214%2F1+Nguy%E1%BB%85n+Tr%C3%A3i+Qu%E1%BA%ADn+5"},
-  {id:129,cuisine:"Vietnamese 🇻🇳",place:"Xôi Bát",area:"Bình Thạnh / Hoàng Hoa Thám",type:"Xôi",budget:"60k–150k",status:"want",rating:0,notes:"Modern xôi bowl",mapsUrl:"https://maps.google.com/?q=X%C3%B4i+B%C3%A1t+Ho%C3%A0ng+Hoa+Th%C3%A1m+B%C3%ACnh+Th%E1%BA%A1nh"},
-  {id:130,cuisine:"Vietnamese 🇻🇳",place:"Bò Lá Lốt Đường Ray",area:"Phú Nhuận / Nguyễn Văn Trỗi",type:"Bò lá lốt",budget:"80k–180k",status:"want",rating:0,notes:"Street-food style",mapsUrl:"https://maps.google.com/?q=B%C3%B2+L%C3%A1+L%E1%BB%91t+80%2F23+Nguy%E1%BB%85n+V%C4%83n+Tr%E1%BB%97i+Ph%C3%BA+Nhu%E1%BA%ADn"},
-  // Cafe / Brunch
-  {id:131,cuisine:"Cafe / Brunch ☕",place:"I Hate Monday",area:"Thảo Điền / Q2",type:"Cafe / brunch",budget:"200k–500k",status:"want",rating:0,notes:"Good brunch/cafe stop",mapsUrl:"https://maps.google.com/?q=I+Hate+Monday+Nguy%E1%BB%85n+Duy+Hi%E1%BB%87u+Th%E1%BA%A3o+%C4%90i%E1%BB%81n"},
-  {id:132,cuisine:"Cafe / Brunch ☕",place:"Today With You",area:"Thảo Điền / Q2",type:"Cafe / brunch",budget:"200k–500k",status:"want",rating:0,notes:"Cute cafe vibe",mapsUrl:"https://maps.google.com/?q=Today+With+You+Th%E1%BA%A3o+%C4%90i%E1%BB%81n"},
-  {id:133,cuisine:"Cafe / Brunch ☕",place:"Zumwhere",area:"Thảo Điền / Q2",type:"Dining / drinks",budget:"250k–600k",status:"want",rating:0,notes:"Casual dinner/drinks",mapsUrl:"https://maps.google.com/?q=Zumwhere+Th%E1%BA%A3o+%C4%90i%E1%BB%81n"},
-  {id:134,cuisine:"Cafe / Brunch ☕",place:"Society",area:"Q1 / Lý Tự Trọng",type:"Cafe / dining",budget:"250k–600k",status:"want",rating:0,notes:"Central dining/cafe",mapsUrl:"https://maps.google.com/?q=Society+26+L%C3%BD+T%E1%BB%B1+Tr%E1%BB%8Dng+Qu%E1%BA%ADn+1"},
-  {id:135,cuisine:"Cafe / Brunch ☕",place:"Oliu Quán",area:"TP.HCM",type:"Cafe / dining",budget:"200k–500k",status:"want",rating:0,notes:"Casual option",mapsUrl:"https://maps.google.com/?q=Oliu+Qu%C3%A1n+TP.HCM"},
-  {id:136,cuisine:"Cafe / Brunch ☕",place:"Sol Kitchen",area:"TP.HCM",type:"Modern dining",budget:"400k–900k",status:"want",rating:0,notes:"Date-night friendly",mapsUrl:"https://maps.google.com/?q=Sol+Kitchen+Ho+Chi+Minh"},
-  {id:137,cuisine:"Cafe / Brunch ☕",place:"Aussie Meat",area:"CMT8",type:"Steak / meat",budget:"300k–800k",status:"want",rating:0,notes:"Meat-focused casual",mapsUrl:"https://maps.google.com/?q=Aussie+Meat+C%C3%A1ch+M%E1%BA%A1ng+Th%C3%A1ng+8+Ho+Chi+Minh"},
-  {id:138,cuisine:"Cafe / Brunch ☕",place:"15 Grams Homemade Kitchen",area:"Q1",type:"Brunch / western",budget:"200k–500k",status:"want",rating:0,notes:"Cafe brunch",mapsUrl:"https://maps.google.com/?q=15+Grams+Homemade+Kitchen+Qu%E1%BA%ADn+1+Ho+Chi+Minh"},
+  {id:1,cuisine:"Vietnamese 🇻🇳",place:"Anan Saigon",area:"Q1",budget:"800k-1,000k",budgetTier:"Budget",mustTry:"Bánh mì / tasting snacks",vibe:"Fine dining",mapsUrl:"https://maps.google.com/?q=Anan+Saigon+Q1+Ho+Chi+Minh+City",status:"want",rating:0,tier:"",notes:"",googleRating:"",googleReviewCount:""},
+  {id:2,cuisine:"Vietnamese 🇻🇳",place:"Quán Bụi Original",area:"Q1",budget:"250k-600k",budgetTier:"Mid-range",mustTry:"Cơm nhà set",vibe:"Vietnamese comfort",mapsUrl:"https://maps.google.com/?q=Qu%C3%A1n+B%E1%BB%A5i+Original+Q1+Ho+Chi+Minh+City",status:"want",rating:0,tier:"",notes:"",googleRating:"",googleReviewCount:""},
+  {id:3,cuisine:"Vietnamese 🇻🇳",place:"Secret Garden",area:"Q1",budget:"250k-600k",budgetTier:"Mid-range",mustTry:"Gỏi cuốn / cơm nhà",vibe:"Rooftop",mapsUrl:"https://maps.google.com/?q=Secret+Garden+Q1+Ho+Chi+Minh+City",status:"want",rating:0,tier:"",notes:"",googleRating:"",googleReviewCount:""},
+  {id:4,cuisine:"Vietnamese 🇻🇳",place:"Hoa Túc",area:"Q1",budget:"400k-900k",budgetTier:"Budget",mustTry:"Vietnamese set",vibe:"Date night",mapsUrl:"https://maps.google.com/?q=Hoa+T%C3%BAc+Q1+Ho+Chi+Minh+City",status:"want",rating:0,tier:"",notes:"",googleRating:"",googleReviewCount:""},
+  {id:5,cuisine:"Vietnamese 🇻🇳",place:"Cục Gạch Quán",area:"Q1",budget:"350k-900k",budgetTier:"Premium under 1m",mustTry:"Cơm gia đình",vibe:"Classic",mapsUrl:"https://maps.google.com/?q=C%E1%BB%A5c+G%E1%BA%A1ch+Qu%C3%A1n+Q1+Ho+Chi+Minh+City",status:"want",rating:0,tier:"",notes:"",googleRating:"",googleReviewCount:""},
+  {id:6,cuisine:"Vietnamese 🇻🇳",place:"Bếp Mẹ Ỉn",area:"Q1",budget:"250k-500k",budgetTier:"Mid-range",mustTry:"Bánh xèo / grilled pork",vibe:"Casual",mapsUrl:"https://maps.google.com/?q=B%E1%BA%BFp+M%E1%BA%B9+%E1%BB%88n+Q1+Ho+Chi+Minh+City",status:"want",rating:0,tier:"",notes:"",googleRating:"",googleReviewCount:""},
+  {id:7,cuisine:"Vietnamese 🇻🇳",place:"Hum Vegetarian",area:"Q2/Q3",budget:"250k-600k",budgetTier:"Mid-range",mustTry:"Mushroom hotpot",vibe:"Vegetarian",mapsUrl:"https://maps.google.com/?q=Hum+Vegetarian+Q2%2FQ3+Ho+Chi+Minh+City",status:"want",rating:0,tier:"",notes:"",googleRating:"",googleReviewCount:""},
+  {id:8,cuisine:"Vietnamese 🇻🇳",place:"Chay Garden",area:"Q3",budget:"250k-600k",budgetTier:"Mid-range",mustTry:"Vegetarian set",vibe:"Vegetarian",mapsUrl:"https://maps.google.com/?q=Chay+Garden+Q3+Ho+Chi+Minh+City",status:"want",rating:0,tier:"",notes:"",googleRating:"",googleReviewCount:""},
+  {id:9,cuisine:"Vietnamese 🇻🇳",place:"Mặn Mòi",area:"Q1/Q3",budget:"250k-700k",budgetTier:"Mid-range",mustTry:"Vietnamese seafood",vibe:"Modern VN",mapsUrl:"https://maps.google.com/?q=M%E1%BA%B7n+M%C3%B2i+Q1%2FQ3+Ho+Chi+Minh+City",status:"want",rating:0,tier:"",notes:"",googleRating:"",googleReviewCount:""},
+  {id:10,cuisine:"Vietnamese 🇻🇳",place:"Nén Light Saigon",area:"Q1",budget:"700k-1,000k",budgetTier:"Budget",mustTry:"Modern tasting bites",vibe:"Fine casual",mapsUrl:"https://maps.google.com/?q=N%C3%A9n+Light+Saigon+Q1+Ho+Chi+Minh+City",status:"want",rating:0,tier:"",notes:"",googleRating:"",googleReviewCount:""},
+  {id:11,cuisine:"Vietnamese 🇻🇳",place:"Mountain Retreat",area:"Q1",budget:"250k-600k",budgetTier:"Mid-range",mustTry:"Cơm gia đình",vibe:"Rooftop",mapsUrl:"https://maps.google.com/?q=Mountain+Retreat+Q1+Ho+Chi+Minh+City",status:"want",rating:0,tier:"",notes:"",googleRating:"",googleReviewCount:""},
+  {id:12,cuisine:"Vietnamese 🇻🇳",place:"Rice Field",area:"Q1",budget:"250k-600k",budgetTier:"Mid-range",mustTry:"Vietnamese sharing dishes",vibe:"Casual",mapsUrl:"https://maps.google.com/?q=Rice+Field+Q1+Ho+Chi+Minh+City",status:"want",rating:0,tier:"",notes:"",googleRating:"",googleReviewCount:""},
+  {id:13,cuisine:"Japanese 🇯🇵",place:"Ippudo Ramen",area:"Q1",budget:"250k-500k",budgetTier:"Mid-range",mustTry:"Shiromaru ramen",vibe:"Ramen",mapsUrl:"https://maps.google.com/?q=Ippudo+Ramen+Q1+Ho+Chi+Minh+City",status:"want",rating:0,tier:"",notes:"",googleRating:"",googleReviewCount:""},
+  {id:14,cuisine:"Japanese 🇯🇵",place:"Futaba Ramen",area:"Q1",budget:"200k-400k",budgetTier:"Mid-range",mustTry:"Tonkotsu ramen",vibe:"Ramen",mapsUrl:"https://maps.google.com/?q=Futaba+Ramen+Q1+Ho+Chi+Minh+City",status:"want",rating:0,tier:"",notes:"",googleRating:"",googleReviewCount:""},
+  {id:15,cuisine:"Japanese 🇯🇵",place:"Danbo Ramen",area:"Q1",budget:"200k-400k",budgetTier:"Mid-range",mustTry:"Classic ramen",vibe:"Ramen",mapsUrl:"https://maps.google.com/?q=Danbo+Ramen+Q1+Ho+Chi+Minh+City",status:"want",rating:0,tier:"",notes:"",googleRating:"",googleReviewCount:""},
+  {id:16,cuisine:"Japanese 🇯🇵",place:"Mutahiro Ramen",area:"Q1",budget:"200k-450k",budgetTier:"Mid-range",mustTry:"Tsukemen / ramen",vibe:"Ramen",mapsUrl:"https://maps.google.com/?q=Mutahiro+Ramen+Q1+Ho+Chi+Minh+City",status:"want",rating:0,tier:"",notes:"",googleRating:"",googleReviewCount:""},
+  {id:17,cuisine:"Japanese 🇯🇵",place:"Sushi Hokkaido Sachi",area:"Q1/Q3/Q7",budget:"400k-900k",budgetTier:"Budget",mustTry:"Aburi sushi",vibe:"Sushi",mapsUrl:"https://maps.google.com/?q=Sushi+Hokkaido+Sachi+Q1%2FQ3%2FQ7+Ho+Chi+Minh+City",status:"want",rating:0,tier:"",notes:"",googleRating:"",googleReviewCount:""},
+  {id:18,cuisine:"Japanese 🇯🇵",place:"Nori Modern Izakaya",area:"Q1",budget:"350k-900k",budgetTier:"Premium under 1m",mustTry:"Izakaya sharing plates",vibe:"Izakaya",mapsUrl:"https://maps.google.com/?q=Nori+Modern+Izakaya+Q1+Ho+Chi+Minh+City",status:"want",rating:0,tier:"",notes:"",googleRating:"",googleReviewCount:""},
+  {id:19,cuisine:"Japanese 🇯🇵",place:"Izakaya Ten",area:"Q1/Phu Nhuan",budget:"300k-800k",budgetTier:"Mid-range",mustTry:"Yakitori / sake snacks",vibe:"Izakaya",mapsUrl:"https://maps.google.com/?q=Izakaya+Ten+Q1%2FPhu+Nhuan+Ho+Chi+Minh+City",status:"want",rating:0,tier:"",notes:"",googleRating:"",googleReviewCount:""},
+  {id:20,cuisine:"Japanese 🇯🇵",place:"Izakaya Matsuki",area:"Q1",budget:"300k-800k",budgetTier:"Mid-range",mustTry:"Grilled skewers",vibe:"Izakaya",mapsUrl:"https://maps.google.com/?q=Izakaya+Matsuki+Q1+Ho+Chi+Minh+City",status:"want",rating:0,tier:"",notes:"",googleRating:"",googleReviewCount:""},
+  {id:21,cuisine:"Japanese 🇯🇵",place:"Metetsu Izakaya",area:"Q1",budget:"300k-800k",budgetTier:"Mid-range",mustTry:"Nagoya chicken wings",vibe:"Izakaya",mapsUrl:"https://maps.google.com/?q=Metetsu+Izakaya+Q1+Ho+Chi+Minh+City",status:"want",rating:0,tier:"",notes:"",googleRating:"",googleReviewCount:""},
+  {id:22,cuisine:"Japanese 🇯🇵",place:"Mangetsu",area:"Q1",budget:"350k-900k",budgetTier:"Premium under 1m",mustTry:"Okonomiyaki / sashimi",vibe:"Izakaya",mapsUrl:"https://maps.google.com/?q=Mangetsu+Q1+Ho+Chi+Minh+City",status:"want",rating:0,tier:"",notes:"",googleRating:"",googleReviewCount:""},
+  {id:23,cuisine:"Japanese 🇯🇵",place:"Ebisu Shoten",area:"Q1",budget:"300k-800k",budgetTier:"Mid-range",mustTry:"Tempura / kushi katsu",vibe:"Izakaya",mapsUrl:"https://maps.google.com/?q=Ebisu+Shoten+Q1+Ho+Chi+Minh+City",status:"want",rating:0,tier:"",notes:"",googleRating:"",googleReviewCount:""},
+  {id:24,cuisine:"Japanese 🇯🇵",place:"Fujiro Tonkatsu",area:"Q1",budget:"250k-500k",budgetTier:"Mid-range",mustTry:"Tonkatsu set",vibe:"Tonkatsu",mapsUrl:"https://maps.google.com/?q=Fujiro+Tonkatsu+Q1+Ho+Chi+Minh+City",status:"want",rating:0,tier:"",notes:"",googleRating:"",googleReviewCount:""},
+  {id:25,cuisine:"Japanese 🇯🇵",place:"Chikara Gyoza",area:"Q1",budget:"200k-450k",budgetTier:"Mid-range",mustTry:"Gyoza / ramen",vibe:"Casual",mapsUrl:"https://maps.google.com/?q=Chikara+Gyoza+Q1+Ho+Chi+Minh+City",status:"want",rating:0,tier:"",notes:"",googleRating:"",googleReviewCount:""},
+  {id:26,cuisine:"Japanese 🇯🇵",place:"Sukiya",area:"Multiple",budget:"120k-250k",budgetTier:"Budget",mustTry:"Gyudon",vibe:"Budget",mapsUrl:"https://maps.google.com/?q=Sukiya+Multiple+Ho+Chi+Minh+City",status:"want",rating:0,tier:"",notes:"",googleRating:"",googleReviewCount:""},
+  {id:27,cuisine:"Japanese 🇯🇵",place:"Maguro Studio",area:"Q1",budget:"400k-900k",budgetTier:"Budget",mustTry:"Tuna dishes",vibe:"Sushi",mapsUrl:"https://maps.google.com/?q=Maguro+Studio+Q1+Ho+Chi+Minh+City",status:"want",rating:0,tier:"",notes:"",googleRating:"",googleReviewCount:""},
+  {id:28,cuisine:"Japanese 🇯🇵",place:"Tokyo Deli",area:"Multiple",budget:"150k-350k",budgetTier:"Budget",mustTry:"Sushi set",vibe:"Budget",mapsUrl:"https://maps.google.com/?q=Tokyo+Deli+Multiple+Ho+Chi+Minh+City",status:"want",rating:0,tier:"",notes:"",googleRating:"",googleReviewCount:""},
+  {id:29,cuisine:"Korean 🇰🇷",place:"Palsaik BBQ",area:"Q1",budget:"400k-900k",budgetTier:"Budget",mustTry:"8 flavour pork BBQ",vibe:"BBQ",mapsUrl:"https://maps.google.com/?q=Palsaik+BBQ+Q1+Ho+Chi+Minh+City",status:"want",rating:0,tier:"",notes:"",googleRating:"",googleReviewCount:""},
+  {id:30,cuisine:"Korean 🇰🇷",place:"Midam Korean Premium BBQ",area:"Q1",budget:"450k-900k",budgetTier:"Premium under 1m",mustTry:"Beef BBQ set",vibe:"BBQ",mapsUrl:"https://maps.google.com/?q=Midam+Korean+Premium+BBQ+Q1+Ho+Chi+Minh+City",status:"want",rating:0,tier:"",notes:"",googleRating:"",googleReviewCount:""},
+  {id:31,cuisine:"Korean 🇰🇷",place:"Bros Korea 1980s",area:"Q3",budget:"300k-800k",budgetTier:"Mid-range",mustTry:"Korean BBQ",vibe:"BBQ",mapsUrl:"https://maps.google.com/?q=Bros+Korea+1980s+Q3+Ho+Chi+Minh+City",status:"want",rating:0,tier:"",notes:"",googleRating:"",googleReviewCount:""},
+  {id:32,cuisine:"Korean 🇰🇷",place:"Matchandeul BBQ",area:"Q7",budget:"400k-900k",budgetTier:"Budget",mustTry:"Pork belly BBQ",vibe:"BBQ",mapsUrl:"https://maps.google.com/?q=Matchandeul+BBQ+Q7+Ho+Chi+Minh+City",status:"want",rating:0,tier:"",notes:"",googleRating:"",googleReviewCount:""},
+  {id:33,cuisine:"Korean 🇰🇷",place:"Bornga",area:"Q1/Q7",budget:"400k-900k",budgetTier:"Budget",mustTry:"Woo Samgyeop",vibe:"BBQ",mapsUrl:"https://maps.google.com/?q=Bornga+Q1%2FQ7+Ho+Chi+Minh+City",status:"want",rating:0,tier:"",notes:"",googleRating:"",googleReviewCount:""},
+  {id:34,cuisine:"Korean 🇰🇷",place:"Hanuri",area:"Multiple",budget:"120k-300k",budgetTier:"Budget",mustTry:"Kimchi fried rice",vibe:"Budget",mapsUrl:"https://maps.google.com/?q=Hanuri+Multiple+Ho+Chi+Minh+City",status:"want",rating:0,tier:"",notes:"",googleRating:"",googleReviewCount:""},
+  {id:35,cuisine:"Korean 🇰🇷",place:"Don Chicken",area:"Multiple",budget:"200k-450k",budgetTier:"Mid-range",mustTry:"Fried chicken",vibe:"Chicken",mapsUrl:"https://maps.google.com/?q=Don+Chicken+Multiple+Ho+Chi+Minh+City",status:"want",rating:0,tier:"",notes:"",googleRating:"",googleReviewCount:""},
+  {id:36,cuisine:"Korean 🇰🇷",place:"Gaxeo Chicken",area:"Multiple",budget:"200k-450k",budgetTier:"Mid-range",mustTry:"Korean fried chicken",vibe:"Chicken",mapsUrl:"https://maps.google.com/?q=Gaxeo+Chicken+Multiple+Ho+Chi+Minh+City",status:"want",rating:0,tier:"",notes:"",googleRating:"",googleReviewCount:""},
+  {id:37,cuisine:"Korean 🇰🇷",place:"Doran Doran",area:"Q1",budget:"200k-500k",budgetTier:"Mid-range",mustTry:"Korean home food",vibe:"Casual",mapsUrl:"https://maps.google.com/?q=Doran+Doran+Q1+Ho+Chi+Minh+City",status:"want",rating:0,tier:"",notes:"",googleRating:"",googleReviewCount:""},
+  {id:38,cuisine:"Korean 🇰🇷",place:"Busan Korean Food",area:"Q1/Q7",budget:"150k-350k",budgetTier:"Budget",mustTry:"Tteokbokki / kimbap",vibe:"Casual",mapsUrl:"https://maps.google.com/?q=Busan+Korean+Food+Q1%2FQ7+Ho+Chi+Minh+City",status:"want",rating:0,tier:"",notes:"",googleRating:"",googleReviewCount:""},
+  {id:39,cuisine:"Korean 🇰🇷",place:"Yukssam BBQ",area:"Multiple",budget:"300k-700k",budgetTier:"Mid-range",mustTry:"BBQ set",vibe:"BBQ",mapsUrl:"https://maps.google.com/?q=Yukssam+BBQ+Multiple+Ho+Chi+Minh+City",status:"want",rating:0,tier:"",notes:"",googleRating:"",googleReviewCount:""},
+  {id:40,cuisine:"Korean 🇰🇷",place:"Kimbap FC",area:"Multiple",budget:"120k-300k",budgetTier:"Budget",mustTry:"Kimbap / tteokbokki",vibe:"Budget",mapsUrl:"https://maps.google.com/?q=Kimbap+FC+Multiple+Ho+Chi+Minh+City",status:"want",rating:0,tier:"",notes:"",googleRating:"",googleReviewCount:""},
+  {id:41,cuisine:"Korean 🇰🇷",place:"Oppa Kitchen",area:"Multiple",budget:"150k-350k",budgetTier:"Budget",mustTry:"Bibimbap",vibe:"Casual",mapsUrl:"https://maps.google.com/?q=Oppa+Kitchen+Multiple+Ho+Chi+Minh+City",status:"want",rating:0,tier:"",notes:"",googleRating:"",googleReviewCount:""},
+  {id:42,cuisine:"Korean 🇰🇷",place:"Mabu-KKO Chi",area:"Q7",budget:"250k-600k",budgetTier:"Mid-range",mustTry:"Korean pub food",vibe:"Pocha",mapsUrl:"https://maps.google.com/?q=Mabu-KKO+Chi+Q7+Ho+Chi+Minh+City",status:"want",rating:0,tier:"",notes:"",googleRating:"",googleReviewCount:""},
+  {id:43,cuisine:"Thai 🇹🇭",place:"Som Tum Thai",area:"Q1",budget:"200k-500k",budgetTier:"Mid-range",mustTry:"Papaya salad",vibe:"Casual",mapsUrl:"https://maps.google.com/?q=Som+Tum+Thai+Q1+Ho+Chi+Minh+City",status:"want",rating:0,tier:"",notes:"",googleRating:"",googleReviewCount:""},
+  {id:44,cuisine:"Thai 🇹🇭",place:"Somtam ZAAP",area:"Q1",budget:"200k-500k",budgetTier:"Mid-range",mustTry:"Som tam / grilled pork",vibe:"Casual",mapsUrl:"https://maps.google.com/?q=Somtam+ZAAP+Q1+Ho+Chi+Minh+City",status:"want",rating:0,tier:"",notes:"",googleRating:"",googleReviewCount:""},
+  {id:45,cuisine:"Thai 🇹🇭",place:"Koh Yam Thai Kitchen",area:"Q1",budget:"200k-500k",budgetTier:"Mid-range",mustTry:"Pad Thai / tom yum",vibe:"Casual",mapsUrl:"https://maps.google.com/?q=Koh+Yam+Thai+Kitchen+Q1+Ho+Chi+Minh+City",status:"want",rating:0,tier:"",notes:"",googleRating:"",googleReviewCount:""},
+  {id:46,cuisine:"Thai 🇹🇭",place:"Lac Thai",area:"Q1",budget:"300k-700k",budgetTier:"Mid-range",mustTry:"Tom yum seafood",vibe:"Classic",mapsUrl:"https://maps.google.com/?q=Lac+Thai+Q1+Ho+Chi+Minh+City",status:"want",rating:0,tier:"",notes:"",googleRating:"",googleReviewCount:""},
+  {id:47,cuisine:"Thai 🇹🇭",place:"Golden Elephant",area:"Q1",budget:"300k-700k",budgetTier:"Mid-range",mustTry:"Green curry",vibe:"Classic",mapsUrl:"https://maps.google.com/?q=Golden+Elephant+Q1+Ho+Chi+Minh+City",status:"want",rating:0,tier:"",notes:"",googleRating:"",googleReviewCount:""},
+  {id:48,cuisine:"Thai 🇹🇭",place:"Mama Thai",area:"Q1",budget:"200k-500k",budgetTier:"Mid-range",mustTry:"Pad Thai",vibe:"Casual",mapsUrl:"https://maps.google.com/?q=Mama+Thai+Q1+Ho+Chi+Minh+City",status:"want",rating:0,tier:"",notes:"",googleRating:"",googleReviewCount:""},
+  {id:49,cuisine:"Thai 🇹🇭",place:"TukTuk Thai Bistro",area:"Multiple",budget:"250k-600k",budgetTier:"Mid-range",mustTry:"Thai sharing dishes",vibe:"Casual",mapsUrl:"https://maps.google.com/?q=TukTuk+Thai+Bistro+Multiple+Ho+Chi+Minh+City",status:"want",rating:0,tier:"",notes:"",googleRating:"",googleReviewCount:""},
+  {id:50,cuisine:"Thai 🇹🇭",place:"Thai Market",area:"Multiple",budget:"200k-500k",budgetTier:"Mid-range",mustTry:"Thai street food",vibe:"Casual",mapsUrl:"https://maps.google.com/?q=Thai+Market+Multiple+Ho+Chi+Minh+City",status:"want",rating:0,tier:"",notes:"",googleRating:"",googleReviewCount:""},
+  {id:51,cuisine:"Thai 🇹🇭",place:"MK Restaurant",area:"Multiple",budget:"250k-600k",budgetTier:"Mid-range",mustTry:"Thai hotpot",vibe:"Hotpot",mapsUrl:"https://maps.google.com/?q=MK+Restaurant+Multiple+Ho+Chi+Minh+City",status:"want",rating:0,tier:"",notes:"",googleRating:"",googleReviewCount:""},
+  {id:52,cuisine:"Thai 🇹🇭",place:"Con Voi Vàng",area:"Q1",budget:"250k-600k",budgetTier:"Mid-range",mustTry:"Thai curry",vibe:"Classic",mapsUrl:"https://maps.google.com/?q=Con+Voi+V%C3%A0ng+Q1+Ho+Chi+Minh+City",status:"want",rating:0,tier:"",notes:"",googleRating:"",googleReviewCount:""},
+  {id:53,cuisine:"Chinese / HongKong 🇨🇳🇭🇰",place:"Dim Tu Tac",area:"Q1/Q5/Q7",budget:"350k-900k",budgetTier:"Premium under 1m",mustTry:"Har gow / dimsum",vibe:"Dimsum",mapsUrl:"https://maps.google.com/?q=Dim+Tu+Tac+Q1%2FQ5%2FQ7+Ho+Chi+Minh+City",status:"want",rating:0,tier:"",notes:"",googleRating:"",googleReviewCount:""},
+  {id:54,cuisine:"Chinese / HongKong 🇨🇳🇭🇰",place:"Baoz Dimsum",area:"Q5/Q7",budget:"250k-600k",budgetTier:"Mid-range",mustTry:"Xiao long bao",vibe:"Dimsum",mapsUrl:"https://maps.google.com/?q=Baoz+Dimsum+Q5%2FQ7+Ho+Chi+Minh+City",status:"want",rating:0,tier:"",notes:"",googleRating:"",googleReviewCount:""},
+  {id:55,cuisine:"Chinese / HongKong 🇨🇳🇭🇰",place:"San Fu Lou",area:"Q1/Q7",budget:"300k-700k",budgetTier:"Mid-range",mustTry:"Dimsum / roasted duck",vibe:"Cantonese",mapsUrl:"https://maps.google.com/?q=San+Fu+Lou+Q1%2FQ7+Ho+Chi+Minh+City",status:"want",rating:0,tier:"",notes:"",googleRating:"",googleReviewCount:""},
+  {id:56,cuisine:"Chinese / HongKong 🇨🇳🇭🇰",place:"Crystal Jade",area:"Q1",budget:"400k-900k",budgetTier:"Budget",mustTry:"Cantonese dishes",vibe:"Cantonese",mapsUrl:"https://maps.google.com/?q=Crystal+Jade+Q1+Ho+Chi+Minh+City",status:"want",rating:0,tier:"",notes:"",googleRating:"",googleReviewCount:""},
+  {id:57,cuisine:"Chinese / HongKong 🇨🇳🇭🇰",place:"Tim Ho Wan",area:"Q1",budget:"350k-800k",budgetTier:"Mid-range",mustTry:"BBQ pork buns",vibe:"Dimsum",mapsUrl:"https://maps.google.com/?q=Tim+Ho+Wan+Q1+Ho+Chi+Minh+City",status:"want",rating:0,tier:"",notes:"",googleRating:"",googleReviewCount:""},
+  {id:58,cuisine:"Chinese / HongKong 🇨🇳🇭🇰",place:"Tân Hải Vân",area:"Q1/Q5",budget:"250k-600k",budgetTier:"Mid-range",mustTry:"Mì vịt tiềm",vibe:"Chinatown",mapsUrl:"https://maps.google.com/?q=T%C3%A2n+H%E1%BA%A3i+V%C3%A2n+Q1%2FQ5+Ho+Chi+Minh+City",status:"want",rating:0,tier:"",notes:"",googleRating:"",googleReviewCount:""},
+  {id:59,cuisine:"Chinese / HongKong 🇨🇳🇭🇰",place:"Hải Ký Mì Gia",area:"Q5",budget:"150k-350k",budgetTier:"Budget",mustTry:"Mì hoành thánh",vibe:"Chinatown",mapsUrl:"https://maps.google.com/?q=H%E1%BA%A3i+K%C3%BD+M%C3%AC+Gia+Q5+Ho+Chi+Minh+City",status:"want",rating:0,tier:"",notes:"",googleRating:"",googleReviewCount:""},
+  {id:60,cuisine:"Chinese / HongKong 🇨🇳🇭🇰",place:"Mỹ Vị Hong Kong",area:"Q5",budget:"150k-400k",budgetTier:"Budget",mustTry:"Hong Kong noodles",vibe:"Chinatown",mapsUrl:"https://maps.google.com/?q=M%E1%BB%B9+V%E1%BB%8B+Hong+Kong+Q5+Ho+Chi+Minh+City",status:"want",rating:0,tier:"",notes:"",googleRating:"",googleReviewCount:""},
+  {id:61,cuisine:"Chinese / HongKong 🇨🇳🇭🇰",place:"Long Triều",area:"Q3",budget:"400k-900k",budgetTier:"Budget",mustTry:"Cantonese dishes",vibe:"Cantonese",mapsUrl:"https://maps.google.com/?q=Long+Tri%E1%BB%81u+Q3+Ho+Chi+Minh+City",status:"want",rating:0,tier:"",notes:"",googleRating:"",googleReviewCount:""},
+  {id:62,cuisine:"Chinese / HongKong 🇨🇳🇭🇰",place:"Bao Bei",area:"Q1",budget:"300k-700k",budgetTier:"Mid-range",mustTry:"Chinese comfort food",vibe:"Modern",mapsUrl:"https://maps.google.com/?q=Bao+Bei+Q1+Ho+Chi+Minh+City",status:"want",rating:0,tier:"",notes:"",googleRating:"",googleReviewCount:""},
+  {id:63,cuisine:"Chinese / HongKong 🇨🇳🇭🇰",place:"Cửu Long Quán Kowloon",area:"Q6",budget:"200k-500k",budgetTier:"Mid-range",mustTry:"Hong Kong street food",vibe:"Casual",mapsUrl:"https://maps.google.com/?q=C%E1%BB%ADu+Long+Qu%C3%A1n+Kowloon+Q6+Ho+Chi+Minh+City",status:"want",rating:0,tier:"",notes:"",googleRating:"",googleReviewCount:""},
+  {id:64,cuisine:"Chinese / HongKong 🇨🇳🇭🇰",place:"Dimsum Ông Sủi",area:"Q5",budget:"150k-350k",budgetTier:"Budget",mustTry:"Dimsum plates",vibe:"Budget",mapsUrl:"https://maps.google.com/?q=Dimsum+%C3%94ng+S%E1%BB%A7i+Q5+Ho+Chi+Minh+City",status:"want",rating:0,tier:"",notes:"",googleRating:"",googleReviewCount:""},
+  {id:65,cuisine:"Chinese / HongKong 🇨🇳🇭🇰",place:"Sủi Cảo Ngọc Ý",area:"Q11",budget:"100k-250k",budgetTier:"Budget",mustTry:"Sủi cảo",vibe:"Budget",mapsUrl:"https://maps.google.com/?q=S%E1%BB%A7i+C%E1%BA%A3o+Ng%E1%BB%8Dc+%C3%9D+Q11+Ho+Chi+Minh+City",status:"want",rating:0,tier:"",notes:"",googleRating:"",googleReviewCount:""},
+  {id:66,cuisine:"Chinese / HongKong 🇨🇳🇭🇰",place:"Tân Tòng Lợi",area:"Q3",budget:"100k-250k",budgetTier:"Budget",mustTry:"Sủi cảo / mì",vibe:"Budget",mapsUrl:"https://maps.google.com/?q=T%C3%A2n+T%C3%B2ng+L%E1%BB%A3i+Q3+Ho+Chi+Minh+City",status:"want",rating:0,tier:"",notes:"",googleRating:"",googleReviewCount:""},
+  {id:67,cuisine:"Italian 🇮🇹",place:"Pizza 4P's",area:"Multiple",budget:"350k-800k",budgetTier:"Mid-range",mustTry:"Burrata pizza",vibe:"Pizza",mapsUrl:"https://maps.google.com/?q=Pizza+4P%27s+Multiple+Ho+Chi+Minh+City",status:"want",rating:0,tier:"",notes:"",googleRating:"",googleReviewCount:""},
+  {id:68,cuisine:"Italian 🇮🇹",place:"Pendolasco",area:"Q1/Q2",budget:"400k-900k",budgetTier:"Budget",mustTry:"Wood-fired pizza",vibe:"Italian",mapsUrl:"https://maps.google.com/?q=Pendolasco+Q1%2FQ2+Ho+Chi+Minh+City",status:"want",rating:0,tier:"",notes:"",googleRating:"",googleReviewCount:""},
+  {id:69,cuisine:"Italian 🇮🇹",place:"Ciao Bella",area:"Q1",budget:"400k-900k",budgetTier:"Budget",mustTry:"Pasta / risotto",vibe:"Italian",mapsUrl:"https://maps.google.com/?q=Ciao+Bella+Q1+Ho+Chi+Minh+City",status:"want",rating:0,tier:"",notes:"",googleRating:"",googleReviewCount:""},
+  {id:70,cuisine:"Italian 🇮🇹",place:"Basta Hiro",area:"Q1",budget:"300k-700k",budgetTier:"Mid-range",mustTry:"Pizza / pasta",vibe:"Casual",mapsUrl:"https://maps.google.com/?q=Basta+Hiro+Q1+Ho+Chi+Minh+City",status:"want",rating:0,tier:"",notes:"",googleRating:"",googleReviewCount:""},
+  {id:71,cuisine:"Italian 🇮🇹",place:"Truffle & Co.",area:"Q1",budget:"350k-800k",budgetTier:"Mid-range",mustTry:"Truffle pasta",vibe:"Pasta",mapsUrl:"https://maps.google.com/?q=Truffle+%26+Co.+Q1+Ho+Chi+Minh+City",status:"want",rating:0,tier:"",notes:"",googleRating:"",googleReviewCount:""},
+  {id:72,cuisine:"Italian 🇮🇹",place:"Pasta Club",area:"Q1",budget:"300k-700k",budgetTier:"Mid-range",mustTry:"Fresh pasta",vibe:"Pasta",mapsUrl:"https://maps.google.com/?q=Pasta+Club+Q1+Ho+Chi+Minh+City",status:"want",rating:0,tier:"",notes:"",googleRating:"",googleReviewCount:""},
+  {id:73,cuisine:"Italian 🇮🇹",place:"Opera Italian Restaurant",area:"Q1",budget:"500k-1,000k",budgetTier:"Budget",mustTry:"Pasta / Italian mains",vibe:"Italian",mapsUrl:"https://maps.google.com/?q=Opera+Italian+Restaurant+Q1+Ho+Chi+Minh+City",status:"want",rating:0,tier:"",notes:"",googleRating:"",googleReviewCount:""},
+  {id:74,cuisine:"Italian 🇮🇹",place:"Pizza Reale",area:"Q2",budget:"300k-700k",budgetTier:"Mid-range",mustTry:"Neapolitan pizza",vibe:"Pizza",mapsUrl:"https://maps.google.com/?q=Pizza+Reale+Q2+Ho+Chi+Minh+City",status:"want",rating:0,tier:"",notes:"",googleRating:"",googleReviewCount:""},
+  {id:75,cuisine:"Italian 🇮🇹",place:"Lucca",area:"Q1",budget:"400k-900k",budgetTier:"Budget",mustTry:"Italian classics",vibe:"Italian",mapsUrl:"https://maps.google.com/?q=Lucca+Q1+Ho+Chi+Minh+City",status:"want",rating:0,tier:"",notes:"",googleRating:"",googleReviewCount:""},
+  {id:76,cuisine:"Italian 🇮🇹",place:"Da Vittorio Saigon",area:"Q1",budget:"700k-1,000k",budgetTier:"Budget",mustTry:"Italian set dishes",vibe:"Premium",mapsUrl:"https://maps.google.com/?q=Da+Vittorio+Saigon+Q1+Ho+Chi+Minh+City",status:"want",rating:0,tier:"",notes:"",googleRating:"",googleReviewCount:""},
+  {id:77,cuisine:"French 🇫🇷",place:"Cocotte",area:"Q1",budget:"300k-800k",budgetTier:"Mid-range",mustTry:"Duck confit",vibe:"Bistro",mapsUrl:"https://maps.google.com/?q=Cocotte+Q1+Ho+Chi+Minh+City",status:"want",rating:0,tier:"",notes:"",googleRating:"",googleReviewCount:""},
+  {id:78,cuisine:"French 🇫🇷",place:"Marcel Gourmet Burger",area:"Q1/Q2",budget:"250k-500k",budgetTier:"Mid-range",mustTry:"Burger",vibe:"Casual",mapsUrl:"https://maps.google.com/?q=Marcel+Gourmet+Burger+Q1%2FQ2+Ho+Chi+Minh+City",status:"want",rating:0,tier:"",notes:"",googleRating:"",googleReviewCount:""},
+  {id:79,cuisine:"French 🇫🇷",place:"L'Usine",area:"Q1/Q2",budget:"250k-600k",budgetTier:"Mid-range",mustTry:"Brunch / bistro",vibe:"Cafe bistro",mapsUrl:"https://maps.google.com/?q=L%27Usine+Q1%2FQ2+Ho+Chi+Minh+City",status:"want",rating:0,tier:"",notes:"",googleRating:"",googleReviewCount:""},
+  {id:80,cuisine:"French 🇫🇷",place:"Paul Bakery",area:"Q1",budget:"150k-400k",budgetTier:"Budget",mustTry:"Pastry / croissant",vibe:"Bakery",mapsUrl:"https://maps.google.com/?q=Paul+Bakery+Q1+Ho+Chi+Minh+City",status:"want",rating:0,tier:"",notes:"",googleRating:"",googleReviewCount:""},
+  {id:81,cuisine:"French 🇫🇷",place:"Le Padam",area:"Q1",budget:"350k-900k",budgetTier:"Premium under 1m",mustTry:"Wine bistro plates",vibe:"Bistro",mapsUrl:"https://maps.google.com/?q=Le+Padam+Q1+Ho+Chi+Minh+City",status:"want",rating:0,tier:"",notes:"",googleRating:"",googleReviewCount:""},
+  {id:82,cuisine:"French 🇫🇷",place:"The Refinery",area:"Q1",budget:"350k-900k",budgetTier:"Premium under 1m",mustTry:"French bistro",vibe:"Bistro",mapsUrl:"https://maps.google.com/?q=The+Refinery+Q1+Ho+Chi+Minh+City",status:"want",rating:0,tier:"",notes:"",googleRating:"",googleReviewCount:""},
+  {id:83,cuisine:"French 🇫🇷",place:"Au Parc",area:"Q1",budget:"250k-600k",budgetTier:"Mid-range",mustTry:"Mediterranean brunch",vibe:"Brunch",mapsUrl:"https://maps.google.com/?q=Au+Parc+Q1+Ho+Chi+Minh+City",status:"want",rating:0,tier:"",notes:"",googleRating:"",googleReviewCount:""},
+  {id:84,cuisine:"French 🇫🇷",place:"Godmother Bake & Brunch",area:"Q1",budget:"250k-600k",budgetTier:"Mid-range",mustTry:"Brunch",vibe:"Brunch",mapsUrl:"https://maps.google.com/?q=Godmother+Bake+%26+Brunch+Q1+Ho+Chi+Minh+City",status:"want",rating:0,tier:"",notes:"",googleRating:"",googleReviewCount:""},
+  {id:85,cuisine:"Spanish 🇪🇸",place:"Tomatito Saigon",area:"Q1",budget:"350k-900k",budgetTier:"Premium under 1m",mustTry:"Tapas / paella",vibe:"Tapas",mapsUrl:"https://maps.google.com/?q=Tomatito+Saigon+Q1+Ho+Chi+Minh+City",status:"want",rating:0,tier:"",notes:"",googleRating:"",googleReviewCount:""},
+  {id:86,cuisine:"Spanish 🇪🇸",place:"Iberico Tapas y Vino",area:"Q1/Q2",budget:"400k-900k",budgetTier:"Budget",mustTry:"Iberico tapas",vibe:"Tapas",mapsUrl:"https://maps.google.com/?q=Iberico+Tapas+y+Vino+Q1%2FQ2+Ho+Chi+Minh+City",status:"want",rating:0,tier:"",notes:"",googleRating:"",googleReviewCount:""},
+  {id:87,cuisine:"Spanish 🇪🇸",place:"Octo Tapas Restobar",area:"Q1",budget:"400k-900k",budgetTier:"Budget",mustTry:"Octopus / tapas",vibe:"Tapas",mapsUrl:"https://maps.google.com/?q=Octo+Tapas+Restobar+Q1+Ho+Chi+Minh+City",status:"want",rating:0,tier:"",notes:"",googleRating:"",googleReviewCount:""},
+  {id:88,cuisine:"Spanish 🇪🇸",place:"La Fiesta",area:"Q1",budget:"250k-600k",budgetTier:"Mid-range",mustTry:"Tex-Mex / tacos",vibe:"Casual",mapsUrl:"https://maps.google.com/?q=La+Fiesta+Q1+Ho+Chi+Minh+City",status:"want",rating:0,tier:"",notes:"",googleRating:"",googleReviewCount:""},
+  {id:89,cuisine:"Spanish 🇪🇸",place:"Ole Spanish Restaurant",area:"Q1",budget:"350k-800k",budgetTier:"Mid-range",mustTry:"Paella",vibe:"Spanish",mapsUrl:"https://maps.google.com/?q=Ole+Spanish+Restaurant+Q1+Ho+Chi+Minh+City",status:"want",rating:0,tier:"",notes:"",googleRating:"",googleReviewCount:""},
+  {id:90,cuisine:"Spanish 🇪🇸",place:"El Camino Taqueria",area:"Q2",budget:"250k-600k",budgetTier:"Mid-range",mustTry:"Tacos / tapas",vibe:"Casual",mapsUrl:"https://maps.google.com/?q=El+Camino+Taqueria+Q2+Ho+Chi+Minh+City",status:"want",rating:0,tier:"",notes:"",googleRating:"",googleReviewCount:""},
+  {id:91,cuisine:"Mexican 🇲🇽",place:"District Federal",area:"Thao Dien",budget:"250k-600k",budgetTier:"Mid-range",mustTry:"Tacos al pastor",vibe:"Mexican",mapsUrl:"https://maps.google.com/?q=District+Federal+Thao+Dien+Ho+Chi+Minh+City",status:"want",rating:0,tier:"",notes:"",googleRating:"",googleReviewCount:""},
+  {id:92,cuisine:"Mexican 🇲🇽",place:"Tippy's Mexican Food",area:"Thao Dien",budget:"250k-600k",budgetTier:"Mid-range",mustTry:"Burrito / tacos",vibe:"Mexican",mapsUrl:"https://maps.google.com/?q=Tippy%27s+Mexican+Food+Thao+Dien+Ho+Chi+Minh+City",status:"want",rating:0,tier:"",notes:"",googleRating:"",googleReviewCount:""},
+  {id:93,cuisine:"Mexican 🇲🇽",place:"Rico Taco",area:"Q1",budget:"200k-500k",budgetTier:"Mid-range",mustTry:"Tacos",vibe:"Mexican",mapsUrl:"https://maps.google.com/?q=Rico+Taco+Q1+Ho+Chi+Minh+City",status:"want",rating:0,tier:"",notes:"",googleRating:"",googleReviewCount:""},
+  {id:94,cuisine:"Mexican 🇲🇽",place:"Gringo Tacos",area:"Q1",budget:"200k-500k",budgetTier:"Mid-range",mustTry:"Tacos",vibe:"Mexican",mapsUrl:"https://maps.google.com/?q=Gringo+Tacos+Q1+Ho+Chi+Minh+City",status:"want",rating:0,tier:"",notes:"",googleRating:"",googleReviewCount:""},
+  {id:95,cuisine:"Mexican 🇲🇽",place:"TacoLeo",area:"Q1",budget:"200k-500k",budgetTier:"Mid-range",mustTry:"Tacos",vibe:"Mexican",mapsUrl:"https://maps.google.com/?q=TacoLeo+Q1+Ho+Chi+Minh+City",status:"want",rating:0,tier:"",notes:"",googleRating:"",googleReviewCount:""},
+  {id:96,cuisine:"Mexican 🇲🇽",place:"Mexcla",area:"Q1",budget:"250k-600k",budgetTier:"Mid-range",mustTry:"Tacos / quesadilla",vibe:"Mexican",mapsUrl:"https://maps.google.com/?q=Mexcla+Q1+Ho+Chi+Minh+City",status:"want",rating:0,tier:"",notes:"",googleRating:"",googleReviewCount:""},
+  {id:97,cuisine:"Mexican 🇲🇽",place:"Bandido Saigon",area:"Q1",budget:"300k-700k",budgetTier:"Mid-range",mustTry:"Modern Mexican",vibe:"Mexican",mapsUrl:"https://maps.google.com/?q=Bandido+Saigon+Q1+Ho+Chi+Minh+City",status:"want",rating:0,tier:"",notes:"",googleRating:"",googleReviewCount:""},
+  {id:98,cuisine:"Mexican 🇲🇽",place:"Sol Kitchen & Bar",area:"Q7",budget:"400k-900k",budgetTier:"Budget",mustTry:"Latin sharing plates",vibe:"Latin",mapsUrl:"https://maps.google.com/?q=Sol+Kitchen+%26+Bar+Q7+Ho+Chi+Minh+City",status:"want",rating:0,tier:"",notes:"",googleRating:"",googleReviewCount:""},
+  {id:99,cuisine:"Indian 🇮🇳",place:"Baba's Kitchen",area:"Q1/Q2",budget:"250k-600k",budgetTier:"Mid-range",mustTry:"Butter chicken",vibe:"Indian",mapsUrl:"https://maps.google.com/?q=Baba%27s+Kitchen+Q1%2FQ2+Ho+Chi+Minh+City",status:"want",rating:0,tier:"",notes:"",googleRating:"",googleReviewCount:""},
+  {id:100,cuisine:"Indian 🇮🇳",place:"Tandoor",area:"Q1",budget:"300k-700k",budgetTier:"Mid-range",mustTry:"Tandoori chicken",vibe:"Indian",mapsUrl:"https://maps.google.com/?q=Tandoor+Q1+Ho+Chi+Minh+City",status:"want",rating:0,tier:"",notes:"",googleRating:"",googleReviewCount:""},
+  {id:101,cuisine:"Indian 🇮🇳",place:"Benaras",area:"Q1",budget:"400k-900k",budgetTier:"Budget",mustTry:"North Indian curry",vibe:"Indian",mapsUrl:"https://maps.google.com/?q=Benaras+Q1+Ho+Chi+Minh+City",status:"want",rating:0,tier:"",notes:"",googleRating:"",googleReviewCount:""},
+  {id:102,cuisine:"Indian 🇮🇳",place:"Ganesh",area:"Q1/Q2",budget:"300k-700k",budgetTier:"Mid-range",mustTry:"Naan / curry",vibe:"Indian",mapsUrl:"https://maps.google.com/?q=Ganesh+Q1%2FQ2+Ho+Chi+Minh+City",status:"want",rating:0,tier:"",notes:"",googleRating:"",googleReviewCount:""},
+  {id:103,cuisine:"Indian 🇮🇳",place:"Mustard Indian Restaurant",area:"Q1",budget:"300k-700k",budgetTier:"Mid-range",mustTry:"Biryani",vibe:"Indian",mapsUrl:"https://maps.google.com/?q=Mustard+Indian+Restaurant+Q1+Ho+Chi+Minh+City",status:"want",rating:0,tier:"",notes:"",googleRating:"",googleReviewCount:""},
+  {id:104,cuisine:"Indian 🇮🇳",place:"Saffron Indian",area:"Q1",budget:"300k-800k",budgetTier:"Mid-range",mustTry:"Indian set",vibe:"Indian",mapsUrl:"https://maps.google.com/?q=Saffron+Indian+Q1+Ho+Chi+Minh+City",status:"want",rating:0,tier:"",notes:"",googleRating:"",googleReviewCount:""},
+  {id:105,cuisine:"Indian 🇮🇳",place:"Namaste India",area:"Q1",budget:"250k-600k",budgetTier:"Mid-range",mustTry:"Curry / naan",vibe:"Indian",mapsUrl:"https://maps.google.com/?q=Namaste+India+Q1+Ho+Chi+Minh+City",status:"want",rating:0,tier:"",notes:"",googleRating:"",googleReviewCount:""},
+  {id:106,cuisine:"Indian 🇮🇳",place:"Dahi Handi",area:"Q1",budget:"250k-600k",budgetTier:"Mid-range",mustTry:"Indian thali",vibe:"Indian",mapsUrl:"https://maps.google.com/?q=Dahi+Handi+Q1+Ho+Chi+Minh+City",status:"want",rating:0,tier:"",notes:"",googleRating:"",googleReviewCount:""},
+  {id:107,cuisine:"Middle Eastern 🇱🇧🇹🇷",place:"Pasha Turkish Restaurant",area:"Thao Dien",budget:"300k-700k",budgetTier:"Mid-range",mustTry:"Mixed kebab",vibe:"Turkish",mapsUrl:"https://maps.google.com/?q=Pasha+Turkish+Restaurant+Thao+Dien+Ho+Chi+Minh+City",status:"want",rating:0,tier:"",notes:"",googleRating:"",googleReviewCount:""},
+  {id:108,cuisine:"Middle Eastern 🇱🇧🇹🇷",place:"Kebaby",area:"Thao Dien",budget:"150k-350k",budgetTier:"Budget",mustTry:"Kebab wrap",vibe:"Turkish",mapsUrl:"https://maps.google.com/?q=Kebaby+Thao+Dien+Ho+Chi+Minh+City",status:"want",rating:0,tier:"",notes:"",googleRating:"",googleReviewCount:""},
+  {id:109,cuisine:"Middle Eastern 🇱🇧🇹🇷",place:"Al Sham Saigon",area:"Q1",budget:"300k-700k",budgetTier:"Mid-range",mustTry:"Shawarma / grill",vibe:"Syrian",mapsUrl:"https://maps.google.com/?q=Al+Sham+Saigon+Q1+Ho+Chi+Minh+City",status:"want",rating:0,tier:"",notes:"",googleRating:"",googleReviewCount:""},
+  {id:110,cuisine:"Middle Eastern 🇱🇧🇹🇷",place:"Beirut Restaurant",area:"Q1",budget:"300k-700k",budgetTier:"Mid-range",mustTry:"Mezze platter",vibe:"Lebanese",mapsUrl:"https://maps.google.com/?q=Beirut+Restaurant+Q1+Ho+Chi+Minh+City",status:"want",rating:0,tier:"",notes:"",googleRating:"",googleReviewCount:""},
+  {id:111,cuisine:"Middle Eastern 🇱🇧🇹🇷",place:"Hummus & Grill",area:"Thao Dien",budget:"250k-600k",budgetTier:"Mid-range",mustTry:"Hummus / kebab",vibe:"Middle Eastern",mapsUrl:"https://maps.google.com/?q=Hummus+%26+Grill+Thao+Dien+Ho+Chi+Minh+City",status:"want",rating:0,tier:"",notes:"",googleRating:"",googleReviewCount:""},
+  {id:112,cuisine:"Middle Eastern 🇱🇧🇹🇷",place:"Sultan Kebab",area:"Q1",budget:"150k-350k",budgetTier:"Budget",mustTry:"Kebab",vibe:"Turkish",mapsUrl:"https://maps.google.com/?q=Sultan+Kebab+Q1+Ho+Chi+Minh+City",status:"want",rating:0,tier:"",notes:"",googleRating:"",googleReviewCount:""},
+  {id:113,cuisine:"Middle Eastern 🇱🇧🇹🇷",place:"Tandoor Halal Saigon",area:"Q1",budget:"250k-600k",budgetTier:"Mid-range",mustTry:"Halal grill",vibe:"Halal",mapsUrl:"https://maps.google.com/?q=Tandoor+Halal+Saigon+Q1+Ho+Chi+Minh+City",status:"want",rating:0,tier:"",notes:"",googleRating:"",googleReviewCount:""},
+  {id:114,cuisine:"Middle Eastern 🇱🇧🇹🇷",place:"Mr. Kebab",area:"Multiple",budget:"120k-300k",budgetTier:"Budget",mustTry:"Kebab wrap",vibe:"Budget",mapsUrl:"https://maps.google.com/?q=Mr.+Kebab+Multiple+Ho+Chi+Minh+City",status:"want",rating:0,tier:"",notes:"",googleRating:"",googleReviewCount:""},
+  {id:115,cuisine:"American 🇺🇸",place:"Eddie's Diner",area:"Q1/Q2",budget:"250k-600k",budgetTier:"Mid-range",mustTry:"Burger / milkshake",vibe:"Diner",mapsUrl:"https://maps.google.com/?q=Eddie%27s+Diner+Q1%2FQ2+Ho+Chi+Minh+City",status:"want",rating:0,tier:"",notes:"",googleRating:"",googleReviewCount:""},
+  {id:116,cuisine:"American 🇺🇸",place:"Quan Ut Ut",area:"Q1/Q2",budget:"300k-700k",budgetTier:"Mid-range",mustTry:"BBQ ribs",vibe:"BBQ",mapsUrl:"https://maps.google.com/?q=Quan+Ut+Ut+Q1%2FQ2+Ho+Chi+Minh+City",status:"want",rating:0,tier:"",notes:"",googleRating:"",googleReviewCount:""},
+  {id:117,cuisine:"American 🇺🇸",place:"Jake's BBQ",area:"Q1",budget:"350k-800k",budgetTier:"Mid-range",mustTry:"Smoked ribs",vibe:"BBQ",mapsUrl:"https://maps.google.com/?q=Jake%27s+BBQ+Q1+Ho+Chi+Minh+City",status:"want",rating:0,tier:"",notes:"",googleRating:"",googleReviewCount:""},
+  {id:118,cuisine:"American 🇺🇸",place:"Soul Burger",area:"Q2",budget:"250k-500k",budgetTier:"Mid-range",mustTry:"Burger",vibe:"Burger",mapsUrl:"https://maps.google.com/?q=Soul+Burger+Q2+Ho+Chi+Minh+City",status:"want",rating:0,tier:"",notes:"",googleRating:"",googleReviewCount:""},
+  {id:119,cuisine:"American 🇺🇸",place:"Chuck's Burgers",area:"Q1",budget:"250k-500k",budgetTier:"Mid-range",mustTry:"Burger",vibe:"Burger",mapsUrl:"https://maps.google.com/?q=Chuck%27s+Burgers+Q1+Ho+Chi+Minh+City",status:"want",rating:0,tier:"",notes:"",googleRating:"",googleReviewCount:""},
+  {id:120,cuisine:"American 🇺🇸",place:"BiaCraft",area:"Q2/Q3",budget:"250k-600k",budgetTier:"Mid-range",mustTry:"Wings / burgers",vibe:"Pub",mapsUrl:"https://maps.google.com/?q=BiaCraft+Q2%2FQ3+Ho+Chi+Minh+City",status:"want",rating:0,tier:"",notes:"",googleRating:"",googleReviewCount:""},
+  {id:121,cuisine:"American 🇺🇸",place:"7 Bridges Brewing",area:"Q1",budget:"250k-600k",budgetTier:"Mid-range",mustTry:"Brewpub food",vibe:"Pub",mapsUrl:"https://maps.google.com/?q=7+Bridges+Brewing+Q1+Ho+Chi+Minh+City",status:"want",rating:0,tier:"",notes:"",googleRating:"",googleReviewCount:""},
+  {id:122,cuisine:"American 🇺🇸",place:"Hard Rock Cafe",area:"Q1",budget:"400k-900k",budgetTier:"Budget",mustTry:"Burger / ribs",vibe:"American",mapsUrl:"https://maps.google.com/?q=Hard+Rock+Cafe+Q1+Ho+Chi+Minh+City",status:"want",rating:0,tier:"",notes:"",googleRating:"",googleReviewCount:""},
+  {id:123,cuisine:"American 🇺🇸",place:"Chicago Steakhouse",area:"Q1",budget:"600k-1,000k",budgetTier:"Premium under 1m",mustTry:"Steak lunch/set",vibe:"Steak",mapsUrl:"https://maps.google.com/?q=Chicago+Steakhouse+Q1+Ho+Chi+Minh+City",status:"want",rating:0,tier:"",notes:"",googleRating:"",googleReviewCount:""},
+  {id:124,cuisine:"American 🇺🇸",place:"The Wagon Wheel",area:"Q1",budget:"300k-700k",budgetTier:"Mid-range",mustTry:"American comfort food",vibe:"Diner",mapsUrl:"https://maps.google.com/?q=The+Wagon+Wheel+Q1+Ho+Chi+Minh+City",status:"want",rating:0,tier:"",notes:"",googleRating:"",googleReviewCount:""},
+  {id:125,cuisine:"Malaysia / Singapore 🇲🇾🇸🇬",place:"Mamak Malaysian",area:"Q1",budget:"200k-500k",budgetTier:"Mid-range",mustTry:"Nasi lemak",vibe:"Malaysian",mapsUrl:"https://maps.google.com/?q=Mamak+Malaysian+Q1+Ho+Chi+Minh+City",status:"want",rating:0,tier:"",notes:"",googleRating:"",googleReviewCount:""},
+  {id:126,cuisine:"Malaysia / Singapore 🇲🇾🇸🇬",place:"Penang Food Village",area:"Q1",budget:"150k-400k",budgetTier:"Budget",mustTry:"Char kway teow",vibe:"Malaysian",mapsUrl:"https://maps.google.com/?q=Penang+Food+Village+Q1+Ho+Chi+Minh+City",status:"want",rating:0,tier:"",notes:"",googleRating:"",googleReviewCount:""},
+  {id:127,cuisine:"Malaysia / Singapore 🇲🇾🇸🇬",place:"Song Fa Bak Kut Teh",area:"Q1",budget:"250k-600k",budgetTier:"Mid-range",mustTry:"Bak kut teh",vibe:"Singaporean",mapsUrl:"https://maps.google.com/?q=Song+Fa+Bak+Kut+Teh+Q1+Ho+Chi+Minh+City",status:"want",rating:0,tier:"",notes:"",googleRating:"",googleReviewCount:""},
+  {id:128,cuisine:"Malaysia / Singapore 🇲🇾🇸🇬",place:"Old Street Bak Kut Teh",area:"Q1",budget:"250k-600k",budgetTier:"Mid-range",mustTry:"Bak kut teh",vibe:"Singaporean",mapsUrl:"https://maps.google.com/?q=Old+Street+Bak+Kut+Teh+Q1+Ho+Chi+Minh+City",status:"want",rating:0,tier:"",notes:"",googleRating:"",googleReviewCount:""},
+  {id:129,cuisine:"Malaysia / Singapore 🇲🇾🇸🇬",place:"Lion City Cafe & Restaurant",area:"Q1",budget:"200k-500k",budgetTier:"Mid-range",mustTry:"Singapore chicken rice",vibe:"Singaporean",mapsUrl:"https://maps.google.com/?q=Lion+City+Cafe+%26+Restaurant+Q1+Ho+Chi+Minh+City",status:"want",rating:0,tier:"",notes:"",googleRating:"",googleReviewCount:""},
+  {id:130,cuisine:"Malaysia / Singapore 🇲🇾🇸🇬",place:"Hawker Star",area:"Multiple",budget:"150k-350k",budgetTier:"Budget",mustTry:"Hainanese chicken rice",vibe:"Singaporean",mapsUrl:"https://maps.google.com/?q=Hawker+Star+Multiple+Ho+Chi+Minh+City",status:"want",rating:0,tier:"",notes:"",googleRating:"",googleReviewCount:""},
+  {id:131,cuisine:"Indonesia 🇮🇩",place:"Warung Indo",area:"Q1",budget:"150k-400k",budgetTier:"Budget",mustTry:"Nasi goreng",vibe:"Indonesian",mapsUrl:"https://maps.google.com/?q=Warung+Indo+Q1+Ho+Chi+Minh+City",status:"want",rating:0,tier:"",notes:"",googleRating:"",googleReviewCount:""},
+  {id:132,cuisine:"Indonesia 🇮🇩",place:"Dapur Indo",area:"Q1",budget:"150k-400k",budgetTier:"Budget",mustTry:"Rendang",vibe:"Indonesian",mapsUrl:"https://maps.google.com/?q=Dapur+Indo+Q1+Ho+Chi+Minh+City",status:"want",rating:0,tier:"",notes:"",googleRating:"",googleReviewCount:""},
+  {id:133,cuisine:"Indonesia 🇮🇩",place:"Bali in Saigon",area:"Q2",budget:"250k-600k",budgetTier:"Mid-range",mustTry:"Balinese dishes",vibe:"Indonesian",mapsUrl:"https://maps.google.com/?q=Bali+in+Saigon+Q2+Ho+Chi+Minh+City",status:"want",rating:0,tier:"",notes:"",googleRating:"",googleReviewCount:""},
+  {id:134,cuisine:"Indonesia 🇮🇩",place:"Sate House",area:"Q1",budget:"150k-400k",budgetTier:"Budget",mustTry:"Satay",vibe:"Indonesian",mapsUrl:"https://maps.google.com/?q=Sate+House+Q1+Ho+Chi+Minh+City",status:"want",rating:0,tier:"",notes:"",googleRating:"",googleReviewCount:""},
+  {id:135,cuisine:"Taiwanese / Hotpot 🇹🇼",place:"Din Tai Fung",area:"Q1",budget:"350k-800k",budgetTier:"Mid-range",mustTry:"Xiao long bao",vibe:"Taiwanese",mapsUrl:"https://maps.google.com/?q=Din+Tai+Fung+Q1+Ho+Chi+Minh+City",status:"want",rating:0,tier:"",notes:"",googleRating:"",googleReviewCount:""},
+  {id:136,cuisine:"Taiwanese / Hotpot 🇹🇼",place:"Manwah Taiwanese Hotpot",area:"Multiple",budget:"400k-800k",budgetTier:"Budget",mustTry:"Hotpot buffet",vibe:"Hotpot",mapsUrl:"https://maps.google.com/?q=Manwah+Taiwanese+Hotpot+Multiple+Ho+Chi+Minh+City",status:"want",rating:0,tier:"",notes:"",googleRating:"",googleReviewCount:""},
+  {id:137,cuisine:"Taiwanese / Hotpot 🇹🇼",place:"Haidilao Hotpot",area:"Multiple",budget:"500k-1,000k",budgetTier:"Budget",mustTry:"Hotpot",vibe:"Hotpot",mapsUrl:"https://maps.google.com/?q=Haidilao+Hotpot+Multiple+Ho+Chi+Minh+City",status:"want",rating:0,tier:"",notes:"",googleRating:"",googleReviewCount:""},
+  {id:138,cuisine:"Taiwanese / Hotpot 🇹🇼",place:"Beauty in the Pot",area:"Q1",budget:"500k-1,000k",budgetTier:"Budget",mustTry:"Collagen hotpot",vibe:"Hotpot",mapsUrl:"https://maps.google.com/?q=Beauty+in+the+Pot+Q1+Ho+Chi+Minh+City",status:"want",rating:0,tier:"",notes:"",googleRating:"",googleReviewCount:""},
+  {id:139,cuisine:"Taiwanese / Hotpot 🇹🇼",place:"Kichi-Kichi",area:"Multiple",budget:"250k-500k",budgetTier:"Mid-range",mustTry:"Conveyor hotpot",vibe:"Hotpot",mapsUrl:"https://maps.google.com/?q=Kichi-Kichi+Multiple+Ho+Chi+Minh+City",status:"want",rating:0,tier:"",notes:"",googleRating:"",googleReviewCount:""},
+  {id:140,cuisine:"Taiwanese / Hotpot 🇹🇼",place:"Lau Wang",area:"Multiple",budget:"250k-600k",budgetTier:"Mid-range",mustTry:"Hotpot",vibe:"Hotpot",mapsUrl:"https://maps.google.com/?q=Lau+Wang+Multiple+Ho+Chi+Minh+City",status:"want",rating:0,tier:"",notes:"",googleRating:"",googleReviewCount:""},
+  {id:141,cuisine:"Taiwanese / Hotpot 🇹🇼",place:"Mala Xiang Guo Sky Garden",area:"Q7",budget:"200k-500k",budgetTier:"Mid-range",mustTry:"Mala bowl",vibe:"Mala",mapsUrl:"https://maps.google.com/?q=Mala+Xiang+Guo+Sky+Garden+Q7+Ho+Chi+Minh+City",status:"want",rating:0,tier:"",notes:"",googleRating:"",googleReviewCount:""},
+  {id:142,cuisine:"Taiwanese / Hotpot 🇹🇼",place:"Hutong",area:"Multiple",budget:"350k-700k",budgetTier:"Mid-range",mustTry:"Hong Kong hotpot",vibe:"Hotpot",mapsUrl:"https://maps.google.com/?q=Hutong+Multiple+Ho+Chi+Minh+City",status:"want",rating:0,tier:"",notes:"",googleRating:"",googleReviewCount:""},
+  {id:143,cuisine:"Vietnamese Street/Local 🇻🇳",place:"Phở Gia Hân",area:"Bình Thạnh",budget:"80k-150k",budgetTier:"Budget",mustTry:"Phở bò",vibe:"Local",mapsUrl:"https://maps.google.com/?q=Ph%E1%BB%9F+Gia+H%C3%A2n+B%C3%ACnh+Th%E1%BA%A1nh+Ho+Chi+Minh+City",status:"want",rating:0,tier:"",notes:"",googleRating:"",googleReviewCount:""},
+  {id:144,cuisine:"Vietnamese Street/Local 🇻🇳",place:"Phở Miến Gà Kỳ Đồng",area:"Q3",budget:"80k-180k",budgetTier:"Budget",mustTry:"Miến gà",vibe:"Local",mapsUrl:"https://maps.google.com/?q=Ph%E1%BB%9F+Mi%E1%BA%BFn+G%C3%A0+K%E1%BB%B3+%C4%90%E1%BB%93ng+Q3+Ho+Chi+Minh+City",status:"want",rating:0,tier:"",notes:"",googleRating:"",googleReviewCount:""},
+  {id:145,cuisine:"Vietnamese Street/Local 🇻🇳",place:"Phở Chú Hải",area:"Q1",budget:"80k-180k",budgetTier:"Budget",mustTry:"Phở đêm",vibe:"Late night",mapsUrl:"https://maps.google.com/?q=Ph%E1%BB%9F+Ch%C3%BA+H%E1%BA%A3i+Q1+Ho+Chi+Minh+City",status:"want",rating:0,tier:"",notes:"",googleRating:"",googleReviewCount:""},
+  {id:146,cuisine:"Vietnamese Street/Local 🇻🇳",place:"Hủ Tiếu Thành Đạt",area:"Q1",budget:"80k-150k",budgetTier:"Budget",mustTry:"Hủ tiếu Nam Vang",vibe:"Local",mapsUrl:"https://maps.google.com/?q=H%E1%BB%A7+Ti%E1%BA%BFu+Th%C3%A0nh+%C4%90%E1%BA%A1t+Q1+Ho+Chi+Minh+City",status:"want",rating:0,tier:"",notes:"",googleRating:"",googleReviewCount:""},
+  {id:147,cuisine:"Vietnamese Street/Local 🇻🇳",place:"Hủ Tiếu Mì Gà Hà Ký",area:"Q1",budget:"80k-150k",budgetTier:"Budget",mustTry:"Hủ tiếu mì gà",vibe:"Local",mapsUrl:"https://maps.google.com/?q=H%E1%BB%A7+Ti%E1%BA%BFu+M%C3%AC+G%C3%A0+H%C3%A0+K%C3%BD+Q1+Ho+Chi+Minh+City",status:"want",rating:0,tier:"",notes:"",googleRating:"",googleReviewCount:""},
+  {id:148,cuisine:"Vietnamese Street/Local 🇻🇳",place:"Bún Bò Hoàng Sa",area:"Q3",budget:"70k-150k",budgetTier:"Budget",mustTry:"Bún bò Huế",vibe:"Local",mapsUrl:"https://maps.google.com/?q=B%C3%BAn+B%C3%B2+Ho%C3%A0ng+Sa+Q3+Ho+Chi+Minh+City",status:"want",rating:0,tier:"",notes:"",googleRating:"",googleReviewCount:""},
+  {id:149,cuisine:"Vietnamese Street/Local 🇻🇳",place:"Bún Chả Vân Anh",area:"Tân Bình",budget:"70k-150k",budgetTier:"Budget",mustTry:"Bún chả",vibe:"Local",mapsUrl:"https://maps.google.com/?q=B%C3%BAn+Ch%E1%BA%A3+V%C3%A2n+Anh+T%C3%A2n+B%C3%ACnh+Ho+Chi+Minh+City",status:"want",rating:0,tier:"",notes:"",googleRating:"",googleReviewCount:""},
+  {id:150,cuisine:"Vietnamese Street/Local 🇻🇳",place:"Bún Thịt Nướng Kiều Bảo",area:"Q1/Q10",budget:"70k-150k",budgetTier:"Budget",mustTry:"Bún thịt nướng",vibe:"Local",mapsUrl:"https://maps.google.com/?q=B%C3%BAn+Th%E1%BB%8Bt+N%C6%B0%E1%BB%9Bng+Ki%E1%BB%81u+B%E1%BA%A3o+Q1%2FQ10+Ho+Chi+Minh+City",status:"want",rating:0,tier:"",notes:"",googleRating:"",googleReviewCount:""},
+  {id:151,cuisine:"Vietnamese Street/Local 🇻🇳",place:"Cơm Tấm Huyền",area:"Bình Thạnh",budget:"80k-180k",budgetTier:"Budget",mustTry:"Cơm tấm đêm",vibe:"Late night",mapsUrl:"https://maps.google.com/?q=C%C6%A1m+T%E1%BA%A5m+Huy%E1%BB%81n+B%C3%ACnh+Th%E1%BA%A1nh+Ho+Chi+Minh+City",status:"want",rating:0,tier:"",notes:"",googleRating:"",googleReviewCount:""},
+  {id:152,cuisine:"Vietnamese Street/Local 🇻🇳",place:"Cơm Tấm Nạc Giòn",area:"Phú Nhuận",budget:"80k-180k",budgetTier:"Budget",mustTry:"Cơm tấm nạc giòn",vibe:"Local",mapsUrl:"https://maps.google.com/?q=C%C6%A1m+T%E1%BA%A5m+N%E1%BA%A1c+Gi%C3%B2n+Ph%C3%BA+Nhu%E1%BA%ADn+Ho+Chi+Minh+City",status:"want",rating:0,tier:"",notes:"",googleRating:"",googleReviewCount:""},
+  {id:153,cuisine:"Vietnamese Street/Local 🇻🇳",place:"Cơm Gà Thanh",area:"Q5",budget:"80k-180k",budgetTier:"Budget",mustTry:"Cơm gà",vibe:"Local",mapsUrl:"https://maps.google.com/?q=C%C6%A1m+G%C3%A0+Thanh+Q5+Ho+Chi+Minh+City",status:"want",rating:0,tier:"",notes:"",googleRating:"",googleReviewCount:""},
+  {id:154,cuisine:"Vietnamese Street/Local 🇻🇳",place:"Bánh Mì Bùi Thị Xuân",area:"Q1",budget:"40k-100k",budgetTier:"Budget",mustTry:"Bánh mì",vibe:"Local",mapsUrl:"https://maps.google.com/?q=B%C3%A1nh+M%C3%AC+B%C3%B9i+Th%E1%BB%8B+Xu%C3%A2n+Q1+Ho+Chi+Minh+City",status:"want",rating:0,tier:"",notes:"",googleRating:"",googleReviewCount:""},
+  {id:155,cuisine:"Vietnamese Street/Local 🇻🇳",place:"Bánh Mì Thanh Hằng",area:"Bình Thạnh",budget:"40k-100k",budgetTier:"Budget",mustTry:"Bánh mì",vibe:"Local",mapsUrl:"https://maps.google.com/?q=B%C3%A1nh+M%C3%AC+Thanh+H%E1%BA%B1ng+B%C3%ACnh+Th%E1%BA%A1nh+Ho+Chi+Minh+City",status:"want",rating:0,tier:"",notes:"",googleRating:"",googleReviewCount:""},
+  {id:156,cuisine:"Vietnamese Street/Local 🇻🇳",place:"Bò Lá Lốt Đường Ray",area:"Phú Nhuận",budget:"80k-180k",budgetTier:"Budget",mustTry:"Bò lá lốt",vibe:"Local",mapsUrl:"https://maps.google.com/?q=B%C3%B2+L%C3%A1+L%E1%BB%91t+%C4%90%C6%B0%E1%BB%9Dng+Ray+Ph%C3%BA+Nhu%E1%BA%ADn+Ho+Chi+Minh+City",status:"want",rating:0,tier:"",notes:"",googleRating:"",googleReviewCount:""},
+  {id:157,cuisine:"Vietnamese Street/Local 🇻🇳",place:"Ốc Trứng Muối Hoa Sữa",area:"Phú Nhuận",budget:"150k-400k",budgetTier:"Budget",mustTry:"Ốc trứng muối",vibe:"Seafood",mapsUrl:"https://maps.google.com/?q=%E1%BB%90c+Tr%E1%BB%A9ng+Mu%E1%BB%91i+Hoa+S%E1%BB%AFa+Ph%C3%BA+Nhu%E1%BA%ADn+Ho+Chi+Minh+City",status:"want",rating:0,tier:"",notes:"",googleRating:"",googleReviewCount:""},
+  {id:158,cuisine:"Vietnamese Street/Local 🇻🇳",place:"Cá Viên Chiên Nguyễn Thái Học",area:"Q1",budget:"50k-150k",budgetTier:"Budget",mustTry:"Cá viên chiên",vibe:"Snack",mapsUrl:"https://maps.google.com/?q=C%C3%A1+Vi%C3%AAn+Chi%C3%AAn+Nguy%E1%BB%85n+Th%C3%A1i+H%E1%BB%8Dc+Q1+Ho+Chi+Minh+City",status:"want",rating:0,tier:"",notes:"",googleRating:"",googleReviewCount:""},
+  {id:159,cuisine:"Cafe / Brunch ☕",place:"I Hate Monday",area:"Thao Dien",budget:"200k-500k",budgetTier:"Mid-range",mustTry:"Brunch",vibe:"Cafe",mapsUrl:"https://maps.google.com/?q=I+Hate+Monday+Thao+Dien+Ho+Chi+Minh+City",status:"want",rating:0,tier:"",notes:"",googleRating:"",googleReviewCount:""},
+  {id:160,cuisine:"Cafe / Brunch ☕",place:"Today With You",area:"Thao Dien",budget:"200k-500k",budgetTier:"Mid-range",mustTry:"Korean cafe food",vibe:"Cafe",mapsUrl:"https://maps.google.com/?q=Today+With+You+Thao+Dien+Ho+Chi+Minh+City",status:"want",rating:0,tier:"",notes:"",googleRating:"",googleReviewCount:""},
+  {id:161,cuisine:"Cafe / Brunch ☕",place:"Zumwhere",area:"Thao Dien",budget:"200k-500k",budgetTier:"Mid-range",mustTry:"Souffle pancake",vibe:"Cafe",mapsUrl:"https://maps.google.com/?q=Zumwhere+Thao+Dien+Ho+Chi+Minh+City",status:"want",rating:0,tier:"",notes:"",googleRating:"",googleReviewCount:""},
+  {id:162,cuisine:"Cafe / Brunch ☕",place:"Oliu Quán",area:"Q1",budget:"200k-500k",budgetTier:"Mid-range",mustTry:"Brunch / casual plates",vibe:"Cafe",mapsUrl:"https://maps.google.com/?q=Oliu+Qu%C3%A1n+Q1+Ho+Chi+Minh+City",status:"want",rating:0,tier:"",notes:"",googleRating:"",googleReviewCount:""},
+  {id:163,cuisine:"Cafe / Brunch ☕",place:"15 Grams Homemade Kitchen",area:"Q1",budget:"200k-500k",budgetTier:"Mid-range",mustTry:"Brunch",vibe:"Cafe",mapsUrl:"https://maps.google.com/?q=15+Grams+Homemade+Kitchen+Q1+Ho+Chi+Minh+City",status:"want",rating:0,tier:"",notes:"",googleRating:"",googleReviewCount:""},
+  {id:164,cuisine:"Cafe / Brunch ☕",place:"Godmother Bake & Brunch",area:"Q1",budget:"250k-600k",budgetTier:"Mid-range",mustTry:"Brunch",vibe:"Cafe",mapsUrl:"https://maps.google.com/?q=Godmother+Bake+%26+Brunch+Q1+Ho+Chi+Minh+City",status:"want",rating:0,tier:"",notes:"",googleRating:"",googleReviewCount:""},
+  {id:165,cuisine:"Cafe / Brunch ☕",place:"L'Usine Cafe",area:"Q1/Q2",budget:"200k-500k",budgetTier:"Mid-range",mustTry:"Brunch / dessert",vibe:"Cafe",mapsUrl:"https://maps.google.com/?q=L%27Usine+Cafe+Q1%2FQ2+Ho+Chi+Minh+City",status:"want",rating:0,tier:"",notes:"",googleRating:"",googleReviewCount:""},
+  {id:166,cuisine:"Cafe / Brunch ☕",place:"Maison Marou",area:"Q1",budget:"150k-400k",budgetTier:"Budget",mustTry:"Chocolate desserts",vibe:"Dessert",mapsUrl:"https://maps.google.com/?q=Maison+Marou+Q1+Ho+Chi+Minh+City",status:"want",rating:0,tier:"",notes:"",googleRating:"",googleReviewCount:""},
+  {id:167,cuisine:"Cafe / Brunch ☕",place:"Tous Les Jours",area:"Multiple",budget:"80k-250k",budgetTier:"Budget",mustTry:"Bakery",vibe:"Bakery",mapsUrl:"https://maps.google.com/?q=Tous+Les+Jours+Multiple+Ho+Chi+Minh+City",status:"want",rating:0,tier:"",notes:"",googleRating:"",googleReviewCount:""},
+  {id:168,cuisine:"Cafe / Brunch ☕",place:"Runam Bistro",area:"Multiple",budget:"200k-600k",budgetTier:"Mid-range",mustTry:"Vietnamese cafe bistro",vibe:"Cafe",mapsUrl:"https://maps.google.com/?q=Runam+Bistro+Multiple+Ho+Chi+Minh+City",status:"want",rating:0,tier:"",notes:"",googleRating:"",googleReviewCount:""}
 ];
 
 // ── DISTRICT HELPER ──────────────────────────────────────────────────────
 function getDistrict(area) {
   if (!area || area === "Multiple" || area === "TP.HCM" || area === "CMT8") return "Multiple / Other";
-  if (area.includes("Thảo Điền") || (area.includes("Q2") && !area.includes("Q1"))) return "Q2 / Thảo Điền";
+  if (area.includes("Thao Dien") || area.includes("Thảo Điền") || (area.includes("Q2") && !area.includes("Q1"))) return "Q2 / Thảo Điền";
   if (area.startsWith("Q1") || area.includes("Q1")) return "Quận 1";
   if (area.startsWith("Q3") || area.includes("Q3") || area.includes("Lê Văn Sỹ")) return "Quận 3";
   if (area.startsWith("Q5") || area.includes("Q5")) return "Quận 5";
   if (area.startsWith("Q6")) return "Quận 6";
   if (area.startsWith("Q7") || area.includes("Q7")) return "Quận 7";
+  if (area.startsWith("Q10") || area.includes("Q10")) return "Quận 10";
   if (area.startsWith("Q11")) return "Quận 11";
   if (area.includes("Bình Thạnh")) return "Bình Thạnh";
   if (area.includes("Phú Nhuận")) return "Phú Nhuận";
@@ -193,11 +212,11 @@ function getDistrict(area) {
   return "Multiple / Other";
 }
 
-const ALL_DISTRICTS = ["All Districts", "Quận 1", "Q2 / Thảo Điền", "Quận 3", "Quận 5", "Quận 6", "Quận 7", "Quận 11", "Bình Thạnh", "Phú Nhuận", "Tân Bình", "Multiple / Other"];
+const ALL_DISTRICTS = ["All Districts","Quận 1","Q2 / Thảo Điền","Quận 3","Quận 5","Quận 6","Quận 7","Quận 10","Quận 11","Bình Thạnh","Phú Nhuận","Tân Bình","Multiple / Other"];
 
 // ── EMPTY FORM ───────────────────────────────────────────────────────────
 function emptyForm() {
-  return { place: "", area: "", cuisine: CUISINES[0], type: "", budget: "", status: "want", rating: 0, notes: "", mapsUrl: "", googleRating: "", googleReviewCount: "" };
+  return { place:"", area:"", cuisine:CUISINES[0], mustTry:"", budget:"", budgetTier:"Mid-range", vibe:"", status:"want", rating:0, tier:"", notes:"", mapsUrl:"", googleRating:"", googleReviewCount:"" };
 }
 
 // ── COLORS ───────────────────────────────────────────────────────────────
@@ -242,6 +261,8 @@ export default function HCMCFoodPassport({ onSwitch = () => {} }) {
   const [filter, setFilter] = useState("all");
   const [cuisineFilter, setCuisineFilter] = useState("All Cuisines");
   const [districtFilter, setDistrictFilter] = useState("All Districts");
+  const [vibeFilter, setVibeFilter] = useState("All Vibes");
+  const [budgetTierFilter, setBudgetTierFilter] = useState("All Budgets");
   const [search, setSearch] = useState("");
   const [showForm, setShowForm] = useState(false);
   const [form, setForm] = useState(emptyForm());
@@ -257,7 +278,13 @@ export default function HCMCFoodPassport({ onSwitch = () => {} }) {
         const res = localStorage.getItem("hcmc-passport-v1");
         if (res) {
           const parsed = JSON.parse(res);
-          setEntries(parsed.length ? parsed : INITIAL_DATA);
+          // migrate old field names and rename cuisines
+          const migrated = parsed.map(e => ({
+            googleRating:"", googleReviewCount:"", budgetTier:"", vibe:"", tier:"", ...e,
+            mustTry: e.mustTry || e.type || "",
+            cuisine: e.cuisine === "Chinese / HK 🇨🇳🇭🇰" ? "Chinese / HongKong 🇨🇳🇭🇰" : e.cuisine,
+          }));
+          setEntries(migrated.length ? migrated : INITIAL_DATA);
         } else {
           setEntries(INITIAL_DATA);
         }
@@ -291,7 +318,7 @@ export default function HCMCFoodPassport({ onSwitch = () => {} }) {
     setShowForm(false);
   }
 
-  function startEdit(e) { setForm({ googleRating:"", googleReviewCount:"", ...e }); setEditId(e.id); setShowForm(true); }
+  function startEdit(e) { setForm({ googleRating:"", googleReviewCount:"", mustTry:"", budgetTier:"", vibe:"", tier:"", ...e }); setEditId(e.id); setShowForm(true); }
   function deleteEntry(id) { if (!window.confirm("Remove this entry?")) return; persist(entries.filter(e => e.id !== id)); }
   function updateGoogleData(id, field, value) {
     persist(entries.map(e => e.id === id ? { ...e, [field]: value } : e));
@@ -359,7 +386,9 @@ export default function HCMCFoodPassport({ onSwitch = () => {} }) {
     if (filter !== "all" && e.status !== filter) return false;
     if (cuisineFilter !== "All Cuisines" && e.cuisine !== cuisineFilter) return false;
     if (districtFilter !== "All Districts" && getDistrict(e.area) !== districtFilter) return false;
-    if (search && ![e.place, e.area, e.cuisine, e.type, e.notes].some(f => f?.toLowerCase().includes(search.toLowerCase()))) return false;
+    if (vibeFilter !== "All Vibes" && e.vibe !== vibeFilter) return false;
+    if (budgetTierFilter !== "All Budgets" && e.budgetTier !== budgetTierFilter) return false;
+    if (search && ![e.place, e.area, e.cuisine, e.mustTry, e.vibe, e.notes].some(f => f?.toLowerCase().includes(search.toLowerCase()))) return false;
     return true;
   });
 
@@ -429,12 +458,31 @@ export default function HCMCFoodPassport({ onSwitch = () => {} }) {
             <div>
               <div style={{ fontSize:10, letterSpacing:4, textTransform:"uppercase", opacity:0.5, marginBottom:5, fontWeight:500 }}>Thành phố Hồ Chí Minh</div>
               <h1 style={{ fontFamily:"'Playfair Display',serif", fontSize:28, fontWeight:700, lineHeight:1.15, letterSpacing:"-0.3px" }}>Food Passport</h1>
-              <div style={{ fontSize:12, opacity:0.55, marginTop:3 }}>138 spots · under 1,000,000 VND/person</div>
+              <div style={{ fontSize:12, opacity:0.55, marginTop:3 }}>168 spots · under 1,000,000 VND/person</div>
             </div>
-            <button onClick={() => { setForm(emptyForm()); setEditId(null); setShowForm(true); }}
-              style={{ background:C.gold, border:"none", color:"white", borderRadius:10, padding:"11px 18px", fontWeight:700, fontSize:14, cursor:"pointer", fontFamily:"Inter,sans-serif", letterSpacing:"0.2px", whiteSpace:"nowrap" }}>
-              + Add Spot
-            </button>
+            <div style={{ display:"flex", flexDirection:"column", gap:8, alignItems:"flex-end" }}>
+              <button onClick={() => { setForm(emptyForm()); setEditId(null); setShowForm(true); }}
+                style={{ background:C.gold, border:"none", color:"white", borderRadius:10, padding:"11px 18px", fontWeight:700, fontSize:14, cursor:"pointer", fontFamily:"Inter,sans-serif", letterSpacing:"0.2px", whiteSpace:"nowrap" }}>
+                + Add Spot
+              </button>
+              {/* Google Import button */}
+              {importStatus === "running" ? (
+                <div style={{ display:"flex", alignItems:"center", gap:6, background:"rgba(255,255,255,0.12)", borderRadius:8, padding:"7px 12px", fontSize:12, color:"white", whiteSpace:"nowrap" }}>
+                  <span style={{ display:"inline-block", animation:"spin 1s linear infinite" }}>⟳</span>
+                  {importProgress.done}/{importProgress.total}…
+                  <style>{`@keyframes spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}`}</style>
+                </div>
+              ) : importStatus === "done" ? (
+                <div style={{ background:"rgba(255,255,255,0.12)", borderRadius:8, padding:"7px 12px", fontSize:12, color:"#a8d5c2", whiteSpace:"nowrap" }}>
+                  ✓ Ratings imported!
+                </div>
+              ) : (
+                <button onClick={handleImportClick} style={{ display:"flex", alignItems:"center", gap:6, background:"rgba(255,255,255,0.1)", border:"1px solid rgba(255,255,255,0.2)", color:"white", borderRadius:8, padding:"7px 13px", fontWeight:600, fontSize:12, cursor:"pointer", fontFamily:"Inter,sans-serif", whiteSpace:"nowrap" }}>
+                  <span style={{ background:"#4285F4", borderRadius:3, fontSize:9, fontWeight:800, padding:"1px 5px" }}>G</span>
+                  Import Ratings
+                </button>
+              )}
+            </div>
           </div>
 
           {/* Stats row */}
@@ -486,30 +534,19 @@ export default function HCMCFoodPassport({ onSwitch = () => {} }) {
             style={{ border:`1.5px solid ${C.border}`, borderRadius:8, padding:"8px 28px 8px 12px", fontSize:13, background:C.white, cursor:"pointer" }}>
             {ALL_DISTRICTS.map(d => <option key={d}>{d}</option>)}
           </select>
+          <select value={vibeFilter} onChange={e => setVibeFilter(e.target.value)}
+            style={{ border:`1.5px solid ${C.border}`, borderRadius:8, padding:"8px 28px 8px 12px", fontSize:13, background:C.white, cursor:"pointer" }}>
+            <option>All Vibes</option>
+            {[...new Set(entries.map(e => e.vibe).filter(Boolean))].sort().map(v => <option key={v}>{v}</option>)}
+          </select>
+          <select value={budgetTierFilter} onChange={e => setBudgetTierFilter(e.target.value)}
+            style={{ border:`1.5px solid ${C.border}`, borderRadius:8, padding:"8px 28px 8px 12px", fontSize:13, background:C.white, cursor:"pointer" }}>
+            <option>All Budgets</option>
+            {["Budget","Mid-range","Premium under 1m"].map(t => <option key={t}>{t}</option>)}
+          </select>
           <input placeholder="Search restaurants, type, area…" value={search} onChange={e => setSearch(e.target.value)}
             style={{ border:`1.5px solid ${C.border}`, borderRadius:8, padding:"8px 12px", fontSize:13, flex:1, minWidth:160, background:"#fafafa" }} />
           <span style={{ fontSize:12, color:C.textMuted, whiteSpace:"nowrap" }}>{filtered.length} results</span>
-          {/* Import button */}
-          {importStatus === "running" ? (
-            <div style={{ display:"flex", alignItems:"center", gap:8, background:"#f0faf5", border:`1px solid ${C.greenLight}`, borderRadius:8, padding:"7px 12px", fontSize:12, color:C.green, whiteSpace:"nowrap" }}>
-              <span style={{ display:"inline-block", animation:"spin 1s linear infinite" }}>⟳</span>
-              {importProgress.done}/{importProgress.total} fetched…
-              <style>{`@keyframes spin { from{transform:rotate(0deg)} to{transform:rotate(360deg)} }`}</style>
-            </div>
-          ) : importStatus === "done" ? (
-            <div style={{ background:"#f0faf5", border:`1px solid ${C.greenLight}`, borderRadius:8, padding:"7px 12px", fontSize:12, color:C.green, whiteSpace:"nowrap" }}>
-              ✓ Ratings imported!
-            </div>
-          ) : (
-            <button onClick={handleImportClick} style={{
-              background:C.header, color:"white", border:"none", borderRadius:8,
-              padding:"8px 13px", fontSize:12, fontWeight:600, cursor:"pointer",
-              fontFamily:"Inter,sans-serif", whiteSpace:"nowrap",
-            }}>
-              <span style={{ background:"#4285F4", borderRadius:2, fontSize:8, fontWeight:800, padding:"1px 4px", marginRight:5 }}>G</span>
-              Import Ratings
-            </button>
-          )}
         </div>
       </div>
 
@@ -583,8 +620,25 @@ export default function HCMCFoodPassport({ onSwitch = () => {} }) {
                       {entry.place}
                     </h3>
 
-                    {entry.area && <div style={{ fontSize:12, color:C.textMuted, marginBottom: entry.type ? 4 : 7 }}>📍 {entry.area}</div>}
-                    {entry.type && <div style={{ fontSize:12, color:"#777", fontStyle:"italic", marginBottom:7 }}>{entry.type}</div>}
+                    {entry.area && <div style={{ fontSize:12, color:C.textMuted, marginBottom: entry.mustTry ? 4 : 7 }}>📍 {entry.area}</div>}
+                    {entry.mustTry && <div style={{ fontSize:12, color:"#777", fontStyle:"italic", marginBottom:6 }}>🍽 {entry.mustTry}</div>}
+
+                    {/* Vibe + Budget Tier + Tier row */}
+                    <div style={{ display:"flex", gap:5, flexWrap:"wrap", marginBottom:6 }}>
+                      {entry.vibe && (
+                        <span style={{ background:"#f0f0f0", borderRadius:20, padding:"2px 9px", fontSize:11, color:"#555" }}>{entry.vibe}</span>
+                      )}
+                      {entry.budgetTier && (
+                        <span style={{ background: entry.budgetTier==="Budget"?"#e8f5ee":entry.budgetTier==="Premium under 1m"?"#fce8ee":"#f5f5f5", borderRadius:20, padding:"2px 9px", fontSize:11, fontWeight:500, color: entry.budgetTier==="Budget"?"#2d6e4e":entry.budgetTier==="Premium under 1m"?"#c03030":"#555" }}>
+                          {entry.budgetTier}
+                        </span>
+                      )}
+                      {entry.tier && (
+                        <span style={{ background: entry.tier==="S"?"#1a3a4a":entry.tier==="A"?"#2d6e4e":entry.tier==="B"?"#d4a020":"#888", borderRadius:20, padding:"2px 10px", fontSize:11, fontWeight:800, color:"white", letterSpacing:1 }}>
+                          {entry.tier}-tier
+                        </span>
+                      )}
+                    </div>
 
                     {/* Personal stars (only when tried/fav) */}
                     {entry.status !== "want" && entry.rating > 0 && (
@@ -676,7 +730,7 @@ export default function HCMCFoodPassport({ onSwitch = () => {} }) {
             {[
               {label:"Place Name *", key:"place", placeholder:"e.g. Pizza 4P's"},
               {label:"Area / District", key:"area", placeholder:"e.g. Q1 / Hai Bà Trưng"},
-              {label:"Type / Style", key:"type", placeholder:"e.g. Ramen, Korean BBQ, Dim sum…"},
+              {label:"Must Try 🍽", key:"mustTry", placeholder:"e.g. Xiao long bao, Cruffin…"},
               {label:"Budget/person (VND)", key:"budget", placeholder:"e.g. 200k–500k"},
             ].map(({label,key,placeholder}) => (
               <div key={key} style={{ marginBottom:13 }}>
@@ -696,6 +750,42 @@ export default function HCMCFoodPassport({ onSwitch = () => {} }) {
                 {CUISINES.map(c => <option key={c}>{c}</option>)}
               </select>
             </div>
+
+            <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:12, marginBottom:13 }}>
+              <div>
+                <label style={{ fontSize:11, fontWeight:600, color:"#555", display:"block", marginBottom:4, textTransform:"uppercase", letterSpacing:0.5 }}>Vibe</label>
+                <input placeholder="e.g. Rooftop, Date night…" value={form.vibe||""}
+                  onChange={e => setForm(f => ({...f, vibe:e.target.value}))}
+                  className="form-field"
+                  style={{ width:"100%", border:`1.5px solid ${C.border}`, borderRadius:9, padding:"10px 12px", fontSize:14 }} />
+              </div>
+              <div>
+                <label style={{ fontSize:11, fontWeight:600, color:"#555", display:"block", marginBottom:4, textTransform:"uppercase", letterSpacing:0.5 }}>Budget Tier</label>
+                <select value={form.budgetTier||""} onChange={e => setForm(f => ({...f, budgetTier:e.target.value}))}
+                  className="form-field"
+                  style={{ width:"100%", border:`1.5px solid ${C.border}`, borderRadius:9, padding:"10px 28px 10px 12px", fontSize:14, background:"#2a2a2a" }}>
+                  <option value="">—</option>
+                  {["Budget","Mid-range","Premium under 1m"].map(t => <option key={t}>{t}</option>)}
+                </select>
+              </div>
+            </div>
+
+            {/* Tier selector — only when tried or favourite */}
+            {form.status !== "want" && (
+              <div style={{ marginBottom:13 }}>
+                <label style={{ fontSize:11, fontWeight:600, color:"#555", display:"block", marginBottom:6, textTransform:"uppercase", letterSpacing:0.5 }}>Your Tier</label>
+                <div style={{ display:"flex", gap:8 }}>
+                  {["S","A","B","C"].map(t => (
+                    <button key={t} type="button" onClick={() => setForm(f => ({...f, tier: f.tier===t ? "" : t}))}
+                      style={{ flex:1, padding:"8px", borderRadius:8, border:"none", fontWeight:800, fontSize:15,
+                        background: form.tier===t ? (t==="S"?"#1a3a4a":t==="A"?"#2d6e4e":t==="B"?"#d4a020":"#888") : "#3a3a3a",
+                        color: form.tier===t ? "white" : "#777", cursor:"pointer", fontFamily:"Inter,sans-serif",
+                        letterSpacing:1, transition:"all 0.15s",
+                      }}>{t}</button>
+                  ))}
+                </div>
+              </div>
+            )}
 
             {/* My Rating — only when Tried or Favourite */}
             {form.status !== "want" && (
