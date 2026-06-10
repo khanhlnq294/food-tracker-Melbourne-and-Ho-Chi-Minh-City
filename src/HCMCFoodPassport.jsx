@@ -197,7 +197,7 @@ const ALL_DISTRICTS = ["All Districts", "Quận 1", "Q2 / Thảo Điền", "Qu�
 
 // ── EMPTY FORM ───────────────────────────────────────────────────────────
 function emptyForm() {
-  return { place: "", area: "", cuisine: CUISINES[0], type: "", budget: "", status: "want", rating: 0, notes: "", mapsUrl: "" };
+  return { place: "", area: "", cuisine: CUISINES[0], type: "", budget: "", status: "want", rating: 0, notes: "", mapsUrl: "", googleRating: "", googleReviewCount: "" };
 }
 
 // ── COLORS ───────────────────────────────────────────────────────────────
@@ -462,12 +462,26 @@ export default function HCMCFoodPassport({ onSwitch = () => {} }) {
                     {entry.area && <div style={{ fontSize:12, color:C.textMuted, marginBottom: entry.type ? 4 : 7 }}>📍 {entry.area}</div>}
                     {entry.type && <div style={{ fontSize:12, color:"#777", fontStyle:"italic", marginBottom:7 }}>{entry.type}</div>}
 
-                    {/* Stars */}
-                    {entry.status !== "want" && entry.rating > 0 && (
-                      <div style={{ fontSize:16, marginBottom:6, letterSpacing:1 }}>
-                        {"★".repeat(entry.rating)}<span style={{ color:"#e0e0e0" }}>{"★".repeat(5-entry.rating)}</span>
+                    {/* Ratings row */}
+                    {(entry.status !== "want" && entry.rating > 0) || entry.googleRating ? (
+                      <div style={{ display:"flex", alignItems:"center", gap:10, marginBottom:6, flexWrap:"wrap" }}>
+                        {entry.status !== "want" && entry.rating > 0 && (
+                          <div style={{ fontSize:15, letterSpacing:1 }}>
+                            {"★".repeat(entry.rating)}<span style={{ color:"#e0e0e0" }}>{"★".repeat(5-entry.rating)}</span>
+                          </div>
+                        )}
+                        {entry.googleRating && (
+                          <div style={{ display:"inline-flex", alignItems:"center", gap:5, background:"#f8f9fa", border:"1px solid #e8e8e8", borderRadius:20, padding:"3px 9px" }}>
+                            <span style={{ background:"#4285F4", color:"white", borderRadius:3, fontSize:8, fontWeight:800, padding:"1px 4px", letterSpacing:0.5 }}>G</span>
+                            <span style={{ fontSize:12, fontWeight:600, color:"#333" }}>{parseFloat(entry.googleRating).toFixed(1)}</span>
+                            <span style={{ fontSize:12, color:"#f0b429" }}>★</span>
+                            {entry.googleReviewCount && (
+                              <span style={{ fontSize:11, color:"#888" }}>({entry.googleReviewCount})</span>
+                            )}
+                          </div>
+                        )}
                       </div>
-                    )}
+                    ) : null}
 
                     {entry.notes && (
                       <div style={{ fontSize:12.5, color:"#666", lineHeight:1.55, background:"#fafafa", borderRadius:7, padding:"8px 10px", marginTop:4 }}>
@@ -553,17 +567,47 @@ export default function HCMCFoodPassport({ onSwitch = () => {} }) {
               </select>
             </div>
 
-            {form.status !== "want" && (
-              <div style={{ marginBottom:13 }}>
-                <label style={{ fontSize:11, fontWeight:600, color:"#555", display:"block", marginBottom:7, textTransform:"uppercase", letterSpacing:0.5 }}>Rating</label>
-                <div style={{ display:"flex", gap:6 }}>
-                  {[1,2,3,4,5].map(n => (
-                    <span key={n} className="star" onClick={() => setForm(f => ({...f, rating:n}))}
-                      style={{ fontSize:28, color: n<=form.rating?"#f0b429":"#ddd" }}>★</span>
-                  ))}
+            <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:14, marginBottom:13 }}>
+              {/* Personal rating */}
+              {form.status !== "want" && (
+                <div>
+                  <label style={{ fontSize:11, fontWeight:600, color:"#555", display:"block", marginBottom:7, textTransform:"uppercase", letterSpacing:0.5 }}>My Rating</label>
+                  <div style={{ display:"flex", gap:4 }}>
+                    {[1,2,3,4,5].map(n => (
+                      <span key={n} className="star" onClick={() => setForm(f => ({...f, rating:n}))}
+                        style={{ fontSize:24, color: n<=form.rating?"#f0b429":"#ddd" }}>★</span>
+                    ))}
+                  </div>
+                </div>
+              )}
+              {/* Google rating */}
+              <div style={{ gridColumn: form.status === "want" ? "1 / -1" : "auto" }}>
+                <label style={{ fontSize:11, fontWeight:600, color:"#555", display:"block", marginBottom:4, textTransform:"uppercase", letterSpacing:0.5 }}>
+                  <span style={{ display:"inline-flex", alignItems:"center", gap:5 }}>
+                    <span style={{ background:"#4285F4", color:"white", borderRadius:3, fontSize:9, fontWeight:800, padding:"1px 4px", letterSpacing:0.5 }}>G</span>
+                    Google Rating
+                  </span>
+                </label>
+                <div style={{ display:"flex", gap:8 }}>
+                  <input
+                    type="number" min="0" max="5" step="0.1"
+                    placeholder="4.3"
+                    value={form.googleRating || ""}
+                    onChange={e => setForm(f => ({...f, googleRating: e.target.value}))}
+                    className="form-field"
+                    style={{ width:"30%", border:`1.5px solid ${C.border}`, borderRadius:9, padding:"10px 12px", fontSize:14 }}
+                  />
+                  <input
+                    type="text"
+                    placeholder="e.g. 2,847 reviews"
+                    value={form.googleReviewCount || ""}
+                    onChange={e => setForm(f => ({...f, googleReviewCount: e.target.value}))}
+                    className="form-field"
+                    style={{ flex:1, border:`1.5px solid ${C.border}`, borderRadius:9, padding:"10px 12px", fontSize:14 }}
+                  />
                 </div>
               </div>
-            )}
+            </div>
 
             <div style={{ marginBottom:13 }}>
               <label style={{ fontSize:11, fontWeight:600, color:"#555", display:"block", marginBottom:4, textTransform:"uppercase", letterSpacing:0.5 }}>Notes</label>
