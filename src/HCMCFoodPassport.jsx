@@ -221,6 +221,21 @@ const C = {
   cardBg: "#ffffff",
 };
 
+// ── Inline Google rating inputs (own state → no full-list re-render on keypress) ──
+function GoogleRatingInput({ entryId, field, initialValue, placeholder, inputStyle, onSave }) {
+  const [val, setVal] = useState(initialValue || "");
+  useEffect(() => { setVal(initialValue || ""); }, [initialValue]);
+  return (
+    <input
+      value={val}
+      onChange={e => setVal(e.target.value)}
+      onBlur={() => { if (val !== String(initialValue || "")) onSave(entryId, field, val); }}
+      placeholder={placeholder}
+      style={inputStyle}
+    />
+  );
+}
+
 export default function HCMCFoodPassport({ onSwitch = () => {} }) {
   const [entries, setEntries] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -231,6 +246,10 @@ export default function HCMCFoodPassport({ onSwitch = () => {} }) {
   const [showForm, setShowForm] = useState(false);
   const [form, setForm] = useState(emptyForm());
   const [editId, setEditId] = useState(null);
+  const [showApiInput, setShowApiInput] = useState(false);
+  const [apiKeyDraft, setApiKeyDraft] = useState("");
+  const [importStatus, setImportStatus] = useState(null); // null | "running" | "done" | "error"
+  const [importProgress, setImportProgress] = useState({ done: 0, total: 0 });
 
   useEffect(() => {
     (async () => {
@@ -272,8 +291,61 @@ export default function HCMCFoodPassport({ onSwitch = () => {} }) {
     setShowForm(false);
   }
 
-  function startEdit(e) { setForm({ ...e }); setEditId(e.id); setShowForm(true); }
+  function startEdit(e) { setForm({ googleRating:"", googleReviewCount:"", ...e }); setEditId(e.id); setShowForm(true); }
   function deleteEntry(id) { if (!window.confirm("Remove this entry?")) return; persist(entries.filter(e => e.id !== id)); }
+  function updateGoogleData(id, field, value) {
+    persist(entries.map(e => e.id === id ? { ...e, [field]: value } : e));
+  }
+
+  async function importGoogleRatings(key) {
+    const toImport = entries.filter(e => !e.googleRating);
+    if (toImport.length === 0) { setImportStatus("done"); setTimeout(() => setImportStatus(null), 3000); return; }
+    setImportStatus("running");
+    setImportProgress({ done: 0, total: toImport.length });
+    let updated = [...entries];
+    for (let i = 0; i < toImport.length; i++) {
+      const entry = toImport[i];
+      try {
+        const res = await fetch("https://places.googleapis.com/v1/places:searchText", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "X-Goog-Api-Key": key,
+            "X-Goog-FieldMask": "places.rating,places.userRatingCount",
+          },
+          body: JSON.stringify({ textQuery: `${entry.place} ${entry.area} Ho Chi Minh City Vietnam` }),
+        });
+        const data = await res.json();
+        if (data.places?.[0]) {
+          const p = data.places[0];
+          updated = updated.map(e => e.id === entry.id ? {
+            ...e,
+            googleRating: p.rating != null ? String(p.rating) : e.googleRating,
+            googleReviewCount: p.userRatingCount != null ? p.userRatingCount.toLocaleString() : e.googleReviewCount,
+          } : e);
+        }
+      } catch (err) { console.warn(`Skipped ${entry.place}:`, err); }
+      setImportProgress({ done: i + 1, total: toImport.length });
+      if (i < toImport.length - 1) await new Promise(r => setTimeout(r, 220));
+    }
+    persist(updated);
+    setImportStatus("done");
+    setTimeout(() => setImportStatus(null), 4000);
+  }
+
+  function handleImportClick() {
+    const stored = localStorage.getItem("google-places-key");
+    if (stored) { importGoogleRatings(stored); }
+    else { setShowApiInput(true); }
+  }
+
+  function handleApiKeySubmit() {
+    if (!apiKeyDraft.trim()) return;
+    localStorage.setItem("google-places-key", apiKeyDraft.trim());
+    setShowApiInput(false);
+    setApiKeyDraft("");
+    importGoogleRatings(apiKeyDraft.trim());
+  }
 
   const counts = {
     all: entries.length,
@@ -417,8 +489,60 @@ export default function HCMCFoodPassport({ onSwitch = () => {} }) {
           <input placeholder="Search restaurants, type, area…" value={search} onChange={e => setSearch(e.target.value)}
             style={{ border:`1.5px solid ${C.border}`, borderRadius:8, padding:"8px 12px", fontSize:13, flex:1, minWidth:160, background:"#fafafa" }} />
           <span style={{ fontSize:12, color:C.textMuted, whiteSpace:"nowrap" }}>{filtered.length} results</span>
+          {/* Import button */}
+          {importStatus === "running" ? (
+            <div style={{ display:"flex", alignItems:"center", gap:8, background:"#f0faf5", border:`1px solid ${C.greenLight}`, borderRadius:8, padding:"7px 12px", fontSize:12, color:C.green, whiteSpace:"nowrap" }}>
+              <span style={{ display:"inline-block", animation:"spin 1s linear infinite" }}>⟳</span>
+              {importProgress.done}/{importProgress.total} fetched…
+              <style>{`@keyframes spin { from{transform:rotate(0deg)} to{transform:rotate(360deg)} }`}</style>
+            </div>
+          ) : importStatus === "done" ? (
+            <div style={{ background:"#f0faf5", border:`1px solid ${C.greenLight}`, borderRadius:8, padding:"7px 12px", fontSize:12, color:C.green, whiteSpace:"nowrap" }}>
+              ✓ Ratings imported!
+            </div>
+          ) : (
+            <button onClick={handleImportClick} style={{
+              background:C.header, color:"white", border:"none", borderRadius:8,
+              padding:"8px 13px", fontSize:12, fontWeight:600, cursor:"pointer",
+              fontFamily:"Inter,sans-serif", whiteSpace:"nowrap",
+            }}>
+              <span style={{ background:"#4285F4", borderRadius:2, fontSize:8, fontWeight:800, padding:"1px 4px", marginRight:5 }}>G</span>
+              Import Ratings
+            </button>
+          )}
         </div>
       </div>
+
+      {/* ── API KEY MODAL ── */}
+      {showApiInput && (
+        <div onClick={e => e.target===e.currentTarget && setShowApiInput(false)}
+          style={{ position:"fixed", inset:0, background:"rgba(0,0,0,0.45)", display:"flex", alignItems:"center", justifyContent:"center", zIndex:300, padding:24 }}>
+          <div style={{ background:C.white, borderRadius:16, padding:"28px 24px", width:"100%", maxWidth:460 }}>
+            <h3 style={{ fontFamily:"'Playfair Display',serif", fontSize:20, color:C.header, marginBottom:6 }}>Google Places API Key</h3>
+            <p style={{ fontSize:13, color:C.textMuted, marginBottom:16, lineHeight:1.55 }}>
+              Paste your key below. It's saved to your browser only — never sent anywhere except Google's API.
+            </p>
+            <input
+              autoFocus
+              type="password"
+              placeholder="AIza…"
+              value={apiKeyDraft}
+              onChange={e => setApiKeyDraft(e.target.value)}
+              onKeyDown={e => e.key === "Enter" && handleApiKeySubmit()}
+              className="form-field"
+              style={{ width:"100%", border:`1.5px solid ${C.border}`, borderRadius:9, padding:"11px 13px", fontSize:14, marginBottom:14 }}
+            />
+            <div style={{ display:"flex", gap:10 }}>
+              <button onClick={handleApiKeySubmit} style={{ flex:1, background:C.header, color:"white", border:"none", borderRadius:9, padding:"12px", fontWeight:700, fontSize:14, cursor:"pointer", fontFamily:"Inter,sans-serif" }}>
+                Save & Import
+              </button>
+              <button onClick={() => setShowApiInput(false)} style={{ background:"none", border:`1.5px solid ${C.border}`, borderRadius:9, padding:"12px 16px", fontSize:14, cursor:"pointer", color:C.textMid, fontFamily:"Inter,sans-serif" }}>
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* ── CARDS ── */}
       <div style={{ maxWidth:860, margin:"0 auto", padding:"22px 24px" }}>
@@ -462,32 +586,38 @@ export default function HCMCFoodPassport({ onSwitch = () => {} }) {
                     {entry.area && <div style={{ fontSize:12, color:C.textMuted, marginBottom: entry.type ? 4 : 7 }}>📍 {entry.area}</div>}
                     {entry.type && <div style={{ fontSize:12, color:"#777", fontStyle:"italic", marginBottom:7 }}>{entry.type}</div>}
 
-                    {/* Ratings row */}
-                    {(entry.status !== "want" && entry.rating > 0) || entry.googleRating ? (
-                      <div style={{ display:"flex", alignItems:"center", gap:10, marginBottom:6, flexWrap:"wrap" }}>
-                        {entry.status !== "want" && entry.rating > 0 && (
-                          <div style={{ fontSize:15, letterSpacing:1 }}>
-                            {"★".repeat(entry.rating)}<span style={{ color:"#e0e0e0" }}>{"★".repeat(5-entry.rating)}</span>
-                          </div>
-                        )}
-                        {entry.googleRating && (
-                          <div style={{ display:"inline-flex", alignItems:"center", gap:5, background:"#f8f9fa", border:"1px solid #e8e8e8", borderRadius:20, padding:"3px 9px" }}>
-                            <span style={{ background:"#4285F4", color:"white", borderRadius:3, fontSize:8, fontWeight:800, padding:"1px 4px", letterSpacing:0.5 }}>G</span>
-                            <span style={{ fontSize:12, fontWeight:600, color:"#333" }}>{parseFloat(entry.googleRating).toFixed(1)}</span>
-                            <span style={{ fontSize:12, color:"#f0b429" }}>★</span>
-                            {entry.googleReviewCount && (
-                              <span style={{ fontSize:11, color:"#888" }}>({entry.googleReviewCount})</span>
-                            )}
-                          </div>
-                        )}
+                    {/* Personal stars (only when tried/fav) */}
+                    {entry.status !== "want" && entry.rating > 0 && (
+                      <div style={{ fontSize:15, letterSpacing:1, marginBottom:6 }}>
+                        {"★".repeat(entry.rating)}<span style={{ color:"#e0e0e0" }}>{"★".repeat(5-entry.rating)}</span>
                       </div>
-                    ) : null}
+                    )}
 
                     {entry.notes && (
                       <div style={{ fontSize:12.5, color:"#666", lineHeight:1.55, background:"#fafafa", borderRadius:7, padding:"8px 10px", marginTop:4 }}>
                         {entry.notes}
                       </div>
                     )}
+
+                    {/* Inline Google rating strip */}
+                    <div style={{ display:"flex", alignItems:"center", gap:7, marginTop:10, padding:"7px 10px", background:"#f8f9fa", borderRadius:8, border:"1px solid #eee" }}>
+                      <span style={{ background:"#4285F4", color:"white", borderRadius:3, fontSize:8, fontWeight:800, padding:"1px 5px", letterSpacing:0.5, flexShrink:0 }}>G</span>
+                      <GoogleRatingInput
+                        entryId={entry.id} field="googleRating"
+                        initialValue={entry.googleRating}
+                        placeholder="4.3"
+                        onSave={updateGoogleData}
+                        inputStyle={{ width:48, border:"1px solid #ddd", borderRadius:6, padding:"4px 6px", fontSize:12, fontWeight:600, background:"white", color:"#333", textAlign:"center" }}
+                      />
+                      <span style={{ fontSize:12, color:"#f0b429", flexShrink:0 }}>★</span>
+                      <GoogleRatingInput
+                        entryId={entry.id} field="googleReviewCount"
+                        initialValue={entry.googleReviewCount}
+                        placeholder="reviews, e.g. 2,847"
+                        onSave={updateGoogleData}
+                        inputStyle={{ flex:1, border:"1px solid #ddd", borderRadius:6, padding:"4px 8px", fontSize:12, background:"white", color:"#555", minWidth:0 }}
+                      />
+                    </div>
                   </div>
 
                   {/* Footer */}
@@ -567,45 +697,42 @@ export default function HCMCFoodPassport({ onSwitch = () => {} }) {
               </select>
             </div>
 
-            <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:14, marginBottom:13 }}>
-              {/* Personal rating */}
-              {form.status !== "want" && (
-                <div>
-                  <label style={{ fontSize:11, fontWeight:600, color:"#555", display:"block", marginBottom:7, textTransform:"uppercase", letterSpacing:0.5 }}>My Rating</label>
-                  <div style={{ display:"flex", gap:4 }}>
-                    {[1,2,3,4,5].map(n => (
-                      <span key={n} className="star" onClick={() => setForm(f => ({...f, rating:n}))}
-                        style={{ fontSize:24, color: n<=form.rating?"#f0b429":"#ddd" }}>★</span>
-                    ))}
-                  </div>
+            {/* My Rating — only when Tried or Favourite */}
+            {form.status !== "want" && (
+              <div style={{ marginBottom:13 }}>
+                <label style={{ fontSize:11, fontWeight:600, color:"#555", display:"block", marginBottom:7, textTransform:"uppercase", letterSpacing:0.5 }}>My Rating</label>
+                <div style={{ display:"flex", gap:4 }}>
+                  {[1,2,3,4,5].map(n => (
+                    <span key={n} className="star" onClick={() => setForm(f => ({...f, rating:n}))}
+                      style={{ fontSize:26, color: n<=form.rating?"#f0b429":"#ddd" }}>★</span>
+                  ))}
                 </div>
-              )}
-              {/* Google rating */}
-              <div style={{ gridColumn: form.status === "want" ? "1 / -1" : "auto" }}>
-                <label style={{ fontSize:11, fontWeight:600, color:"#555", display:"block", marginBottom:4, textTransform:"uppercase", letterSpacing:0.5 }}>
-                  <span style={{ display:"inline-flex", alignItems:"center", gap:5 }}>
-                    <span style={{ background:"#4285F4", color:"white", borderRadius:3, fontSize:9, fontWeight:800, padding:"1px 4px", letterSpacing:0.5 }}>G</span>
-                    Google Rating
-                  </span>
-                </label>
-                <div style={{ display:"flex", gap:8 }}>
-                  <input
-                    type="number" min="0" max="5" step="0.1"
-                    placeholder="4.3"
-                    value={form.googleRating || ""}
-                    onChange={e => setForm(f => ({...f, googleRating: e.target.value}))}
-                    className="form-field"
-                    style={{ width:"30%", border:`1.5px solid ${C.border}`, borderRadius:9, padding:"10px 12px", fontSize:14 }}
-                  />
-                  <input
-                    type="text"
-                    placeholder="e.g. 2,847 reviews"
-                    value={form.googleReviewCount || ""}
-                    onChange={e => setForm(f => ({...f, googleReviewCount: e.target.value}))}
-                    className="form-field"
-                    style={{ flex:1, border:`1.5px solid ${C.border}`, borderRadius:9, padding:"10px 12px", fontSize:14 }}
-                  />
-                </div>
+              </div>
+            )}
+
+            {/* Google Rating */}
+            <div style={{ marginBottom:13 }}>
+              <label style={{ fontSize:11, fontWeight:600, color:"#555", display:"flex", alignItems:"center", gap:5, marginBottom:6, textTransform:"uppercase", letterSpacing:0.5 }}>
+                <span style={{ background:"#4285F4", color:"white", borderRadius:3, fontSize:9, fontWeight:800, padding:"1px 5px", letterSpacing:0.5 }}>G</span>
+                Google Rating
+              </label>
+              <div style={{ display:"flex", gap:8 }}>
+                <input
+                  type="number" min="0" max="5" step="0.1"
+                  placeholder="4.3"
+                  value={form.googleRating || ""}
+                  onChange={e => setForm(f => ({...f, googleRating:e.target.value}))}
+                  className="form-field"
+                  style={{ width:"90px", border:`1.5px solid ${C.border}`, borderRadius:9, padding:"10px 12px", fontSize:14 }}
+                />
+                <input
+                  type="text"
+                  placeholder="No. of reviews  e.g. 2,847"
+                  value={form.googleReviewCount || ""}
+                  onChange={e => setForm(f => ({...f, googleReviewCount:e.target.value}))}
+                  className="form-field"
+                  style={{ flex:1, border:`1.5px solid ${C.border}`, borderRadius:9, padding:"10px 12px", fontSize:14 }}
+                />
               </div>
             </div>
 
