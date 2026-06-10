@@ -278,12 +278,18 @@ export default function HCMCFoodPassport({ onSwitch = () => {} }) {
         const res = localStorage.getItem("hcmc-passport-v1");
         if (res) {
           const parsed = JSON.parse(res);
-          // migrate old field names and rename cuisines
-          const migrated = parsed.map(e => ({
-            googleRating:"", googleReviewCount:"", budgetTier:"", vibe:"", tier:"", ...e,
-            mustTry: e.mustTry || e.type || "",
-            cuisine: e.cuisine === "Chinese / HK 🇨🇳🇭🇰" ? "Chinese / HongKong 🇨🇳🇭🇰" : e.cuisine,
-          }));
+          const initialById = Object.fromEntries(INITIAL_DATA.map(d => [d.id, d]));
+          // migrate old field names and rename cuisines; back-fill vibe/budgetTier from INITIAL_DATA for entries missing them
+          const migrated = parsed.map(e => {
+            const init = initialById[e.id];
+            return {
+              googleRating:"", googleReviewCount:"", budgetTier:"", vibe:"", tier:"", ...e,
+              vibe: e.vibe || (init ? init.vibe : ""),
+              budgetTier: e.budgetTier || (init ? init.budgetTier : ""),
+              mustTry: e.mustTry || e.type || "",
+              cuisine: e.cuisine === "Chinese / HK 🇨🇳🇭🇰" ? "Chinese / HongKong 🇨🇳🇭🇰" : e.cuisine,
+            };
+          });
           setEntries(migrated.length ? migrated : INITIAL_DATA);
         } else {
           setEntries(INITIAL_DATA);
