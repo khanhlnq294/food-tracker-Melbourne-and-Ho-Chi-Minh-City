@@ -197,7 +197,7 @@ const ALL_DISTRICTS = ["All Districts", "Quận 1", "Q2 / Thảo Điền", "Qu�
 
 // ── EMPTY FORM ───────────────────────────────────────────────────────────
 function emptyForm() {
-  return { place: "", area: "", cuisine: CUISINES[0], type: "", budget: "", status: "want", rating: 0, notes: "" };
+  return { place: "", area: "", cuisine: CUISINES[0], type: "", budget: "", status: "want", rating: 0, notes: "", mapsUrl: "" };
 }
 
 // ── COLORS ───────────────────────────────────────────────────────────────
@@ -565,12 +565,28 @@ export default function HCMCFoodPassport({ onSwitch = () => {} }) {
               </div>
             )}
 
-            <div style={{ marginBottom:20 }}>
+            <div style={{ marginBottom:13 }}>
               <label style={{ fontSize:11, fontWeight:600, color:"#555", display:"block", marginBottom:4, textTransform:"uppercase", letterSpacing:0.5 }}>Notes</label>
               <textarea placeholder="Tips, what to order, vibes…" value={form.notes}
                 onChange={e => setForm(f => ({...f, notes:e.target.value}))} rows={3}
                 className="form-field"
                 style={{ width:"100%", border:`1.5px solid ${C.border}`, borderRadius:9, padding:"10px 12px", fontSize:14, resize:"vertical" }} />
+            </div>
+
+            <div style={{ marginBottom:20 }}>
+              <label style={{ fontSize:11, fontWeight:600, color:"#555", display:"block", marginBottom:4, textTransform:"uppercase", letterSpacing:0.5 }}>
+                Google Maps URL
+              </label>
+              <input
+                placeholder="Paste a Google Maps link…"
+                value={form.mapsUrl || ""}
+                onChange={e => setForm(f => ({...f, mapsUrl:e.target.value}))}
+                className="form-field"
+                style={{ width:"100%", border:`1.5px solid ${C.border}`, borderRadius:9, padding:"10px 12px", fontSize:14 }}
+              />
+              <div style={{ fontSize:11, color:"#888", marginTop:5 }}>
+                Open Google Maps → share → copy link
+              </div>
             </div>
 
             <button className="submit-btn" onClick={handleSubmit} style={{
