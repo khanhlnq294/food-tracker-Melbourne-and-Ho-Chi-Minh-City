@@ -307,6 +307,9 @@ export default function HCMCFoodPassport({ onSwitch = () => {} }) {
     .cycle-btn:hover { opacity:0.85; }
     input,select,textarea { font-family:Inter,sans-serif; color:${C.textDark}; }
     input:focus,select:focus,textarea:focus { outline:none; border-color:${C.header} !important; }
+    .form-field { background:#2a2a2a !important; color:white !important; border-color:#444 !important; }
+    .form-field::placeholder { color:rgba(255,255,255,0.28) !important; }
+    .form-field option { background:#2a2a2a; color:white; }
     select { appearance:none; background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23999' stroke-width='1.5' fill='none'/%3E%3C/svg%3E"); background-repeat:no-repeat; background-position:right 10px center; padding-right:28px !important; }
     .maps-btn:hover { background:${C.header} !important; color:white !important; }
     ::-webkit-scrollbar { width:5px; } ::-webkit-scrollbar-thumb { background:#ccc; border-radius:3px; }
@@ -533,9 +536,10 @@ export default function HCMCFoodPassport({ onSwitch = () => {} }) {
               {label:"Budget/person (VND)", key:"budget", placeholder:"e.g. 200k–500k"},
             ].map(({label,key,placeholder}) => (
               <div key={key} style={{ marginBottom:13 }}>
-                <label style={{ fontSize:11, fontWeight:600, color:"#ffffff", display:"block", marginBottom:4, textTransform:"uppercase", letterSpacing:0.5 }}>{label}</label>
+                <label style={{ fontSize:11, fontWeight:600, color:"#555", display:"block", marginBottom:4, textTransform:"uppercase", letterSpacing:0.5 }}>{label}</label>
                 <input placeholder={placeholder} value={form[key]}
                   onChange={e => setForm(f => ({...f, [key]:e.target.value}))}
+                  className="form-field"
                   style={{ width:"100%", border:`1.5px solid ${C.border}`, borderRadius:9, padding:"10px 12px", fontSize:14 }} />
               </div>
             ))}
@@ -543,6 +547,7 @@ export default function HCMCFoodPassport({ onSwitch = () => {} }) {
             <div style={{ marginBottom:13 }}>
               <label style={{ fontSize:11, fontWeight:600, color:"#555", display:"block", marginBottom:4, textTransform:"uppercase", letterSpacing:0.5 }}>Cuisine</label>
               <select value={form.cuisine} onChange={e => setForm(f => ({...f, cuisine:e.target.value}))}
+                className="form-field"
                 style={{ width:"100%", border:`1.5px solid ${C.border}`, borderRadius:9, padding:"10px 28px 10px 12px", fontSize:14, background:C.white }}>
                 {CUISINES.map(c => <option key={c}>{c}</option>)}
               </select>
@@ -564,6 +569,7 @@ export default function HCMCFoodPassport({ onSwitch = () => {} }) {
               <label style={{ fontSize:11, fontWeight:600, color:"#555", display:"block", marginBottom:4, textTransform:"uppercase", letterSpacing:0.5 }}>Notes</label>
               <textarea placeholder="Tips, what to order, vibes…" value={form.notes}
                 onChange={e => setForm(f => ({...f, notes:e.target.value}))} rows={3}
+                className="form-field"
                 style={{ width:"100%", border:`1.5px solid ${C.border}`, borderRadius:9, padding:"10px 12px", fontSize:14, resize:"vertical" }} />
             </div>
 
