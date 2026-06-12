@@ -96,6 +96,7 @@ export default function MelbourneFoodTracker({ onSwitch = () => {} }) {
 
   const css = `
     @import url('https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400;1,6..72,500&family=Archivo:wght@400;500;600;700&display=swap');
+    html,body{background:#FBF9F4;}
     *{box-sizing:border-box;margin:0;padding:0;}
     ::selection{background:${A};color:${BG};}
     input::placeholder,textarea::placeholder{color:#B3A998;}
