@@ -134,7 +134,7 @@ export default function MelbourneFoodTracker({ onSwitch = () => {} }) {
 
       {/* ── UTILITY BAR ── */}
       <div style={{ borderBottom:`1px solid ${B1}`, background:BG }}>
-        <div style={{ maxWidth:1200, margin:"0 auto", padding:"0 40px", height:54, display:"flex", alignItems:"center", justifyContent:"space-between" }}>
+        <div style={{ padding:"0 5%", height:54, display:"flex", alignItems:"center", justifyContent:"space-between" }}>
           <div style={{ display:"flex", alignItems:"center", gap:10 }}>
             <span style={{ width:7, height:7, borderRadius:"50%", background:A, display:"inline-block" }} />
             <span style={{ fontWeight:700, fontSize:12, letterSpacing:".22em", textTransform:"uppercase" }}>The Passport</span>
@@ -149,7 +149,7 @@ export default function MelbourneFoodTracker({ onSwitch = () => {} }) {
       </div>
 
       {/* ── MASTHEAD ── */}
-      <header style={{ maxWidth:1200, margin:"0 auto", padding:"62px 40px 0" }}>
+      <header style={{ padding:"62px 5% 0" }}>
         <div style={{ fontWeight:600, fontSize:13, letterSpacing:".24em", textTransform:"uppercase", color:A }}>A Dining Journal&nbsp;&nbsp;·&nbsp;&nbsp;Melbourne, Victoria</div>
         <h1 style={{ fontFamily:"'Newsreader',serif", fontWeight:500, fontSize:78, lineHeight:.96, letterSpacing:"-.02em", color:TK, marginTop:20 }}>
           Food <em style={{ fontStyle:"italic", fontWeight:400, color:A }}>Explorer</em>
@@ -181,7 +181,7 @@ export default function MelbourneFoodTracker({ onSwitch = () => {} }) {
 
       {/* ── STICKY CONTROLS ── */}
       <div style={{ position:"sticky", top:0, zIndex:30, background:"rgba(251,249,244,.92)", backdropFilter:"blur(8px)", WebkitBackdropFilter:"blur(8px)", borderBottom:`1px solid ${B1}` }}>
-        <div style={{ maxWidth:1200, margin:"0 auto", padding:"13px 40px", display:"flex", flexWrap:"wrap", alignItems:"center", justifyContent:"space-between", gap:12 }}>
+        <div style={{ padding:"13px 5%", display:"flex", flexWrap:"wrap", alignItems:"center", justifyContent:"space-between", gap:12 }}>
           <div style={{ display:"flex", alignItems:"center", gap:4, flexWrap:"wrap" }}>
             {[["all","All",counts.all],["tried","Visited",counts.tried],["want","To Try",counts.want]].map(([key,lbl,cnt]) => {
               const active = filter === key;
@@ -215,7 +215,7 @@ export default function MelbourneFoodTracker({ onSwitch = () => {} }) {
       </div>
 
       {/* ── GRID ── */}
-      <main style={{ maxWidth:1200, margin:"0 auto", padding:"26px 40px 96px" }}>
+      <main style={{ padding:"26px 5% 96px" }}>
         <div style={{ fontSize:11, fontWeight:600, letterSpacing:".16em", textTransform:"uppercase", color:"#9A9082", marginBottom:22 }}>
           {filtered.length === entries.length ? `${entries.length} places` : `Showing ${filtered.length} of ${entries.length} places`}
         </div>
