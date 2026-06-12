@@ -557,10 +557,7 @@ export default function HCMCFoodPassport({ onSwitch = () => {} }) {
                 <div style={{ display:"flex", flexDirection:"column", gap:13, padding:"18px 18px 16px", flex:1 }}>
                   <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", gap:10 }}>
                     <span style={{ fontWeight:600, fontSize:11, letterSpacing:".16em", textTransform:"uppercase", color:A }}>
-                      {String(entry.cuisine || "Other")
-                        .replace(/[^\x00-\x7F \u0080-\uFFFF]/g, "")
-                        .replace(/[🇦-🇿]{2}/g, "")
-                        .trim() || "Other"}
+                      {entry.cuisine || "Other"}
                     </span>
                     <div style={{ display:"flex", alignItems:"center", gap:6 }}>
                       {entry.tier && <span style={{ fontWeight:800, fontSize:10, letterSpacing:".1em", padding:"3px 8px", borderRadius:2, background:TIER_COLORS[entry.tier]||"#888", color:"white" }}>{entry.tier}</span>}
