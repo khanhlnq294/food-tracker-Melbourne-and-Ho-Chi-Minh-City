@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 
-// ── CUISINE COLORS ────────────────────────────────────────────────────────────
+// ── CUISINE COLORS ───────────────────────────────────────────────────────
 const CUISINE_BG = {
   "Japanese 🇯🇵": "#e8f0f8",
   "Korean 🇰🇷": "#fff0e0",
@@ -22,11 +22,6 @@ const CUISINE_BG = {
   "Bakery 🥐": "#fff0d0",
 };
 const CUISINES = Object.keys(CUISINE_BG);
-
-// ── EMPTY FORM ────────────────────────────────────────────────────────────────
-function emptyForm() {
-  return { place:"", area:"", cuisine:CUISINES[0], mustTry:"", budget:"", budgetTier:"Mid-range", vibe:"", status:"want", rating:0, tier:"", notes:"", mapsUrl:"", googleRating:"", googleReviewCount:"" };
-}
 
 // ── ALL 168 RESTAURANTS ──────────────────────────────────────────────────
 const INITIAL_DATA = [
@@ -200,7 +195,7 @@ const INITIAL_DATA = [
   {id:168,cuisine:"Cafe / Brunch ☕",place:"Runam Bistro",area:"Multiple",budget:"200k-600k",budgetTier:"Mid-range",mustTry:"Vietnamese cafe bistro",vibe:"Cafe",mapsUrl:"https://maps.google.com/?q=Runam+Bistro+Multiple+Ho+Chi+Minh+City",status:"want",rating:0,tier:"",notes:"",googleRating:"",googleReviewCount:""}
 ];
 
-// ── DISTRICT HELPER ───────────────────────────────────────────────────────────
+// ── DISTRICT HELPER ──────────────────────────────────────────────────────
 function getDistrict(area) {
   if (!area || area === "Multiple" || area === "TP.HCM" || area === "CMT8") return "Multiple / Other";
   if (area.includes("Thao Dien") || area.includes("Thảo Điền") || (area.includes("Q2") && !area.includes("Q1"))) return "Q2 / Thảo Điền";
@@ -217,46 +212,84 @@ function getDistrict(area) {
   return "Multiple / Other";
 }
 
+const ALL_DISTRICTS = ["All Districts","Quận 1","Q2 / Thảo Điền","Quận 3","Quận 5","Quận 6","Quận 7","Quận 10","Quận 11","Bình Thạnh","Phú Nhuận","Tân Bình","Multiple / Other"];
 
-const ALL_DISTRICTS = ["All Districts","Quận 1","Q2 / Thảo Điền","Quận 3","Quận 5","Quận 6","Quận 7","Quận 10","Quận 11","Bình Thạnh","Phú Nhuận","Tân Bình","Multiple / Other"];;
+// ── EMPTY FORM ───────────────────────────────────────────────────────────
+function emptyForm() {
+  return { place:"", area:"", cuisine:CUISINES[0], mustTry:"", budget:"", budgetTier:"Mid-range", vibe:"", status:"want", rating:0, tier:"", notes:"", mapsUrl:"", googleRating:"", googleReviewCount:"" };
+}
 
-// ── DESIGN TOKENS ─────────────────────────────────────────────────────────────
-const A  = "#C0442B"; // accent — HCMC terracotta
-const BG = "#FBF9F4"; // warm off-white
-const TK = "#1A1815"; // near-black
-const B1 = "#E7E1D5"; // light border
-const B2 = "#DAD2C4"; // medium border
+// ── COLORS ───────────────────────────────────────────────────────────────
+const C = {
+  bg: "#f4f0e8",
+  header: "#1c3d2e",
+  headerDark: "#122a1e",
+  gold: "#d4a020",
+  goldLight: "#f5e8b0",
+  green: "#2d6e4e",
+  greenLight: "#a8d5c2",
+  red: "#c73030",
+  redLight: "#f5c0c0",
+  amber: "#d4721a",
+  amberLight: "#f8d5a8",
+  white: "#ffffff",
+  textDark: "#1a1a1a",
+  textMid: "#555",
+  textMuted: "#999",
+  border: "#e0d8cc",
+  cardBg: "#ffffff",
+};
 
-// ── COMPONENT ─────────────────────────────────────────────────────────────────
+// ── Inline Google rating inputs (own state → no full-list re-render on keypress) ──
+function GoogleRatingInput({ entryId, field, initialValue, placeholder, inputStyle, onSave }) {
+  const [val, setVal] = useState(initialValue || "");
+  useEffect(() => { setVal(initialValue || ""); }, [initialValue]);
+  return (
+    <input
+      value={val}
+      onChange={e => setVal(e.target.value)}
+      onBlur={() => { if (val !== String(initialValue || "")) onSave(entryId, field, val); }}
+      placeholder={placeholder}
+      style={inputStyle}
+    />
+  );
+}
+
 export default function HCMCFoodPassport({ onSwitch = () => {} }) {
-  const [entries, setEntries]               = useState([]);
-  const [loading, setLoading]               = useState(true);
-  const [filter, setFilter]                 = useState("all");
-  const [cuisineFilter, setCuisineFilter]   = useState("All Cuisines");
+  const [entries, setEntries] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [filter, setFilter] = useState("all");
+  const [cuisineFilter, setCuisineFilter] = useState("All Cuisines");
   const [districtFilter, setDistrictFilter] = useState("All Districts");
-  const [vibeFilter, setVibeFilter]         = useState("All Vibes");
+  const [vibeFilter, setVibeFilter] = useState("All Vibes");
   const [budgetTierFilter, setBudgetTierFilter] = useState("All Budgets");
-  const [search, setSearch]                 = useState("");
-  const [showForm, setShowForm]             = useState(false);
-  const [editId, setEditId]                 = useState(null);
-  const [form, setForm]                     = useState(emptyForm());
-  const [photos, setPhotos]                 = useState({});
-  const [showApiInput, setShowApiInput]     = useState(false);
-  const [apiKeyDraft, setApiKeyDraft]       = useState("");
-  const [importStatus, setImportStatus]     = useState(null);
-  const [importProgress, setImportProgress] = useState({ done:0, total:0 });
+  const [search, setSearch] = useState("");
+  const [showForm, setShowForm] = useState(false);
+  const [form, setForm] = useState(emptyForm());
+  const [editId, setEditId] = useState(null);
+  const [showApiInput, setShowApiInput] = useState(false);
+  const [apiKeyDraft, setApiKeyDraft] = useState("");
+  const [importStatus, setImportStatus] = useState(null); // null | "running" | "done" | "error"
+  const [importProgress, setImportProgress] = useState({ done: 0, total: 0 });
 
   useEffect(() => {
-    (() => {
+    (async () => {
       try {
         const res = localStorage.getItem("hcmc-passport-v1");
         if (res) {
           const parsed = JSON.parse(res);
-          const migrated = parsed.map(e => ({
-            googleRating:"", googleReviewCount:"", budgetTier:"", vibe:"", tier:"", ...e,
-            mustTry: e.mustTry || e.type || "",
-            cuisine: e.cuisine === "Chinese / HK 🇨🇳🇭🇰" ? "Chinese / HongKong 🇨🇳🇭🇰" : e.cuisine,
-          }));
+          const initialById = Object.fromEntries(INITIAL_DATA.map(d => [d.id, d]));
+          // migrate old field names and rename cuisines; back-fill vibe/budgetTier from INITIAL_DATA for entries missing them
+          const migrated = parsed.map(e => {
+            const init = initialById[e.id];
+            return {
+              googleRating:"", googleReviewCount:"", budgetTier:"", vibe:"", tier:"", ...e,
+              vibe: e.vibe || (init ? init.vibe : ""),
+              budgetTier: e.budgetTier || (init ? init.budgetTier : ""),
+              mustTry: e.mustTry || e.type || "",
+              cuisine: e.cuisine === "Chinese / HK 🇨🇳🇭🇰" ? "Chinese / HongKong 🇨🇳🇭🇰" : e.cuisine,
+            };
+          });
           setEntries(migrated.length ? migrated : INITIAL_DATA);
         } else {
           setEntries(INITIAL_DATA);
@@ -266,7 +299,7 @@ export default function HCMCFoodPassport({ onSwitch = () => {} }) {
     })();
   }, []);
 
-  function persist(next) {
+  async function persist(next) {
     setEntries(next);
     try { localStorage.setItem("hcmc-passport-v1", JSON.stringify(next)); } catch {}
   }
@@ -279,47 +312,41 @@ export default function HCMCFoodPassport({ onSwitch = () => {} }) {
     }));
   }
 
-  function setRating(id, n) {
-    persist(entries.map(e => e.id !== id ? e : {
-      ...e,
-      rating: e.rating === n ? 0 : n,
-      status: e.status === "want" && n > 0 ? "tried" : e.status,
-    }));
-  }
-
-  function handlePhoto(id, file) {
-    if (!file) return;
-    setPhotos(p => ({ ...p, [id]: URL.createObjectURL(file) }));
-  }
-
   function handleSubmit() {
     if (!form.place.trim()) return;
     if (editId !== null) {
       persist(entries.map(e => e.id === editId ? { ...form, id: editId } : e));
+      setEditId(null);
     } else {
       persist([{ ...form, id: Date.now() }, ...entries]);
     }
-    setEditId(null); setShowForm(false); setForm(emptyForm());
+    setForm(emptyForm());
+    setShowForm(false);
   }
 
-  function startEdit(e) {
-    setForm({ googleRating:"", googleReviewCount:"", mustTry:"", budgetTier:"", vibe:"", tier:"", ...e });
-    setEditId(e.id); setShowForm(true);
+  function startEdit(e) { setForm({ googleRating:"", googleReviewCount:"", mustTry:"", budgetTier:"", vibe:"", tier:"", ...e }); setEditId(e.id); setShowForm(true); }
+  function deleteEntry(id) { if (!window.confirm("Remove this entry?")) return; persist(entries.filter(e => e.id !== id)); }
+  function updateGoogleData(id, field, value) {
+    persist(entries.map(e => e.id === id ? { ...e, [field]: value } : e));
   }
-  function deleteEntry(id) { persist(entries.filter(e => e.id !== id)); if (editId === id) setShowForm(false); }
 
   async function importGoogleRatings(key) {
     const toImport = entries.filter(e => !e.googleRating);
-    if (!toImport.length) { setImportStatus("done"); setTimeout(() => setImportStatus(null), 3000); return; }
-    setImportStatus("running"); setImportProgress({ done:0, total:toImport.length });
+    if (toImport.length === 0) { setImportStatus("done"); setTimeout(() => setImportStatus(null), 3000); return; }
+    setImportStatus("running");
+    setImportProgress({ done: 0, total: toImport.length });
     let updated = [...entries];
     for (let i = 0; i < toImport.length; i++) {
       const entry = toImport[i];
       try {
         const res = await fetch("https://places.googleapis.com/v1/places:searchText", {
-          method:"POST",
-          headers:{ "Content-Type":"application/json", "X-Goog-Api-Key":key, "X-Goog-FieldMask":"places.rating,places.userRatingCount" },
-          body: JSON.stringify({ textQuery:`${entry.place} ${entry.area} Ho Chi Minh City Vietnam` }),
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "X-Goog-Api-Key": key,
+            "X-Goog-FieldMask": "places.rating,places.userRatingCount",
+          },
+          body: JSON.stringify({ textQuery: `${entry.place} ${entry.area} Ho Chi Minh City Vietnam` }),
         });
         const data = await res.json();
         if (data.places?.[0]) {
@@ -331,10 +358,12 @@ export default function HCMCFoodPassport({ onSwitch = () => {} }) {
           } : e);
         }
       } catch (err) { console.warn(`Skipped ${entry.place}:`, err); }
-      setImportProgress({ done:i+1, total:toImport.length });
+      setImportProgress({ done: i + 1, total: toImport.length });
       if (i < toImport.length - 1) await new Promise(r => setTimeout(r, 220));
     }
-    persist(updated); setImportStatus("done"); setTimeout(() => setImportStatus(null), 4000);
+    persist(updated);
+    setImportStatus("done");
+    setTimeout(() => setImportStatus(null), 4000);
   }
 
   function handleImportClick() {
@@ -346,15 +375,16 @@ export default function HCMCFoodPassport({ onSwitch = () => {} }) {
   function handleApiKeySubmit() {
     if (!apiKeyDraft.trim()) return;
     localStorage.setItem("google-places-key", apiKeyDraft.trim());
-    setShowApiInput(false); setApiKeyDraft("");
+    setShowApiInput(false);
+    setApiKeyDraft("");
     importGoogleRatings(apiKeyDraft.trim());
   }
 
   const counts = {
     all: entries.length,
+    want: entries.filter(e => e.status === "want").length,
     tried: entries.filter(e => e.status === "tried").length,
     fav: entries.filter(e => e.status === "fav").length,
-    want: entries.filter(e => e.status === "want").length,
   };
   const pct = entries.length ? Math.round(((counts.tried + counts.fav) / entries.length) * 100) : 0;
 
@@ -368,422 +398,471 @@ export default function HCMCFoodPassport({ onSwitch = () => {} }) {
     return true;
   });
 
-  const allVibes = [...new Set(entries.map(e => e.vibe).filter(Boolean))].sort();
-
-  const tagStyle = (status) => {
-    const base = { fontWeight:600, fontSize:10, letterSpacing:".13em", textTransform:"uppercase", padding:"4px 9px", borderRadius:2, display:"inline-block" };
-    if (status === "fav")   return { ...base, background:A, color:BG, border:`1px solid ${A}` };
-    if (status === "tried") return { ...base, background:TK, color:BG, border:`1px solid ${TK}` };
-    return { ...base, background:"transparent", color:"#8E867A", border:`1px solid ${B2}` };
-  };
-
-  const toggleLabel = s => s === "want" ? "Mark visited" : s === "tried" ? "Mark favourite" : "Reset to to-try";
-
-  const TIER_COLORS = { S:"#1A3A4A", A:"#2D6E4E", B:"#D4A020", C:"#888" };
-
   const css = `
-    @import url('https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400;1,6..72,500&family=Archivo:wght@400;500;600;700&display=swap');
-    html,body,#root{background:#FBF9F4;margin:0;padding:0;max-width:none;width:100%;text-align:left;}
-    *{box-sizing:border-box;margin:0;padding:0;}
-    ::selection{background:${A};color:${BG};}
-    input::placeholder,textarea::placeholder{color:#B3A998;}
-    input,select,textarea,button{font-family:'Archivo',sans-serif;}
-    select{appearance:none;-webkit-appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='11' height='7' viewBox='0 0 11 7'%3E%3Cpath d='M1 1l4.5 4.5L10 1' stroke='%23C0442B' stroke-width='1.4' fill='none'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 2px center;padding-right:20px;}
-    ::-webkit-scrollbar{width:9px;}::-webkit-scrollbar-thumb{background:#DAD2C4;border-radius:0;}::-webkit-scrollbar-track{background:transparent;}
-    @keyframes modalIn{from{opacity:0;transform:translateY(12px);}to{opacity:1;transform:none;}}
-    @keyframes fadeIn{from{opacity:0;}to{opacity:1;}}
-    .card{transition:box-shadow .2s ease,transform .2s ease;}
-    .card:hover{box-shadow:0 16px 34px -20px rgba(45,33,15,.4);transform:translateY(-3px);}
-    .photo-slot:hover .photo-hint{opacity:1!important;}
-    .tab-btn:not(.active):hover{background:rgba(26,24,21,.06);}
-    .row-btn:hover{background:${TK}!important;color:${BG}!important;border-color:${TK}!important;}
-    .icon-btn:hover{border-color:${TK}!important;color:${TK}!important;}
-    .del-btn:hover{border-color:${A}!important;color:${A}!important;}
-    .star:hover{transform:scale(1.22);}
-    .map-link:hover{color:${A}!important;}
-    .clear-btn:hover{background:${TK}!important;color:${BG}!important;}
-    .save-btn:hover{background:${A}!important;border-color:${A}!important;}
-    .cancel-btn:hover{border-color:${TK}!important;}
-    .remove-link:hover{text-decoration:underline;}
-    .switch-btn:hover{border-color:${TK}!important;color:${TK}!important;}
-    .import-btn:hover{color:${A}!important;border-color:${A}!important;}
+    @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,500&family=Inter:wght@400;500;600;700&display=swap');
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    .card { transition: transform 0.15s, box-shadow 0.15s; }
+    .card:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(0,0,0,0.11) !important; }
+    .stamp-tried { position:absolute; top:13px; right:13px; border:2.5px solid ${C.green}; border-radius:5px; padding:3px 7px; color:${C.green}; font-weight:700; font-size:9px; letter-spacing:2.5px; text-transform:uppercase; opacity:0.65; transform:rotate(9deg); pointer-events:none; font-family:Inter,sans-serif; }
+    .stamp-fav { position:absolute; top:13px; right:13px; border:2.5px solid ${C.gold}; border-radius:5px; padding:3px 7px; color:${C.gold}; font-weight:700; font-size:9px; letter-spacing:2px; text-transform:uppercase; opacity:0.8; transform:rotate(9deg); pointer-events:none; font-family:Inter,sans-serif; }
+    .tab { cursor:pointer; transition:all 0.15s; background:none; border:none; font-family:Inter,sans-serif; }
+    .icon-btn { background:none; border:none; cursor:pointer; border-radius:6px; width:30px; height:30px; display:flex; align-items:center; justify-content:center; transition:background 0.1s; font-size:14px; }
+    .icon-btn:hover { background:rgba(0,0,0,0.06); }
+    .star { cursor:pointer; transition:transform 0.1s; display:inline-block; }
+    .star:hover { transform:scale(1.25); }
+    .cycle-btn { transition:all 0.15s; cursor:pointer; }
+    .cycle-btn:hover { opacity:0.85; }
+    input,select,textarea { font-family:Inter,sans-serif; color:${C.textDark}; }
+    input:focus,select:focus,textarea:focus { outline:none; border-color:${C.header} !important; }
+    .form-field { background:#2a2a2a !important; color:white !important; border-color:#444 !important; }
+    .form-field::placeholder { color:rgba(255,255,255,0.28) !important; }
+    .form-field option { background:#2a2a2a; color:white; }
+    select { appearance:none; background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23999' stroke-width='1.5' fill='none'/%3E%3C/svg%3E"); background-repeat:no-repeat; background-position:right 10px center; padding-right:28px !important; }
+    .maps-btn:hover { background:${C.header} !important; color:white !important; }
+    ::-webkit-scrollbar { width:5px; } ::-webkit-scrollbar-thumb { background:#ccc; border-radius:3px; }
+    .submit-btn:hover { background:${C.headerDark} !important; }
+    .city-btn { cursor:pointer; border:none; font-family:Inter,sans-serif; transition:all 0.15s; }
+    .city-btn:hover { opacity:0.85; }
   `;
 
-  const inputStyle = { border:`1px solid ${B2}`, background:"#FFF", borderRadius:2, padding:"11px 12px", fontSize:14, color:TK, outline:"none", width:"100%" };
-  const selectStyle = { border:"none", borderBottom:`1px solid ${B2}`, background:"transparent", fontSize:13, fontWeight:500, color:TK, padding:"0 20px 4px 0", cursor:"pointer", outline:"none" };
-
   if (loading) return (
-    <div style={{ display:"flex", alignItems:"center", justifyContent:"center", height:"100vh", background:BG, fontFamily:"'Archivo',sans-serif", color:"#8E867A", fontSize:14 }}>
-      Loading the passport…
+    <div style={{ display:"flex", justifyContent:"center", alignItems:"center", height:"100vh", fontFamily:"Inter,sans-serif", color:C.textMuted, background:C.bg }}>
+      Loading your HCMC food passport…
     </div>
   );
 
+  const statusConfig = {
+    want: { color: C.amber, bg: "#fff8f0", border: C.amberLight, label: "Mark Tried ✓" },
+    tried: { color: C.green, bg: "#f0faf5", border: C.greenLight, label: "⭐ Favourite" },
+    fav: { color: C.gold, bg: "#fef9ea", border: C.goldLight, label: "↩ Reset" },
+  };
+
   return (
-    <div style={{ minHeight:"100vh", background:BG, fontFamily:"'Archivo',sans-serif", color:TK, WebkitFontSmoothing:"antialiased" }}>
+    <div style={{ minHeight:"100vh", background:C.bg, fontFamily:"Inter,sans-serif" }}>
       <style>{css}</style>
 
-      {/* ── UTILITY BAR ── */}
-      <div style={{ borderBottom:`1px solid ${B1}`, background:BG }}>
-        <div style={{ padding:"0 5%", height:54, display:"flex", alignItems:"center", justifyContent:"space-between" }}>
-          <div style={{ display:"flex", alignItems:"center", gap:10 }}>
-            <span style={{ width:7, height:7, borderRadius:"50%", background:A, display:"inline-block" }} />
-            <span style={{ fontWeight:700, fontSize:12, letterSpacing:".22em", textTransform:"uppercase" }}>The Passport</span>
-            <span style={{ fontSize:12, letterSpacing:".18em", textTransform:"uppercase", color:"#A89E8E" }}>— Eating Journals</span>
-          </div>
-          <div style={{ display:"flex", alignItems:"center", gap:8 }}>
-            <span style={{ fontSize:11, letterSpacing:".16em", textTransform:"uppercase", color:"#A89E8E", marginRight:4 }}>Journal</span>
-            <button className="switch-btn" onClick={onSwitch} style={{ background:"transparent", border:`1px solid ${B2}`, color:"#8E867A", borderRadius:999, padding:"6px 14px", fontSize:12, fontWeight:500, cursor:"pointer", letterSpacing:".02em", transition:"all .15s" }}>Melbourne</button>
-            <button style={{ background:TK, border:`1px solid ${TK}`, color:BG, borderRadius:999, padding:"6px 14px", fontSize:12, fontWeight:600, cursor:"default", letterSpacing:".02em" }}>Hồ Chí Minh</button>
-          </div>
+      {/* ── City Nav ── */}
+      <div style={{ background:"#0e1f16", padding:"0 24px" }}>
+        <div style={{ maxWidth:860, margin:"0 auto", display:"flex", alignItems:"center", gap:8, height:38 }}>
+          <span style={{ fontSize:10, color:"rgba(255,255,255,0.35)", textTransform:"uppercase", letterSpacing:2, fontWeight:600, marginRight:4 }}>
+            My Journals
+          </span>
+          <button className="city-btn" onClick={onSwitch}
+            style={{ background:"transparent", border:"1px solid rgba(255,255,255,0.2)", borderRadius:20, padding:"4px 12px", fontSize:12, fontWeight:500, color:"rgba(255,255,255,0.5)" }}>
+            🇦🇺 Melbourne
+          </button>
+          <button className="city-btn" style={{ background:"rgba(255,255,255,0.12)", border:"none", borderRadius:20, padding:"4px 12px", fontSize:12, fontWeight:700, color:"white" }}>
+            🇻🇳 HCMC
+          </button>
         </div>
       </div>
 
-      {/* ── MASTHEAD ── */}
-      <header style={{ padding:"62px 5% 0" }}>
-        <div style={{ fontWeight:600, fontSize:13, letterSpacing:".24em", textTransform:"uppercase", color:A }}>An Eating Guide&nbsp;&nbsp;·&nbsp;&nbsp;Hồ Chí Minh City</div>
-        <h1 style={{ fontFamily:"'Newsreader',serif", fontWeight:500, fontSize:78, lineHeight:.96, letterSpacing:"-.02em", color:TK, marginTop:20 }}>
-          Food <em style={{ fontStyle:"italic", fontWeight:400, color:A }}>Passport</em>
-        </h1>
-        <div style={{ display:"flex", flexWrap:"wrap", justifyContent:"space-between", alignItems:"flex-end", gap:36, marginTop:30 }}>
-          <p style={{ maxWidth:430, fontSize:16, lineHeight:1.6, color:"#5A544B" }}>
-            A working list of <strong style={{ fontWeight:600, color:TK }}>{entries.length} tables</strong> worth crossing town for — every one under 1,000,000₫ a head. Mark them off as you eat your way across the city.
-          </p>
-          <div style={{ display:"flex", alignItems:"stretch" }}>
-            {[["Spots", counts.all, TK], ["Visited", counts.tried, TK], ["Favourites", counts.fav, A]].map(([lbl, val, col]) => (
-              <div key={lbl} style={{ padding:"0 22px", borderLeft:`1px solid ${B1}` }}>
-                <div style={{ fontFamily:"'Newsreader',serif", fontSize:34, fontWeight:500, lineHeight:1, color:col }}>{val}</div>
-                <div style={{ fontSize:10, fontWeight:600, letterSpacing:".14em", textTransform:"uppercase", color:"#9A9082", marginTop:6 }}>{lbl}</div>
-              </div>
-            ))}
-            <div style={{ padding:"0 0 0 22px", borderLeft:`1px solid ${B1}`, display:"flex", flexDirection:"column", justifyContent:"flex-end", minWidth:140 }}>
-              <div style={{ display:"flex", justifyContent:"space-between", alignItems:"baseline", marginBottom:7 }}>
-                <span style={{ fontSize:10, fontWeight:600, letterSpacing:".14em", textTransform:"uppercase", color:"#9A9082" }}>Completed</span>
-                <span style={{ fontFamily:"'Newsreader',serif", fontSize:17, color:TK }}>{pct}%</span>
-              </div>
-              <div style={{ width:"100%", height:4, background:B1, overflow:"hidden" }}>
-                <div style={{ height:"100%", background:A, width:`${pct}%`, transition:"width .5s ease" }} />
-              </div>
+      {/* ── HEADER ── */}
+      <div style={{ background:C.header, color:"white", padding:"26px 24px 22px" }}>
+        <div style={{ maxWidth:860, margin:"0 auto" }}>
+          <div style={{ display:"flex", justifyContent:"space-between", alignItems:"flex-start" }}>
+            <div>
+              <div style={{ fontSize:10, letterSpacing:4, textTransform:"uppercase", opacity:0.5, marginBottom:5, fontWeight:500 }}>Thành phố Hồ Chí Minh</div>
+              <h1 style={{ fontFamily:"'Playfair Display',serif", fontSize:28, fontWeight:700, lineHeight:1.15, letterSpacing:"-0.3px" }}>Food Passport</h1>
+              <div style={{ fontSize:12, opacity:0.55, marginTop:3 }}>168 spots · under 1,000,000 VND/person</div>
             </div>
-          </div>
-        </div>
-        <div style={{ borderBottom:`1px solid ${TK}`, marginTop:34 }} />
-      </header>
-
-      {/* ── STICKY CONTROLS ── */}
-      <div style={{ position:"sticky", top:0, zIndex:30, background:"rgba(251,249,244,.92)", backdropFilter:"blur(8px)", WebkitBackdropFilter:"blur(8px)", borderBottom:`1px solid ${B1}` }}>
-        <div style={{ padding:"10px 5%", display:"flex", flexDirection:"column", gap:10 }}>
-          {/* Row 1: tabs + import + add */}
-          <div style={{ display:"flex", alignItems:"center", justifyContent:"space-between", gap:12, flexWrap:"wrap" }}>
-            <div style={{ display:"flex", alignItems:"center", gap:4, flexWrap:"wrap" }}>
-              {[["all","All",counts.all],["want","To Try",counts.want],["tried","Visited",counts.tried],["fav","Favourites",counts.fav]].map(([key,lbl,cnt]) => {
-                const active = filter === key;
-                return (
-                  <button key={key} className={active?"":"tab-btn"} onClick={() => setFilter(key)} style={{ display:"inline-flex", alignItems:"center", gap:7, background:active?TK:"transparent", color:active?BG:"#6E675E", border:`1px solid ${active?TK:"transparent"}`, borderRadius:2, padding:"7px 13px", fontSize:13, fontWeight:600, letterSpacing:".02em", cursor:"pointer", transition:"all .15s ease" }}>
-                    <span>{lbl}</span>
-                    <span style={{ fontSize:11, color:active?"rgba(251,249,244,.6)":"#B3A998" }}>{cnt}</span>
-                  </button>
-                );
-              })}
-            </div>
-            <div style={{ display:"flex", alignItems:"center", gap:10 }}>
+            <div style={{ display:"flex", flexDirection:"column", gap:8, alignItems:"flex-end" }}>
+              <button onClick={() => { setForm(emptyForm()); setEditId(null); setShowForm(true); }}
+                style={{ background:C.gold, border:"none", color:"white", borderRadius:10, padding:"11px 18px", fontWeight:700, fontSize:14, cursor:"pointer", fontFamily:"Inter,sans-serif", letterSpacing:"0.2px", whiteSpace:"nowrap" }}>
+                + Add Spot
+              </button>
+              {/* Google Import button */}
               {importStatus === "running" ? (
-                <span style={{ fontSize:12, color:"#6E675E", letterSpacing:".02em" }}>Fetching {importProgress.done}/{importProgress.total}…</span>
+                <div style={{ display:"flex", alignItems:"center", gap:6, background:"rgba(255,255,255,0.12)", borderRadius:8, padding:"7px 12px", fontSize:12, color:"white", whiteSpace:"nowrap" }}>
+                  <span style={{ display:"inline-block", animation:"spin 1s linear infinite" }}>⟳</span>
+                  {importProgress.done}/{importProgress.total}…
+                  <style>{`@keyframes spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}`}</style>
+                </div>
               ) : importStatus === "done" ? (
-                <span style={{ fontSize:12, color:"#2D6E4E", letterSpacing:".02em" }}>✓ Ratings imported</span>
+                <div style={{ background:"rgba(255,255,255,0.12)", borderRadius:8, padding:"7px 12px", fontSize:12, color:"#a8d5c2", whiteSpace:"nowrap" }}>
+                  ✓ Ratings imported!
+                </div>
               ) : (
-                <button className="import-btn" onClick={handleImportClick} style={{ background:"transparent", border:`1px solid ${B2}`, color:"#6E675E", borderRadius:2, padding:"7px 12px", fontSize:12, fontWeight:600, cursor:"pointer", letterSpacing:".02em", transition:"all .15s", display:"flex", alignItems:"center", gap:6 }}>
-                  <span style={{ background:"#4285F4", color:"white", borderRadius:2, fontSize:8, fontWeight:800, padding:"1px 4px" }}>G</span>
+                <button onClick={handleImportClick} style={{ display:"flex", alignItems:"center", gap:6, background:"rgba(255,255,255,0.1)", border:"1px solid rgba(255,255,255,0.2)", color:"white", borderRadius:8, padding:"7px 13px", fontWeight:600, fontSize:12, cursor:"pointer", fontFamily:"Inter,sans-serif", whiteSpace:"nowrap" }}>
+                  <span style={{ background:"#4285F4", borderRadius:3, fontSize:9, fontWeight:800, padding:"1px 5px" }}>G</span>
                   Import Ratings
                 </button>
               )}
-              <button onClick={() => { setEditId(null); setForm(emptyForm()); setShowForm(true); }} style={{ background:TK, color:BG, border:"none", borderRadius:2, padding:"10px 16px", fontSize:13, fontWeight:600, letterSpacing:".02em", cursor:"pointer", transition:"background .15s" }}
-                onMouseEnter={e => e.currentTarget.style.background = A} onMouseLeave={e => e.currentTarget.style.background = TK}>
-                + Add spot
-              </button>
             </div>
           </div>
-          {/* Row 2: filters */}
-          <div style={{ display:"flex", alignItems:"center", gap:14, flexWrap:"wrap", paddingBottom:4 }}>
-            <div style={{ display:"flex", alignItems:"center", gap:8, borderBottom:`1px solid ${B2}`, paddingBottom:4 }}>
-              <span style={{ color:A, fontSize:14 }}>⌕</span>
-              <input value={search} onChange={e => setSearch(e.target.value)} placeholder="Search places, areas, dishes…" style={{ border:"none", background:"transparent", fontSize:14, color:TK, width:200, outline:"none" }} />
+
+          {/* Stats row */}
+          <div style={{ display:"flex", gap:24, marginTop:20, flexWrap:"wrap" }}>
+            {[["Total", counts.all, "white"], ["Tried", counts.tried, C.greenLight], ["⭐ Favourites", counts.fav, C.goldLight], ["To Try", counts.want, "#f8d5a8"]].map(([lbl, val, col]) => (
+              <div key={lbl}>
+                <div style={{ fontSize:24, fontWeight:700, color:col, fontFamily:"'Playfair Display',serif" }}>{val}</div>
+                <div style={{ fontSize:10, opacity:0.55, textTransform:"uppercase", letterSpacing:1.5, marginTop:1, fontWeight:500 }}>{lbl}</div>
+              </div>
+            ))}
+            <div style={{ marginLeft:"auto", display:"flex", flexDirection:"column", alignItems:"flex-end", justifyContent:"flex-end" }}>
+              <div style={{ fontSize:12, opacity:0.6, marginBottom:4 }}>Completion</div>
+              <div style={{ width:120, height:6, background:"rgba(255,255,255,0.2)", borderRadius:3, overflow:"hidden" }}>
+                <div style={{ width:`${pct}%`, height:"100%", background:C.gold, borderRadius:3, transition:"width 0.4s" }} />
+              </div>
+              <div style={{ fontSize:11, opacity:0.55, marginTop:3 }}>{pct}%</div>
             </div>
-            <select value={cuisineFilter} onChange={e => setCuisineFilter(e.target.value)} style={selectStyle}>
-              <option>All Cuisines</option>
-              {CUISINES.map(c => <option key={c}>{c}</option>)}
-            </select>
-            <select value={districtFilter} onChange={e => setDistrictFilter(e.target.value)} style={selectStyle}>
-              {ALL_DISTRICTS.map(d => <option key={d}>{d}</option>)}
-            </select>
-            <select value={vibeFilter} onChange={e => setVibeFilter(e.target.value)} style={selectStyle}>
-              <option>All Vibes</option>
-              {allVibes.map(v => <option key={v}>{v}</option>)}
-            </select>
-            <select value={budgetTierFilter} onChange={e => setBudgetTierFilter(e.target.value)} style={selectStyle}>
-              <option>All Budgets</option>
-              {["Budget","Mid-range","Premium under 1m"].map(t => <option key={t}>{t}</option>)}
-            </select>
-            <span style={{ fontSize:11, fontWeight:600, letterSpacing:".12em", textTransform:"uppercase", color:"#B3A998", marginLeft:"auto" }}>{filtered.length} spots</span>
           </div>
         </div>
       </div>
 
-      {/* ── GRID ── */}
-      <main style={{ padding:"26px 5% 96px" }}>
-        {filtered.length > 0 ? (
-          <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fill,minmax(310px,1fr))", gap:22 }}>
-            {filtered.map(entry => (
-              <article key={entry.id} className="card" style={{ display:"flex", flexDirection:"column", background:"#FFF", border:`1px solid ${B1}`, borderRadius:2, overflow:"hidden" }}>
-
-                {/* Photo slot */}
-                <div className="photo-slot" onClick={() => document.getElementById(`hph-${entry.id}`).click()} style={{ position:"relative", width:"100%", aspectRatio:"4/3", background:"#F1EBDF", borderBottom:`1px solid ${B1}`, overflow:"hidden", cursor:"pointer" }}>
-                  {photos[entry.id]
-                    ? <img src={photos[entry.id]} style={{ width:"100%", height:"100%", objectFit:"cover", display:"block" }} alt="" />
-                    : <div style={{ display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"center", height:"100%", gap:6 }}>
-                        <span style={{ fontSize:22, color:B2 }}>+</span>
-                        <span className="photo-hint" style={{ fontSize:10, color:"#B3A998", letterSpacing:".12em", textTransform:"uppercase", fontWeight:600, opacity:0, transition:"opacity .15s" }}>Add photo</span>
-                      </div>
-                  }
-                  <input id={`hph-${entry.id}`} type="file" accept="image/*" style={{ display:"none" }} onChange={e => handlePhoto(entry.id, e.target.files?.[0])} onClick={e => e.stopPropagation()} />
-                  {entry.status === "fav" && (
-                    <span style={{ position:"absolute", top:12, left:12, background:A, color:BG, fontSize:10, fontWeight:700, letterSpacing:".14em", textTransform:"uppercase", padding:"5px 9px", borderRadius:2 }}>Favourite</span>
-                  )}
-                  {entry.status === "tried" && (
-                    <span style={{ position:"absolute", top:12, left:12, background:TK, color:BG, fontSize:10, fontWeight:700, letterSpacing:".14em", textTransform:"uppercase", padding:"5px 9px", borderRadius:2 }}>Visited</span>
-                  )}
-                </div>
-
-                {/* Body */}
-                <div style={{ display:"flex", flexDirection:"column", gap:13, padding:"18px 18px 16px", flex:1 }}>
-                  <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", gap:10 }}>
-                    <span style={{ fontWeight:600, fontSize:11, letterSpacing:".16em", textTransform:"uppercase", color:A }}>
-                      {entry.cuisine || "Other"}
-                    </span>
-                    <div style={{ display:"flex", alignItems:"center", gap:6 }}>
-                      {entry.tier && <span style={{ fontWeight:800, fontSize:10, letterSpacing:".1em", padding:"3px 8px", borderRadius:2, background:TIER_COLORS[entry.tier]||"#888", color:"white" }}>{entry.tier}</span>}
-                      <span style={tagStyle(entry.status)}>
-                        {entry.status === "fav" ? "Favourite" : entry.status === "tried" ? "Visited" : "To Try"}
-                      </span>
-                    </div>
-                  </div>
-
-                  <h3 style={{ fontFamily:"'Newsreader',serif", fontWeight:500, fontSize:22, lineHeight:1.14, letterSpacing:"-.01em", color:TK }}>{entry.place}</h3>
-
-                  <div style={{ display:"flex", flexDirection:"column", borderTop:"1px solid #EFEAE0", marginTop:2 }}>
-                    {[
-                      ["Area",      entry.area || "—"],
-                      ["Budget",    entry.budget ? `${entry.budget} ₫` : "—"],
-                      ["Must Try",  entry.mustTry || "—"],
-                      ...(entry.vibe ? [["Vibe", entry.vibe]] : []),
-                      ...(entry.googleRating ? [["G Rating", `${parseFloat(entry.googleRating).toFixed(1)} ★${entry.googleReviewCount ? `  (${entry.googleReviewCount})` : ""}`]] : []),
-                    ].map(([lbl, val]) => (
-                      <div key={lbl} style={{ display:"flex", justifyContent:"space-between", alignItems:"baseline", gap:12, padding:"9px 0", borderBottom:"1px solid #EFEAE0" }}>
-                        <span style={{ fontWeight:600, fontSize:10, letterSpacing:".14em", textTransform:"uppercase", color:"#A89E8E", flexShrink:0 }}>{lbl}</span>
-                        <span style={{ fontSize:13, color:"#3A352E", textAlign:"right" }}>
-                          {lbl === "Budget" && entry.budgetTier
-                            ? <><span style={{ fontFamily:"'Newsreader',serif", fontSize:15 }}>{entry.budget}</span> ₫ <span style={{ fontSize:11, color:"#9A9082", marginLeft:4 }}>· {entry.budgetTier}</span></>
-                            : val
-                          }
-                        </span>
-                      </div>
-                    ))}
-                    {entry.notes && (
-                      <div style={{ display:"flex", justifyContent:"space-between", alignItems:"baseline", gap:12, padding:"9px 0", borderBottom:"1px solid #EFEAE0" }}>
-                        <span style={{ fontWeight:600, fontSize:10, letterSpacing:".14em", textTransform:"uppercase", color:"#A89E8E", flexShrink:0 }}>Notes</span>
-                        <span style={{ fontSize:13, color:"#3A352E", textAlign:"right", fontStyle:"italic" }}>{entry.notes}</span>
-                      </div>
-                    )}
-                  </div>
-
-                  <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", paddingTop:12, marginTop:"auto", borderTop:"1px solid #EFEAE0" }}>
-                    <div style={{ display:"flex", gap:3 }}>
-                      {[1,2,3,4,5].map(n => (
-                        <span key={n} className="star" onClick={() => setRating(entry.id, n)} style={{ cursor:"pointer", fontSize:16, lineHeight:1, color:n<=(entry.rating||0)?A:"#D8D0C2", transition:"transform .12s ease", display:"inline-block" }}>
-                          {n <= (entry.rating||0) ? "★" : "☆"}
-                        </span>
-                      ))}
-                    </div>
-                    {entry.mapsUrl && entry.mapsUrl !== "#" && (
-                      <a href={entry.mapsUrl} target="_blank" rel="noopener noreferrer" className="map-link" style={{ fontSize:12, fontWeight:600, letterSpacing:".04em", color:TK, textDecoration:"none", borderBottom:`1px solid ${A}`, paddingBottom:1, transition:"color .12s" }}>Map ↗</a>
-                    )}
-                  </div>
-
-                  <div style={{ display:"flex", gap:7 }}>
-                    <button className="row-btn" onClick={() => cycleStatus(entry.id)} style={{ flex:1, border:`1px solid ${B2}`, background:BG, fontWeight:600, fontSize:12, letterSpacing:".03em", color:TK, padding:"9px 12px", borderRadius:2, cursor:"pointer", transition:"all .15s ease" }}>
-                      {toggleLabel(entry.status)}
-                    </button>
-                    <button className="icon-btn" onClick={() => startEdit(entry)} title="Edit" style={{ width:36, border:`1px solid ${B2}`, background:BG, color:"#6E675E", fontSize:14, borderRadius:2, cursor:"pointer", display:"flex", alignItems:"center", justifyContent:"center", transition:"all .15s ease" }}>✎</button>
-                    <button className="del-btn" onClick={() => deleteEntry(entry.id)} title="Remove" style={{ width:36, border:`1px solid ${B2}`, background:BG, color:"#6E675E", fontSize:13, borderRadius:2, cursor:"pointer", display:"flex", alignItems:"center", justifyContent:"center", transition:"all .15s ease" }}>✕</button>
-                  </div>
-                </div>
-              </article>
+      {/* ── FILTERS ── */}
+      <div style={{ background:C.white, borderBottom:`1px solid ${C.border}`, padding:"0 24px" }}>
+        <div style={{ maxWidth:860, margin:"0 auto" }}>
+          {/* Status tabs */}
+          <div style={{ display:"flex", overflowX:"auto" }}>
+            {[["all","All",counts.all],["want","🗺️ To Try",counts.want],["tried","✓ Tried",counts.tried],["fav","⭐ Favourites",counts.fav]].map(([val,lbl,cnt]) => (
+              <button key={val} className="tab" onClick={() => setFilter(val)} style={{
+                padding:"13px 15px", fontWeight:600, fontSize:13, whiteSpace:"nowrap",
+                color: filter === val ? C.header : "#999",
+                borderBottom: filter === val ? `2.5px solid ${C.header}` : "2.5px solid transparent",
+              }}>
+                {lbl} <span style={{ fontWeight:400, fontSize:11 }}>({cnt})</span>
+              </button>
             ))}
           </div>
-        ) : (
-          <div style={{ textAlign:"center", padding:"90px 20px", border:`1px dashed ${B2}`, borderRadius:2 }}>
-            <div style={{ fontFamily:"'Newsreader',serif", fontStyle:"italic", fontSize:28, color:TK }}>Nothing on the table.</div>
-            <p style={{ fontSize:14, color:"#8E867A", marginTop:10 }}>No spots match these filters. Try clearing your search.</p>
-            <button className="clear-btn" onClick={() => { setFilter("all"); setCuisineFilter("All Cuisines"); setDistrictFilter("All Districts"); setVibeFilter("All Vibes"); setBudgetTierFilter("All Budgets"); setSearch(""); }} style={{ marginTop:22, background:"transparent", border:`1px solid ${TK}`, color:TK, padding:"10px 20px", fontSize:13, fontWeight:600, borderRadius:2, cursor:"pointer", transition:"all .15s" }}>
-              Clear filters
-            </button>
-          </div>
-        )}
-      </main>
+        </div>
+      </div>
 
-      {/* ── ADD / EDIT MODAL ── */}
-      {showForm && (
-        <div onClick={() => setShowForm(false)} style={{ position:"fixed", inset:0, zIndex:60, background:"rgba(26,24,21,.55)", display:"flex", alignItems:"flex-start", justifyContent:"center", padding:"48px 20px", overflow:"auto", animation:"fadeIn .15s ease" }}>
-          <div onClick={e => e.stopPropagation()} style={{ width:"min(600px,100%)", background:BG, border:`1px solid ${TK}`, borderRadius:3, padding:34, animation:"modalIn .22s ease" }}>
-            <div style={{ display:"flex", justifyContent:"space-between", alignItems:"flex-start", marginBottom:24 }}>
-              <div>
-                <div style={{ fontWeight:600, fontSize:11, letterSpacing:".2em", textTransform:"uppercase", color:A }}>{editId ? "Edit entry" : "New entry"}</div>
-                <h2 style={{ fontFamily:"'Newsreader',serif", fontWeight:500, fontSize:30, color:TK, marginTop:6 }}>{editId ? "Edit spot" : "Add a spot"}</h2>
-              </div>
-              <button onClick={() => setShowForm(false)} style={{ background:"transparent", border:"none", fontSize:22, color:"#8E867A", cursor:"pointer" }}
-                onMouseEnter={e => e.target.style.color = TK} onMouseLeave={e => e.target.style.color = "#8E867A"}>✕</button>
-            </div>
+      {/* ── SECONDARY FILTERS ── */}
+      <div style={{ background:C.white, borderBottom:`1px solid ${C.border}`, padding:"10px 24px" }}>
+        <div style={{ maxWidth:860, margin:"0 auto", display:"flex", gap:10, flexWrap:"wrap", alignItems:"center" }}>
+          <select value={cuisineFilter} onChange={e => setCuisineFilter(e.target.value)}
+            style={{ border:`1.5px solid ${C.border}`, borderRadius:8, padding:"8px 28px 8px 12px", fontSize:13, background:C.white, cursor:"pointer" }}>
+            <option>All Cuisines</option>
+            {CUISINES.map(c => <option key={c}>{c}</option>)}
+          </select>
+          <select value={districtFilter} onChange={e => setDistrictFilter(e.target.value)}
+            style={{ border:`1.5px solid ${C.border}`, borderRadius:8, padding:"8px 28px 8px 12px", fontSize:13, background:C.white, cursor:"pointer" }}>
+            {ALL_DISTRICTS.map(d => <option key={d}>{d}</option>)}
+          </select>
+          <select value={vibeFilter} onChange={e => setVibeFilter(e.target.value)}
+            style={{ border:`1.5px solid ${C.border}`, borderRadius:8, padding:"8px 28px 8px 12px", fontSize:13, background:C.white, cursor:"pointer" }}>
+            <option>All Vibes</option>
+            {[...new Set(entries.map(e => e.vibe).filter(Boolean))].sort().map(v => <option key={v}>{v}</option>)}
+          </select>
+          <select value={budgetTierFilter} onChange={e => setBudgetTierFilter(e.target.value)}
+            style={{ border:`1.5px solid ${C.border}`, borderRadius:8, padding:"8px 28px 8px 12px", fontSize:13, background:C.white, cursor:"pointer" }}>
+            <option>All Budgets</option>
+            {["Budget","Mid-range","Premium under 1m"].map(t => <option key={t}>{t}</option>)}
+          </select>
+          <input placeholder="Search restaurants, type, area…" value={search} onChange={e => setSearch(e.target.value)}
+            style={{ border:`1.5px solid ${C.border}`, borderRadius:8, padding:"8px 12px", fontSize:13, flex:1, minWidth:160, background:"#fafafa" }} />
+          <span style={{ fontSize:12, color:C.textMuted, whiteSpace:"nowrap" }}>{filtered.length} results</span>
+        </div>
+      </div>
 
-            <div style={{ display:"flex", flexDirection:"column", gap:16 }}>
-              <label style={{ display:"flex", flexDirection:"column", gap:6 }}>
-                <span style={{ fontWeight:600, fontSize:10, letterSpacing:".14em", textTransform:"uppercase", color:"#9A9082" }}>Place name</span>
-                <input value={form.place} onChange={e => setForm(f => ({...f, place:e.target.value}))} placeholder="e.g. Pizza 4P's" style={inputStyle}
-                  onFocus={e => e.target.style.borderColor = TK} onBlur={e => e.target.style.borderColor = B2} />
-              </label>
-
-              <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:14 }}>
-                <label style={{ display:"flex", flexDirection:"column", gap:6 }}>
-                  <span style={{ fontWeight:600, fontSize:10, letterSpacing:".14em", textTransform:"uppercase", color:"#9A9082" }}>Cuisine</span>
-                  <select value={form.cuisine} onChange={e => setForm(f => ({...f, cuisine:e.target.value}))} style={inputStyle}>
-                    {CUISINES.map(c => <option key={c}>{c}</option>)}
-                  </select>
-                </label>
-                <label style={{ display:"flex", flexDirection:"column", gap:6 }}>
-                  <span style={{ fontWeight:600, fontSize:10, letterSpacing:".14em", textTransform:"uppercase", color:"#9A9082" }}>Status</span>
-                  <select value={form.status} onChange={e => setForm(f => ({...f, status:e.target.value}))} style={inputStyle}>
-                    <option value="want">To Try</option>
-                    <option value="tried">Visited</option>
-                    <option value="fav">Favourite</option>
-                  </select>
-                </label>
-              </div>
-
-              <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:14 }}>
-                <label style={{ display:"flex", flexDirection:"column", gap:6 }}>
-                  <span style={{ fontWeight:600, fontSize:10, letterSpacing:".14em", textTransform:"uppercase", color:"#9A9082" }}>Area / District</span>
-                  <input value={form.area||""} onChange={e => setForm(f => ({...f, area:e.target.value}))} placeholder="e.g. Q1 / Bến Thành" style={inputStyle}
-                    onFocus={e => e.target.style.borderColor = TK} onBlur={e => e.target.style.borderColor = B2} />
-                </label>
-                <label style={{ display:"flex", flexDirection:"column", gap:6 }}>
-                  <span style={{ fontWeight:600, fontSize:10, letterSpacing:".14em", textTransform:"uppercase", color:"#9A9082" }}>Budget / head</span>
-                  <input value={form.budget||""} onChange={e => setForm(f => ({...f, budget:e.target.value}))} placeholder="e.g. 300k–700k" style={inputStyle}
-                    onFocus={e => e.target.style.borderColor = TK} onBlur={e => e.target.style.borderColor = B2} />
-                </label>
-              </div>
-
-              <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:14 }}>
-                <label style={{ display:"flex", flexDirection:"column", gap:6 }}>
-                  <span style={{ fontWeight:600, fontSize:10, letterSpacing:".14em", textTransform:"uppercase", color:"#9A9082" }}>Budget Tier</span>
-                  <select value={form.budgetTier||""} onChange={e => setForm(f => ({...f, budgetTier:e.target.value}))} style={inputStyle}>
-                    <option value="">—</option>
-                    {["Budget","Mid-range","Premium under 1m"].map(t => <option key={t}>{t}</option>)}
-                  </select>
-                </label>
-                <label style={{ display:"flex", flexDirection:"column", gap:6 }}>
-                  <span style={{ fontWeight:600, fontSize:10, letterSpacing:".14em", textTransform:"uppercase", color:"#9A9082" }}>Vibe</span>
-                  <input value={form.vibe||""} onChange={e => setForm(f => ({...f, vibe:e.target.value}))} placeholder="e.g. Rooftop, Date night…" style={inputStyle}
-                    onFocus={e => e.target.style.borderColor = TK} onBlur={e => e.target.style.borderColor = B2} />
-                </label>
-              </div>
-
-              <label style={{ display:"flex", flexDirection:"column", gap:6 }}>
-                <span style={{ fontWeight:600, fontSize:10, letterSpacing:".14em", textTransform:"uppercase", color:"#9A9082" }}>Must Try 🍽</span>
-                <input value={form.mustTry||""} onChange={e => setForm(f => ({...f, mustTry:e.target.value}))} placeholder="e.g. Xiao long bao, BBQ ribs…" style={inputStyle}
-                  onFocus={e => e.target.style.borderColor = TK} onBlur={e => e.target.style.borderColor = B2} />
-              </label>
-
-              <label style={{ display:"flex", flexDirection:"column", gap:6 }}>
-                <span style={{ fontWeight:600, fontSize:10, letterSpacing:".14em", textTransform:"uppercase", color:"#9A9082" }}>Maps link</span>
-                <input value={form.mapsUrl||""} onChange={e => setForm(f => ({...f, mapsUrl:e.target.value}))} placeholder="https://maps.google.com/?q=…" style={inputStyle}
-                  onFocus={e => e.target.style.borderColor = TK} onBlur={e => e.target.style.borderColor = B2} />
-              </label>
-
-              <div style={{ display:"grid", gridTemplateColumns:"80px 1fr", gap:14 }}>
-                <label style={{ display:"flex", flexDirection:"column", gap:6 }}>
-                  <span style={{ fontWeight:600, fontSize:10, letterSpacing:".14em", textTransform:"uppercase", color:"#9A9082", display:"flex", alignItems:"center", gap:4 }}>
-                    <span style={{ background:"#4285F4", color:"white", borderRadius:2, fontSize:8, fontWeight:800, padding:"1px 4px" }}>G</span> Score
-                  </span>
-                  <input type="number" min="0" max="5" step="0.1" value={form.googleRating||""} onChange={e => setForm(f => ({...f, googleRating:e.target.value}))} placeholder="4.3" style={inputStyle}
-                    onFocus={e => e.target.style.borderColor = TK} onBlur={e => e.target.style.borderColor = B2} />
-                </label>
-                <label style={{ display:"flex", flexDirection:"column", gap:6 }}>
-                  <span style={{ fontWeight:600, fontSize:10, letterSpacing:".14em", textTransform:"uppercase", color:"#9A9082" }}>Reviews</span>
-                  <input value={form.googleReviewCount||""} onChange={e => setForm(f => ({...f, googleReviewCount:e.target.value}))} placeholder="e.g. 2,847" style={inputStyle}
-                    onFocus={e => e.target.style.borderColor = TK} onBlur={e => e.target.style.borderColor = B2} />
-                </label>
-              </div>
-
-              <label style={{ display:"flex", flexDirection:"column", gap:6 }}>
-                <span style={{ fontWeight:600, fontSize:10, letterSpacing:".14em", textTransform:"uppercase", color:"#9A9082" }}>Notes</span>
-                <textarea value={form.notes||""} onChange={e => setForm(f => ({...f, notes:e.target.value}))} rows={2} placeholder="What to order, who to bring…" style={{ ...inputStyle, resize:"vertical", fontFamily:"'Archivo',sans-serif" }}
-                  onFocus={e => e.target.style.borderColor = TK} onBlur={e => e.target.style.borderColor = B2} />
-              </label>
-
-              <div style={{ display:"flex", alignItems:"center", gap:12 }}>
-                <span style={{ fontWeight:600, fontSize:10, letterSpacing:".14em", textTransform:"uppercase", color:"#9A9082" }}>Your rating</span>
-                <div style={{ display:"flex", gap:4 }}>
-                  {[1,2,3,4,5].map(n => (
-                    <span key={n} className="star" onClick={() => setForm(f => ({...f, rating: f.rating === n ? 0 : n}))} style={{ cursor:"pointer", fontSize:22, lineHeight:1, color:n<=(form.rating||0)?A:"#D8D0C2", display:"inline-block" }}>
-                      {n <= (form.rating||0) ? "★" : "☆"}
-                    </span>
-                  ))}
-                </div>
-              </div>
-
-              {form.status !== "want" && (
-                <div>
-                  <span style={{ fontWeight:600, fontSize:10, letterSpacing:".14em", textTransform:"uppercase", color:"#9A9082", display:"block", marginBottom:8 }}>Your Tier</span>
-                  <div style={{ display:"flex", gap:8 }}>
-                    {["S","A","B","C"].map(t => (
-                      <button key={t} type="button" onClick={() => setForm(f => ({...f, tier: f.tier===t ? "" : t}))} style={{ flex:1, padding:"8px", borderRadius:2, border:"none", fontWeight:800, fontSize:14, letterSpacing:1, background: form.tier===t ? (TIER_COLORS[t]||"#888") : B1, color: form.tier===t ? "white" : "#888", cursor:"pointer", transition:"all .15s" }}>{t}</button>
-                    ))}
-                  </div>
-                </div>
-              )}
-            </div>
-
-            <div style={{ display:"flex", alignItems:"center", justifyContent:"space-between", gap:12, marginTop:28, paddingTop:20, borderTop:`1px solid ${B1}` }}>
-              {editId !== null && (
-                <button className="remove-link" onClick={() => { deleteEntry(editId); setShowForm(false); }} style={{ background:"transparent", border:"none", color:A, fontSize:13, fontWeight:600, cursor:"pointer", letterSpacing:".02em" }}>
-                  Remove spot
-                </button>
-              )}
-              <div style={{ display:"flex", gap:10, marginLeft:"auto" }}>
-                <button className="cancel-btn" onClick={() => setShowForm(false)} style={{ background:"transparent", border:`1px solid ${B2}`, color:TK, padding:"11px 18px", fontSize:13, fontWeight:600, borderRadius:2, cursor:"pointer", transition:"border-color .15s" }}>Cancel</button>
-                <button className="save-btn" onClick={handleSubmit} style={{ background:TK, border:`1px solid ${TK}`, color:BG, padding:"11px 22px", fontSize:13, fontWeight:600, borderRadius:2, cursor:"pointer", letterSpacing:".02em", transition:"all .15s" }}>
-                  {editId !== null ? "Save changes" : "Add to passport"}
-                </button>
-              </div>
+      {/* ── API KEY MODAL ── */}
+      {showApiInput && (
+        <div onClick={e => e.target===e.currentTarget && setShowApiInput(false)}
+          style={{ position:"fixed", inset:0, background:"rgba(0,0,0,0.45)", display:"flex", alignItems:"center", justifyContent:"center", zIndex:300, padding:24 }}>
+          <div style={{ background:C.white, borderRadius:16, padding:"28px 24px", width:"100%", maxWidth:460 }}>
+            <h3 style={{ fontFamily:"'Playfair Display',serif", fontSize:20, color:C.header, marginBottom:6 }}>Google Places API Key</h3>
+            <p style={{ fontSize:13, color:C.textMuted, marginBottom:16, lineHeight:1.55 }}>
+              Paste your key below. It's saved to your browser only — never sent anywhere except Google's API.
+            </p>
+            <input
+              autoFocus
+              type="password"
+              placeholder="AIza…"
+              value={apiKeyDraft}
+              onChange={e => setApiKeyDraft(e.target.value)}
+              onKeyDown={e => e.key === "Enter" && handleApiKeySubmit()}
+              className="form-field"
+              style={{ width:"100%", border:`1.5px solid ${C.border}`, borderRadius:9, padding:"11px 13px", fontSize:14, marginBottom:14 }}
+            />
+            <div style={{ display:"flex", gap:10 }}>
+              <button onClick={handleApiKeySubmit} style={{ flex:1, background:C.header, color:"white", border:"none", borderRadius:9, padding:"12px", fontWeight:700, fontSize:14, cursor:"pointer", fontFamily:"Inter,sans-serif" }}>
+                Save & Import
+              </button>
+              <button onClick={() => setShowApiInput(false)} style={{ background:"none", border:`1.5px solid ${C.border}`, borderRadius:9, padding:"12px 16px", fontSize:14, cursor:"pointer", color:C.textMid, fontFamily:"Inter,sans-serif" }}>
+                Cancel
+              </button>
             </div>
           </div>
         </div>
       )}
 
-      {/* ── API KEY MODAL ── */}
-      {showApiInput && (
-        <div onClick={() => setShowApiInput(false)} style={{ position:"fixed", inset:0, zIndex:70, background:"rgba(26,24,21,.55)", display:"flex", alignItems:"center", justifyContent:"center", padding:24, animation:"fadeIn .15s ease" }}>
-          <div onClick={e => e.stopPropagation()} style={{ width:"min(460px,100%)", background:BG, border:`1px solid ${TK}`, borderRadius:3, padding:34, animation:"modalIn .22s ease" }}>
-            <div style={{ fontWeight:600, fontSize:11, letterSpacing:".2em", textTransform:"uppercase", color:A, marginBottom:6 }}>Google Places API</div>
-            <h2 style={{ fontFamily:"'Newsreader',serif", fontWeight:500, fontSize:26, color:TK, marginBottom:12 }}>Enter your API key</h2>
-            <p style={{ fontSize:13, color:"#5A544B", lineHeight:1.6, marginBottom:20 }}>Saved to your browser only — never sent anywhere except Google's API.</p>
-            <input autoFocus type="password" placeholder="AIza…" value={apiKeyDraft} onChange={e => setApiKeyDraft(e.target.value)} onKeyDown={e => e.key === "Enter" && handleApiKeySubmit()} style={{ ...inputStyle, marginBottom:14 }}
-              onFocus={e => e.target.style.borderColor = TK} onBlur={e => e.target.style.borderColor = B2} />
-            <div style={{ display:"flex", gap:10 }}>
-              <button onClick={handleApiKeySubmit} style={{ flex:1, background:TK, border:`1px solid ${TK}`, color:BG, padding:"12px", fontSize:13, fontWeight:600, borderRadius:2, cursor:"pointer", transition:"all .15s" }}
-                onMouseEnter={e => { e.currentTarget.style.background = A; e.currentTarget.style.borderColor = A; }} onMouseLeave={e => { e.currentTarget.style.background = TK; e.currentTarget.style.borderColor = TK; }}>
-                Save &amp; Import
-              </button>
-              <button className="cancel-btn" onClick={() => setShowApiInput(false)} style={{ background:"transparent", border:`1px solid ${B2}`, color:TK, padding:"12px 20px", fontSize:13, fontWeight:600, borderRadius:2, cursor:"pointer", transition:"border-color .15s" }}>Cancel</button>
+      {/* ── CARDS ── */}
+      <div style={{ maxWidth:860, margin:"0 auto", padding:"22px 24px" }}>
+        {filtered.length === 0 ? (
+          <div style={{ textAlign:"center", padding:"70px 0", color:C.textMuted }}>
+            <div style={{ fontSize:44, marginBottom:14 }}>🍜</div>
+            <div style={{ fontFamily:"'Playfair Display',serif", fontSize:20, marginBottom:8, color:"#666" }}>Nothing found</div>
+            <div style={{ fontSize:14 }}>Try a different filter or search term</div>
+          </div>
+        ) : (
+          <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fill, minmax(360px, 1fr))", gap:14 }}>
+            {filtered.map(entry => {
+              const sc = statusConfig[entry.status];
+              return (
+                <div key={entry.id} className="card" style={{ background:C.white, borderRadius:13, overflow:"hidden", boxShadow:"0 2px 12px rgba(0,0,0,0.06)", position:"relative" }}>
+                  {/* Status stripe */}
+                  <div style={{ height:4, background: entry.status==="fav" ? C.gold : entry.status==="tried" ? C.green : C.amber }} />
+                  
+                  <div style={{ padding:"14px 16px 10px" }}>
+                    {/* Status stamps */}
+                    {entry.status === "tried" && <div className="stamp-tried">✓ Visited</div>}
+                    {entry.status === "fav" && <div className="stamp-fav">⭐ Fave</div>}
+
+                    {/* Badges */}
+                    <div style={{ display:"flex", gap:6, flexWrap:"wrap", marginBottom:9 }}>
+                      <span style={{ background:CUISINE_BG[entry.cuisine]||"#f0f0f0", borderRadius:20, padding:"3px 10px", fontSize:11, fontWeight:500, color:"#444" }}>
+                        {entry.cuisine}
+                      </span>
+                      {entry.budget && (
+                        <span style={{ background:"#f5f5f5", borderRadius:20, padding:"3px 10px", fontSize:11, fontWeight:600, color:"#555" }}>
+                          {entry.budget} đ
+                        </span>
+                      )}
+                    </div>
+
+                    {/* Name */}
+                    <h3 style={{ fontFamily:"'Playfair Display',serif", fontSize:19, fontWeight:700, color:C.textDark, lineHeight:1.25, marginBottom:2, paddingRight: (entry.status!=="want") ? 66 : 0 }}>
+                      {entry.place}
+                    </h3>
+
+                    {entry.area && <div style={{ fontSize:12, color:C.textMuted, marginBottom: entry.mustTry ? 4 : 7 }}>📍 {entry.area}</div>}
+                    {entry.mustTry && <div style={{ fontSize:12, color:"#777", fontStyle:"italic", marginBottom:6 }}>🍽 {entry.mustTry}</div>}
+
+                    {/* Vibe + Budget Tier + Tier row */}
+                    <div style={{ display:"flex", gap:5, flexWrap:"wrap", marginBottom:6 }}>
+                      {entry.vibe && (
+                        <span style={{ background:"#f0f0f0", borderRadius:20, padding:"2px 9px", fontSize:11, color:"#555" }}>{entry.vibe}</span>
+                      )}
+                      {entry.budgetTier && (
+                        <span style={{ background: entry.budgetTier==="Budget"?"#e8f5ee":entry.budgetTier==="Premium under 1m"?"#fce8ee":"#f5f5f5", borderRadius:20, padding:"2px 9px", fontSize:11, fontWeight:500, color: entry.budgetTier==="Budget"?"#2d6e4e":entry.budgetTier==="Premium under 1m"?"#c03030":"#555" }}>
+                          {entry.budgetTier}
+                        </span>
+                      )}
+                      {entry.tier && (
+                        <span style={{ background: entry.tier==="S"?"#1a3a4a":entry.tier==="A"?"#2d6e4e":entry.tier==="B"?"#d4a020":"#888", borderRadius:20, padding:"2px 10px", fontSize:11, fontWeight:800, color:"white", letterSpacing:1 }}>
+                          {entry.tier}-tier
+                        </span>
+                      )}
+                    </div>
+
+                    {/* Personal stars (only when tried/fav) */}
+                    {entry.status !== "want" && entry.rating > 0 && (
+                      <div style={{ fontSize:15, letterSpacing:1, marginBottom:6 }}>
+                        {"★".repeat(entry.rating)}<span style={{ color:"#e0e0e0" }}>{"★".repeat(5-entry.rating)}</span>
+                      </div>
+                    )}
+
+                    {entry.notes && (
+                      <div style={{ fontSize:12.5, color:"#666", lineHeight:1.55, background:"#fafafa", borderRadius:7, padding:"8px 10px", marginTop:4 }}>
+                        {entry.notes}
+                      </div>
+                    )}
+
+                    {/* Inline Google rating strip */}
+                    <div style={{ display:"flex", alignItems:"center", gap:7, marginTop:10, padding:"7px 10px", background:"#f8f9fa", borderRadius:8, border:"1px solid #eee" }}>
+                      <span style={{ background:"#4285F4", color:"white", borderRadius:3, fontSize:8, fontWeight:800, padding:"1px 5px", letterSpacing:0.5, flexShrink:0 }}>G</span>
+                      <GoogleRatingInput
+                        entryId={entry.id} field="googleRating"
+                        initialValue={entry.googleRating}
+                        placeholder="4.3"
+                        onSave={updateGoogleData}
+                        inputStyle={{ width:48, border:"1px solid #ddd", borderRadius:6, padding:"4px 6px", fontSize:12, fontWeight:600, background:"white", color:"#333", textAlign:"center" }}
+                      />
+                      <span style={{ fontSize:12, color:"#f0b429", flexShrink:0 }}>★</span>
+                      <GoogleRatingInput
+                        entryId={entry.id} field="googleReviewCount"
+                        initialValue={entry.googleReviewCount}
+                        placeholder="reviews, e.g. 2,847"
+                        onSave={updateGoogleData}
+                        inputStyle={{ flex:1, border:"1px solid #ddd", borderRadius:6, padding:"4px 8px", fontSize:12, background:"white", color:"#555", minWidth:0 }}
+                      />
+                    </div>
+                  </div>
+
+                  {/* Footer */}
+                  <div style={{ borderTop:`1px solid ${C.border}`, padding:"9px 16px", display:"flex", justifyContent:"space-between", alignItems:"center", gap:8 }}>
+                    <div style={{ display:"flex", gap:6, flexWrap:"wrap", flex:1 }}>
+                      <button className="cycle-btn" onClick={() => cycleStatus(entry.id)} style={{
+                        background:sc.bg, border:`1.5px solid ${sc.border}`, borderRadius:7,
+                        padding:"5px 12px", fontSize:11, fontWeight:600, color:sc.color,
+                        fontFamily:"Inter,sans-serif",
+                      }}>
+                        {sc.label}
+                      </button>
+                      {entry.mapsUrl && (
+                        <a href={entry.mapsUrl} target="_blank" rel="noopener noreferrer" className="maps-btn"
+                          style={{ background:"none", border:`1.5px solid ${C.border}`, borderRadius:7, padding:"5px 10px", fontSize:11, fontWeight:500, color:C.textMid, textDecoration:"none", transition:"all 0.15s" }}>
+                          🗺 Maps
+                        </a>
+                      )}
+                    </div>
+                    <div style={{ display:"flex", gap:3 }}>
+                      <button className="icon-btn" onClick={() => startEdit(entry)} title="Edit">✏️</button>
+                      <button className="icon-btn" onClick={() => deleteEntry(entry.id)} title="Delete">🗑️</button>
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        )}
+      </div>
+
+      {/* ── MODAL ── */}
+      {showForm && (
+        <div onClick={e => e.target===e.currentTarget && setShowForm(false)}
+          style={{ position:"fixed", inset:0, background:"rgba(0,0,0,0.45)", display:"flex", alignItems:"flex-end", justifyContent:"center", zIndex:200 }}>
+          <div style={{ background:C.white, borderRadius:"20px 20px 0 0", width:"100%", maxWidth:560, padding:"24px 24px 30px", maxHeight:"92vh", overflowY:"auto" }}>
+            <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", marginBottom:18 }}>
+              <h2 style={{ fontFamily:"'Playfair Display',serif", fontSize:22, color:C.header }}>{editId ? "Edit Entry" : "Add a Spot"}</h2>
+              <button onClick={() => setShowForm(false)} style={{ background:"none", border:"none", fontSize:22, cursor:"pointer", color:C.textMuted }}>✕</button>
             </div>
+
+            {/* Status toggle */}
+            <div style={{ display:"flex", background:"#f2f2f2", borderRadius:10, padding:4, marginBottom:16 }}>
+              {[["want","🗺️ To Try"],["tried","✓ Tried"],["fav","⭐ Favourite"]].map(([val,lbl]) => (
+                <button key={val} onClick={() => setForm(f => ({...f, status:val}))} style={{
+                  flex:1, padding:"9px 6px", borderRadius:8, border:"none",
+                  fontWeight:600, fontSize:12,
+                  background: form.status===val ? (val==="fav"?C.gold:val==="tried"?C.green:C.amber) : "transparent",
+                  color: form.status===val ? "white" : "#888",
+                  cursor:"pointer", fontFamily:"Inter,sans-serif", transition:"all 0.15s",
+                }}>{lbl}</button>
+              ))}
+            </div>
+
+            {/* Fields */}
+            {[
+              {label:"Place Name *", key:"place", placeholder:"e.g. Pizza 4P's"},
+              {label:"Area / District", key:"area", placeholder:"e.g. Q1 / Hai Bà Trưng"},
+              {label:"Must Try 🍽", key:"mustTry", placeholder:"e.g. Xiao long bao, Cruffin…"},
+              {label:"Budget/person (VND)", key:"budget", placeholder:"e.g. 200k–500k"},
+            ].map(({label,key,placeholder}) => (
+              <div key={key} style={{ marginBottom:13 }}>
+                <label style={{ fontSize:11, fontWeight:600, color:"#555", display:"block", marginBottom:4, textTransform:"uppercase", letterSpacing:0.5 }}>{label}</label>
+                <input placeholder={placeholder} value={form[key]}
+                  onChange={e => setForm(f => ({...f, [key]:e.target.value}))}
+                  className="form-field"
+                  style={{ width:"100%", border:`1.5px solid ${C.border}`, borderRadius:9, padding:"10px 12px", fontSize:14 }} />
+              </div>
+            ))}
+
+            <div style={{ marginBottom:13 }}>
+              <label style={{ fontSize:11, fontWeight:600, color:"#555", display:"block", marginBottom:4, textTransform:"uppercase", letterSpacing:0.5 }}>Cuisine</label>
+              <select value={form.cuisine} onChange={e => setForm(f => ({...f, cuisine:e.target.value}))}
+                className="form-field"
+                style={{ width:"100%", border:`1.5px solid ${C.border}`, borderRadius:9, padding:"10px 28px 10px 12px", fontSize:14, background:C.white }}>
+                {CUISINES.map(c => <option key={c}>{c}</option>)}
+              </select>
+            </div>
+
+            <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:12, marginBottom:13 }}>
+              <div>
+                <label style={{ fontSize:11, fontWeight:600, color:"#555", display:"block", marginBottom:4, textTransform:"uppercase", letterSpacing:0.5 }}>Vibe</label>
+                <input placeholder="e.g. Rooftop, Date night…" value={form.vibe||""}
+                  onChange={e => setForm(f => ({...f, vibe:e.target.value}))}
+                  className="form-field"
+                  style={{ width:"100%", border:`1.5px solid ${C.border}`, borderRadius:9, padding:"10px 12px", fontSize:14 }} />
+              </div>
+              <div>
+                <label style={{ fontSize:11, fontWeight:600, color:"#555", display:"block", marginBottom:4, textTransform:"uppercase", letterSpacing:0.5 }}>Budget Tier</label>
+                <select value={form.budgetTier||""} onChange={e => setForm(f => ({...f, budgetTier:e.target.value}))}
+                  className="form-field"
+                  style={{ width:"100%", border:`1.5px solid ${C.border}`, borderRadius:9, padding:"10px 28px 10px 12px", fontSize:14, background:"#2a2a2a" }}>
+                  <option value="">—</option>
+                  {["Budget","Mid-range","Premium under 1m"].map(t => <option key={t}>{t}</option>)}
+                </select>
+              </div>
+            </div>
+
+            {/* Tier selector — only when tried or favourite */}
+            {form.status !== "want" && (
+              <div style={{ marginBottom:13 }}>
+                <label style={{ fontSize:11, fontWeight:600, color:"#555", display:"block", marginBottom:6, textTransform:"uppercase", letterSpacing:0.5 }}>Your Tier</label>
+                <div style={{ display:"flex", gap:8 }}>
+                  {["S","A","B","C"].map(t => (
+                    <button key={t} type="button" onClick={() => setForm(f => ({...f, tier: f.tier===t ? "" : t}))}
+                      style={{ flex:1, padding:"8px", borderRadius:8, border:"none", fontWeight:800, fontSize:15,
+                        background: form.tier===t ? (t==="S"?"#1a3a4a":t==="A"?"#2d6e4e":t==="B"?"#d4a020":"#888") : "#3a3a3a",
+                        color: form.tier===t ? "white" : "#777", cursor:"pointer", fontFamily:"Inter,sans-serif",
+                        letterSpacing:1, transition:"all 0.15s",
+                      }}>{t}</button>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* My Rating — only when Tried or Favourite */}
+            {form.status !== "want" && (
+              <div style={{ marginBottom:13 }}>
+                <label style={{ fontSize:11, fontWeight:600, color:"#555", display:"block", marginBottom:7, textTransform:"uppercase", letterSpacing:0.5 }}>My Rating</label>
+                <div style={{ display:"flex", gap:4 }}>
+                  {[1,2,3,4,5].map(n => (
+                    <span key={n} className="star" onClick={() => setForm(f => ({...f, rating:n}))}
+                      style={{ fontSize:26, color: n<=form.rating?"#f0b429":"#ddd" }}>★</span>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Google Rating */}
+            <div style={{ marginBottom:13 }}>
+              <label style={{ fontSize:11, fontWeight:600, color:"#555", display:"flex", alignItems:"center", gap:5, marginBottom:6, textTransform:"uppercase", letterSpacing:0.5 }}>
+                <span style={{ background:"#4285F4", color:"white", borderRadius:3, fontSize:9, fontWeight:800, padding:"1px 5px", letterSpacing:0.5 }}>G</span>
+                Google Rating
+              </label>
+              <div style={{ display:"flex", gap:8 }}>
+                <input
+                  type="number" min="0" max="5" step="0.1"
+                  placeholder="4.3"
+                  value={form.googleRating || ""}
+                  onChange={e => setForm(f => ({...f, googleRating:e.target.value}))}
+                  className="form-field"
+                  style={{ width:"90px", border:`1.5px solid ${C.border}`, borderRadius:9, padding:"10px 12px", fontSize:14 }}
+                />
+                <input
+                  type="text"
+                  placeholder="No. of reviews  e.g. 2,847"
+                  value={form.googleReviewCount || ""}
+                  onChange={e => setForm(f => ({...f, googleReviewCount:e.target.value}))}
+                  className="form-field"
+                  style={{ flex:1, border:`1.5px solid ${C.border}`, borderRadius:9, padding:"10px 12px", fontSize:14 }}
+                />
+              </div>
+            </div>
+
+            <div style={{ marginBottom:13 }}>
+              <label style={{ fontSize:11, fontWeight:600, color:"#555", display:"block", marginBottom:4, textTransform:"uppercase", letterSpacing:0.5 }}>Notes</label>
+              <textarea placeholder="Tips, what to order, vibes…" value={form.notes}
+                onChange={e => setForm(f => ({...f, notes:e.target.value}))} rows={3}
+                className="form-field"
+                style={{ width:"100%", border:`1.5px solid ${C.border}`, borderRadius:9, padding:"10px 12px", fontSize:14, resize:"vertical" }} />
+            </div>
+
+            <div style={{ marginBottom:20 }}>
+              <label style={{ fontSize:11, fontWeight:600, color:"#555", display:"block", marginBottom:4, textTransform:"uppercase", letterSpacing:0.5 }}>
+                Google Maps URL
+              </label>
+              <input
+                placeholder="Paste a Google Maps link…"
+                value={form.mapsUrl || ""}
+                onChange={e => setForm(f => ({...f, mapsUrl:e.target.value}))}
+                className="form-field"
+                style={{ width:"100%", border:`1.5px solid ${C.border}`, borderRadius:9, padding:"10px 12px", fontSize:14 }}
+              />
+              <div style={{ fontSize:11, color:"#888", marginTop:5 }}>
+                Open Google Maps → share → copy link
+              </div>
+            </div>
+
+            <button className="submit-btn" onClick={handleSubmit} style={{
+              width:"100%", background:C.header, color:"white", border:"none",
+              borderRadius:11, padding:"14px", fontWeight:700, fontSize:15,
+              cursor:"pointer", fontFamily:"Inter,sans-serif", transition:"background 0.15s",
+            }}>
+              {editId ? "Save Changes" : "Add to Passport"}
+            </button>
           </div>
         </div>
       )}
