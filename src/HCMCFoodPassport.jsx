@@ -1,5 +1,4 @@
-import { useState, useEffect, useRef } from "react";
-import { getHCMCEntries, syncHCMC } from './lib/db';
+import { useState, useEffect } from "react";
 
 // ── CUISINE COLORS ────────────────────────────────────────────────────────────
 const CUISINE_BG = {
@@ -246,47 +245,30 @@ export default function HCMCFoodPassport({ onSwitch = () => {} }) {
   const [apiKeyDraft, setApiKeyDraft]       = useState("");
   const [importStatus, setImportStatus]     = useState(null);
   const [importProgress, setImportProgress] = useState({ done:0, total:0 });
-  const prevRef                             = useRef([]);
 
   useEffect(() => {
-    getHCMCEntries()
-      .then(data => {
-        let entries;
-        if (data.length > 0) {
-          entries = data.map(e => ({
+    (() => {
+      try {
+        const res = localStorage.getItem("hcmc-passport-v1");
+        if (res) {
+          const parsed = JSON.parse(res);
+          const migrated = parsed.map(e => ({
             googleRating:"", googleReviewCount:"", budgetTier:"", vibe:"", tier:"", ...e,
             mustTry: e.mustTry || e.type || "",
             cuisine: e.cuisine === "Chinese / HK 🇨🇳🇭🇰" ? "Chinese / HongKong 🇨🇳🇭🇰" : e.cuisine,
           }));
+          setEntries(migrated.length ? migrated : INITIAL_DATA);
         } else {
-          // First run — seed Supabase with the full list
-          entries = INITIAL_DATA;
-          syncHCMC(INITIAL_DATA, []);
+          setEntries(INITIAL_DATA);
         }
-        setEntries(entries);
-        prevRef.current = entries;
-        setLoading(false);
-      })
-      .catch(() => {
-        // Supabase unreachable — fall back to INITIAL_DATA
-        setEntries(INITIAL_DATA);
-        prevRef.current = INITIAL_DATA;
-        setLoading(false);
-      });
+      } catch { setEntries(INITIAL_DATA); }
+      setLoading(false);
+    })();
   }, []);
 
   function persist(next) {
-    const prev = prevRef.current;
     setEntries(next);
-    prevRef.current = next;
-    const toUpsert = next.filter(e => {
-      const old = prev.find(p => p.id === e.id);
-      return !old || JSON.stringify(old) !== JSON.stringify(e);
-    });
-    const toDeleteIds = prev
-      .filter(p => !next.find(n => n.id === p.id))
-      .map(p => p.id);
-    syncHCMC(toUpsert, toDeleteIds);
+    try { localStorage.setItem("hcmc-passport-v1", JSON.stringify(next)); } catch {}
   }
 
   function cycleStatus(id) {
